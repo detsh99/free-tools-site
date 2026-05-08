@@ -144,6 +144,8 @@
   .tc-age  { color: #ff9f5a; }        .tc-age::before  { background: rgba(255,159,90,0.05); }
   .tc-sw   { color: #c47eff; }        .tc-sw::before   { background: rgba(196,126,255,0.05); }
   .tc-dice { color: #ff6b6b; }        .tc-dice::before { background: rgba(255,107,107,0.05); }
+  .tc-tip  { color: #ffd93d; }        .tc-tip::before  { background: rgba(255,217,61,0.05); }
+  .tc-unit { color: #00d4aa; }        .tc-unit::before { background: rgba(0,212,170,0.05); }
 
   /* STOPWATCH */
   .sw-display {
@@ -352,9 +354,9 @@
 </nav>
 
 <div class="hero">
-  <div class="hero-tag">16 Tools · One Place</div>
+  <div class="hero-tag">18 Tools · One Place</div>
   <h1>Your <em>creative</em><br>utility kit</h1>
-  <p>Hepsi bir arada — şifre, QR, UUID, stopwatch, dice ve daha fazlası.</p>
+  <p>Hepsi bir arada — şifre, QR, UUID, tip calculator, unit converter ve daha fazlası.</p>
 </div>
 
 <!-- TOOL NAV CARDS -->
@@ -448,6 +450,18 @@
     <div class="tc-icon">🎲</div>
     <div class="tc-name">Dice Roller</div>
     <div class="tc-desc">Zar at</div>
+  </div>
+  <div class="tool-card tc-tip" onclick="showTool('tip')">
+    <a href="/tip-calculator.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
+    <div class="tc-icon">💰</div>
+    <div class="tc-name">Tip Calculator</div>
+    <div class="tc-desc">Bahşiş & hesap böl</div>
+  </div>
+  <div class="tool-card tc-unit" onclick="showTool('unit')">
+    <a href="/unit-converter.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
+    <div class="tc-icon">📐</div>
+    <div class="tc-name">Unit Converter</div>
+    <div class="tc-desc">Birim dönüştür</div>
   </div>
 </div>
 
@@ -1044,6 +1058,92 @@
     </div>
   </div>
 
+  <!-- TIP CALCULATOR -->
+  <div id="panel-tip" class="tool-panel">
+    <div class="panel-header">
+      <div>
+        <h2 style="color:#ffd93d">Tip Calculator</h2>
+        <p>Bahşiş hesapla ve hesabı kişilere böl</p>
+      </div>
+    </div>
+    <div class="field">
+      <label>Bill Amount ($)</label>
+      <input type="number" id="tipBill" placeholder="0.00" min="0" step="0.01" oninput="calcTip()">
+    </div>
+    <div class="field">
+      <label>Tip Percentage</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+        <button class="bio-tag" data-tip="10" onclick="selectTipPct(this)">10%</button>
+        <button class="bio-tag sel" data-tip="15" onclick="selectTipPct(this)">15%</button>
+        <button class="bio-tag" data-tip="20" onclick="selectTipPct(this)">20%</button>
+        <button class="bio-tag" data-tip="25" onclick="selectTipPct(this)">25%</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="color:var(--muted);font-size:0.82rem;white-space:nowrap;">Custom %</span>
+        <input type="number" id="tipCustom" placeholder="e.g. 18" min="0" max="100" oninput="selectCustomPct()" style="max-width:120px;">
+      </div>
+    </div>
+    <div class="field">
+      <label>Split Between</label>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="btn btn-ghost" style="padding:8px 16px;font-size:1.1rem;" onclick="changeSplit(-1)">−</button>
+        <span id="tipSplitCount" style="font-family:var(--font-mono);font-size:1.4rem;font-weight:600;min-width:28px;text-align:center;">1</span>
+        <button class="btn btn-ghost" style="padding:8px 16px;font-size:1.1rem;" onclick="changeSplit(1)">+</button>
+        <span style="color:var(--muted);font-size:0.85rem;">person(s)</span>
+      </div>
+    </div>
+    <div class="stats-grid" style="margin-top:1.5rem;">
+      <div class="stat-card"><div class="stat-val" id="tipAmount" style="color:#ffd93d;">$0.00</div><div class="stat-label">Tip Amount</div></div>
+      <div class="stat-card"><div class="stat-val" id="tipTotal" style="color:var(--accent4);">$0.00</div><div class="stat-label">Total Bill</div></div>
+      <div class="stat-card" style="grid-column:span 2;"><div class="stat-val" id="tipPerPerson" style="color:var(--accent);font-size:2rem;">$0.00</div><div class="stat-label">Per Person</div></div>
+    </div>
+    <div class="btn-row" style="margin-top:1rem;">
+      <button class="btn btn-ghost" onclick="resetTip()">↺ Reset</button>
+    </div>
+  </div>
+
+  <!-- UNIT CONVERTER -->
+  <div id="panel-unit" class="tool-panel">
+    <div class="panel-header">
+      <div>
+        <h2 style="color:var(--accent4)">Unit Converter</h2>
+        <p>Uzunluk, ağırlık, sıcaklık, hız, alan, veri ve daha fazlası</p>
+      </div>
+    </div>
+    <div class="field">
+      <label>Kategori</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px;" id="unitCatRow">
+        <button class="bio-tag sel" onclick="selectUnitCat(this,'Length')">Length</button>
+        <button class="bio-tag" onclick="selectUnitCat(this,'Weight')">Weight</button>
+        <button class="bio-tag" onclick="selectUnitCat(this,'Temperature')">Temperature</button>
+        <button class="bio-tag" onclick="selectUnitCat(this,'Speed')">Speed</button>
+        <button class="bio-tag" onclick="selectUnitCat(this,'Area')">Area</button>
+        <button class="bio-tag" onclick="selectUnitCat(this,'Volume')">Volume</button>
+        <button class="bio-tag" onclick="selectUnitCat(this,'Data')">Data</button>
+        <button class="bio-tag" onclick="selectUnitCat(this,'Time')">Time</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>From</label>
+        <select id="unitFrom" onchange="convertUnit()"></select>
+        <input type="number" id="unitFromVal" placeholder="Value" oninput="convertUnit()" style="margin-top:8px;">
+      </div>
+      <div class="field">
+        <label>To</label>
+        <select id="unitTo" onchange="convertUnit()"></select>
+        <input type="number" id="unitToVal" placeholder="Result" readonly style="margin-top:8px;opacity:.7;cursor:default;">
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:0.5rem;">
+      <button class="btn btn-ghost" onclick="swapUnitConv()">⇄ Swap</button>
+      <button class="btn btn-ghost" onclick="copyUnitResult()" id="unitCopyBtn">Copy Result</button>
+    </div>
+    <div class="output-box" id="unitResultBox" style="display:none;margin-top:1.2rem;">
+      <span id="unitResultText" style="color:var(--accent4);font-size:1rem;"></span>
+    </div>
+  </div>
+
 </div>
 
 <footer>
@@ -1052,7 +1152,7 @@
     <a href="/privacy.html" style="color:var(--muted);text-decoration:none;margin:0 10px;font-size:0.82rem;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">Privacy Policy</a>
     <a href="/contact.html" style="color:var(--muted);text-decoration:none;margin:0 10px;font-size:0.82rem;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">Contact</a>
   </div>
-  <span style="color:var(--accent)">DetshTool</span> — 16 free utility tools ✦ Built with ♥
+  <span style="color:var(--accent)">DetshTool</span> — 18 free utility tools ✦ Built with ♥
 </footer>
 
 <script>
@@ -1062,7 +1162,7 @@ function showTool(id) {
   document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
   document.getElementById('panel-' + id).classList.add('active');
-  const pills = ['password','qr','username','bio','wordcount','gradient','uuid','repeater','charcount','random','lorem','binary','age','stopwatch','dice'];
+  const pills = ['password','qr','username','bio','wordcount','gradient','uuid','repeater','charcount','random','lorem','binary','age','stopwatch','dice','tip','unit'];
   const idx = pills.indexOf(id);
   if (idx >= 0) {
     document.querySelectorAll('.nav-pill')[idx].classList.add('active');
@@ -1493,9 +1593,8 @@ function calcAge() {
 // Set default dates
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('ageTo').value = new Date().toISOString().split('T')[0];
+  buildUnitSelects();
 });
-
-// ── STOPWATCH ─────────────────────────────────
 let swRunning = false, swStart = 0, swElapsed = 0, swTimer = null, swLapCount = 0, swLapStart = 0;
 function swFormat(ms) {
   const min = Math.floor(ms/60000).toString().padStart(2,'0');
@@ -1587,6 +1686,106 @@ function rollDice() {
   chip.textContent = `D${diceType}: [${nums.join(', ')}]`;
   if (hist.children.length >= 8) hist.removeChild(hist.lastChild);
   hist.prepend(chip);
+// ── TIP CALCULATOR ────────────────────────────
+let tipPct = 15, tipSplit = 1;
+function selectTipPct(btn) {
+  document.querySelectorAll('[data-tip]').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  tipPct = parseFloat(btn.dataset.tip);
+  document.getElementById('tipCustom').value = '';
+  calcTip();
+}
+function selectCustomPct() {
+  const v = parseFloat(document.getElementById('tipCustom').value);
+  document.querySelectorAll('[data-tip]').forEach(b => b.classList.remove('sel'));
+  if (!isNaN(v) && v >= 0) { tipPct = v; calcTip(); }
+}
+function changeSplit(d) {
+  tipSplit = Math.max(1, tipSplit + d);
+  document.getElementById('tipSplitCount').textContent = tipSplit;
+  calcTip();
+}
+function calcTip() {
+  const bill = parseFloat(document.getElementById('tipBill').value) || 0;
+  const tip = bill * (tipPct / 100);
+  const total = bill + tip;
+  const per = total / tipSplit;
+  document.getElementById('tipAmount').textContent = '$' + tip.toFixed(2);
+  document.getElementById('tipTotal').textContent = '$' + total.toFixed(2);
+  document.getElementById('tipPerPerson').textContent = '$' + per.toFixed(2);
+}
+function resetTip() {
+  document.getElementById('tipBill').value = '';
+  document.getElementById('tipCustom').value = '';
+  tipSplit = 1; tipPct = 15;
+  document.getElementById('tipSplitCount').textContent = '1';
+  document.querySelectorAll('[data-tip]').forEach(b => b.classList.remove('sel'));
+  document.querySelector('[data-tip="15"]').classList.add('sel');
+  calcTip();
+}
+
+// ── UNIT CONVERTER ────────────────────────────
+const unitCats = {
+  Length: { units:['Meter','Kilometer','Centimeter','Millimeter','Mile','Yard','Foot','Inch'], base:'Meter', toBase:{Meter:1,Kilometer:1000,Centimeter:.01,Millimeter:.001,Mile:1609.344,Yard:.9144,Foot:.3048,Inch:.0254} },
+  Weight: { units:['Kilogram','Gram','Milligram','Pound','Ounce','Ton'], base:'Kilogram', toBase:{Kilogram:1,Gram:.001,Milligram:1e-6,Pound:.453592,Ounce:.0283495,Ton:1000} },
+  Temperature: { units:['Celsius','Fahrenheit','Kelvin'], base:null, toBase:null },
+  Speed: { units:['m/s','km/h','mph','knot'], base:'m/s', toBase:{'m/s':1,'km/h':0.27778,'mph':0.44704,'knot':0.514444} },
+  Area: { units:['m²','km²','cm²','Hectare','Acre','ft²'], base:'m²', toBase:{'m²':1,'km²':1e6,'cm²':1e-4,'Hectare':10000,'Acre':4046.856,'ft²':0.092903} },
+  Volume: { units:['Liter','Milliliter','Gallon (US)','Quart','Pint','fl oz'], base:'Liter', toBase:{'Liter':1,'Milliliter':.001,'Gallon (US)':3.78541,'Quart':0.946353,'Pint':0.473176,'fl oz':0.0295735} },
+  Data: { units:['Byte','Kilobyte','Megabyte','Gigabyte','Terabyte','Bit'], base:'Byte', toBase:{Byte:1,Kilobyte:1000,Megabyte:1e6,Gigabyte:1e9,Terabyte:1e12,Bit:0.125} },
+  Time: { units:['Second','Minute','Hour','Day','Week','Month','Year','Millisecond'], base:'Second', toBase:{Second:1,Minute:60,Hour:3600,Day:86400,Week:604800,Month:2628000,Year:31536000,Millisecond:0.001} }
+};
+let currentUnitCat = 'Length';
+function selectUnitCat(btn, cat) {
+  document.querySelectorAll('#unitCatRow .bio-tag').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  currentUnitCat = cat;
+  buildUnitSelects();
+  convertUnit();
+}
+function buildUnitSelects() {
+  const cat = unitCats[currentUnitCat];
+  ['unitFrom','unitTo'].forEach((id, i) => {
+    const sel = document.getElementById(id);
+    sel.innerHTML = cat.units.map(u => `<option value="${u}">${u}</option>`).join('');
+    sel.selectedIndex = i;
+  });
+  document.getElementById('unitFromVal').value = '';
+  document.getElementById('unitToVal').value = '';
+  document.getElementById('unitResultBox').style.display = 'none';
+}
+function tempConv(val, from, to) {
+  let c = from==='Celsius' ? val : from==='Fahrenheit' ? (val-32)*5/9 : val-273.15;
+  return to==='Celsius' ? c : to==='Fahrenheit' ? c*9/5+32 : c+273.15;
+}
+function convertUnit() {
+  const cat = unitCats[currentUnitCat];
+  const from = document.getElementById('unitFrom').value;
+  const to = document.getElementById('unitTo').value;
+  const val = parseFloat(document.getElementById('unitFromVal').value);
+  if (isNaN(val)) { document.getElementById('unitToVal').value=''; document.getElementById('unitResultBox').style.display='none'; return; }
+  let result;
+  if (currentUnitCat === 'Temperature') { result = tempConv(val, from, to); }
+  else { result = val * cat.toBase[from] / cat.toBase[to]; }
+  const fmt = Math.abs(result)<0.0001||Math.abs(result)>1e9 ? result.toExponential(4) : parseFloat(result.toFixed(6)).toString();
+  document.getElementById('unitToVal').value = fmt;
+  document.getElementById('unitResultText').textContent = `${val} ${from} = ${fmt} ${to}`;
+  document.getElementById('unitResultBox').style.display = 'block';
+}
+function swapUnitConv() {
+  const f = document.getElementById('unitFrom'), t = document.getElementById('unitTo');
+  const fv = document.getElementById('unitFromVal'), tv = document.getElementById('unitToVal');
+  [f.value, t.value] = [t.value, f.value];
+  fv.value = tv.value;
+  convertUnit();
+}
+function copyUnitResult() {
+  const text = document.getElementById('unitResultText').textContent;
+  if (!text) return;
+  navigator.clipboard.writeText(text);
+  const btn = document.getElementById('unitCopyBtn');
+  btn.textContent = '✓ Copied';
+  setTimeout(() => btn.textContent = 'Copy Result', 1500);
 }
 </script>
 </body>
