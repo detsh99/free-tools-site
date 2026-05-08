@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DetshTool — Dev Guide & Template</title>
+  <style>
+    :root { --bg: #0a0a0f; --surface: #13131a; --card: #1a1a24; --border: #2a2a3a; --accent: #7c6af7; --accent2: #4ecdc4; --text: #e8e8f0; --muted: #6b6b80; --green: #4ade80; --yellow: #fbbf24; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; padding: 24px 20px 60px; max-width: 800px; margin: 0 auto; }
+    h1 { font-size: 28px; font-weight: 800; color: var(--accent); margin-bottom: 8px; }
+    h2 { font-size: 18px; font-weight: 700; margin: 36px 0 14px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+    h3 { font-size: 15px; font-weight: 700; color: var(--accent2); margin: 20px 0 8px; }
+    p { color: var(--muted); font-size: 14px; line-height: 1.8; margin-bottom: 10px; }
+    code { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 2px 6px; font-size: 13px; color: var(--accent2); font-family: monospace; }
+    pre { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin: 12px 0 20px; overflow-x: auto; font-size: 13px; color: var(--text); line-height: 1.7; white-space: pre-wrap; }
+    .table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+    .table th { background: var(--card); padding: 10px 14px; text-align: left; font-size: 13px; color: var(--accent); border-bottom: 1px solid var(--border); }
+    .table td { padding: 10px 14px; font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--border); }
+    .table tr:last-child td { border-bottom: none; }
+    .badge { display: inline-block; border-radius: 6px; padding: 2px 8px; font-size: 11px; font-weight: 700; }
+    .done { background: rgba(74,222,128,0.15); color: var(--green); }
+    .todo { background: rgba(251,191,36,0.15); color: var(--yellow); }
+    .tip { background: rgba(124,106,247,0.1); border: 1px solid rgba(124,106,247,0.3); border-radius: 10px; padding: 14px 16px; margin: 16px 0; font-size: 14px; color: var(--muted); }
+    .tip strong { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<h1>🛠 DetshTool — Dev Guide</h1>
+<p>Bu dosyayı repo'ya ekleme. Sadece senin referans dokümanın.</p>
+
+<h2>📋 Tool Sayfaları — Durum Tablosu</h2>
+<table class="table">
+  <tr><th>Tool</th><th>Dosya Adı</th><th>Durum</th><th>SEO Öncelik</th></tr>
+  <tr><td>Password Generator</td><td><code>password-generator.html</code></td><td><span class="badge done">✓ HAZIR</span></td><td>⭐⭐⭐⭐⭐</td></tr>
+  <tr><td>QR Generator</td><td><code>qr-generator.html</code></td><td><span class="badge todo">TODO</span></td><td>⭐⭐⭐⭐⭐</td></tr>
+  <tr><td>Word Counter</td><td><code>word-counter.html</code></td><td><span class="badge todo">TODO</span></td><td>⭐⭐⭐⭐⭐</td></tr>
+  <tr><td>Age Calculator</td><td><code>age-calculator.html</code></td><td><span class="badge todo">TODO</span></td><td>⭐⭐⭐⭐</td></tr>
+  <tr><td>UUID Generator</td><td><code>uuid-generator.html</code></td><td><span class="badge todo">TODO</span></td><td>⭐⭐⭐⭐</td></tr>
+  <tr><td>Binary Converter</td><td><code>binary-converter.html</code></td><td><span class="badge todo">TODO</span></td><td>⭐⭐⭐</td></tr>
+  <tr><td>Username Generator</td><td><code>username-generator.html</code></td><td><span class="badge todo">TODO</span></td><td>⭐⭐⭐</td></tr>
+  <tr><td>Bio Generator</td><td><code>bio-generator.html</code></td><td><span class="badge todo">TODO</span></td><td>⭐⭐⭐</td></tr>
+  <tr><td>Gradient Generator</td><td><code>gradient-generator.html</code></td><td><span class="badge todo">TODO</span></td><td>⭐⭐⭐</td></tr>
+  <tr><td>Lorem Ipsum</td><td><code>lorem-ipsum.html</code></td><td><span class="badge todo">TODO</span></td><td>⭐⭐⭐</td></tr>
+  <tr><td>Character Counter</td><td><code>character-counter.html</code></td><td><span class="badge todo">TODO</span></td><td>⭐⭐</td></tr>
+  <tr><td>Stopwatch</td><td><code>stopwatch.html</code></td><td><span class="badge todo">TODO</span></td><td>⭐⭐</td></tr>
+  <tr><td>Dice Roller</td><td><code>dice-roller.html</code></td><td><span class="badge todo">TODO</span></td><td>⭐⭐</td></tr>
+  <tr><td>Random Number</td><td><code>random-number.html</code></td><td><span class="badge todo">TODO</span></td><td>⭐⭐</td></tr>
+  <tr><td>Text Repeater</td><td><code>text-repeater.html</code></td><td><span class="badge todo">TODO</span></td><td>⭐</td></tr>
+  <tr><td>About</td><td><code>about.html</code></td><td><span class="badge done">✓ HAZIR</span></td><td>—</td></tr>
+  <tr><td>Privacy Policy</td><td><code>privacy.html</code></td><td><span class="badge done">✓ HAZIR</span></td><td>—</td></tr>
+  <tr><td>Contact</td><td><code>contact.html</code></td><td><span class="badge done">✓ HAZIR</span></td><td>—</td></tr>
+</table>
+
+<h2>📄 Her Tool Sayfasında Olması Gerekenler (Şablon)</h2>
+<p>Yeni bir tool sayfası yaparken bu şablonu kopyala ve doldur:</p>
+
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+  
+  &lt;!-- SEO: Her sayfada değiştir --&gt;
+  &lt;title&gt;[TOOL ADI] — DetshTool&lt;/title&gt;
+  &lt;meta name="description" content="[150-160 karakter açıklama. İngilizce. Anahtar kelime içer.]" /&gt;
+  &lt;meta name="robots" content="index, follow" /&gt;
+  &lt;link rel="canonical" href="https://detsh-tool.vercel.app/[dosya-adi].html" /&gt;
+  
+  &lt;!-- Schema.org --&gt;
+  &lt;script type="application/ld+json"&gt;
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "[Tool Adı]",
+    "description": "[Kısa açıklama]",
+    "url": "https://detsh-tool.vercel.app/[dosya-adi].html",
+    "applicationCategory": "UtilityApplication",
+    "offers": { "@type": "Offer", "price": "0" }
+  }
+  &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;!-- NAV (aynı kalır, sadece son breadcrumb değişir) --&gt;
+  &lt;nav&gt;...&lt;/nav&gt;
+  
+  &lt;main&gt;
+    &lt;h1&gt;Free [TOOL ADI]&lt;/h1&gt;    &lt;!-- H1 mutlaka olmalı --&gt;
+    &lt;p&gt;Kısa açıklama...&lt;/p&gt;
+    
+    &lt;!-- TOOL İÇERİĞİ --&gt;
+    
+    &lt;!-- SEO İÇERİK BLOĞU (önemli!) --&gt;
+    &lt;section&gt;
+      &lt;h2&gt;What is a [Tool Adı]?&lt;/h2&gt;
+      &lt;p&gt;Açıklama...&lt;/p&gt;
+      &lt;h2&gt;How to use...&lt;/h2&gt;
+      &lt;p&gt;...&lt;/p&gt;
+    &lt;/section&gt;
+  &lt;/main&gt;
+  
+  &lt;footer&gt;...&lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+<h2>🔗 Ana Sayfada Tool Linkleri</h2>
+<p>Ana sayfandaki her tool kartına şu şekilde link ekle:</p>
+<pre>&lt;!-- index.html'de her tool kartına --&gt;
+&lt;a href="/password-generator.html"&gt;
+  &lt;div class="tool-card"&gt;
+    🔐 Password Generator
+  &lt;/div&gt;
+&lt;/a&gt;</pre>
+
+<div class="tip">
+  <strong>💡 İpucu:</strong> Her tool sayfası ekleyince sitemap.xml'i de güncelle ve Search Console'dan "URL İndeksleme İste" diyerek o URL'yi gönder.
+</div>
+
+<h2>🎯 Öncelikli SEO Anahtar Kelimeleri</h2>
+<table class="table">
+  <tr><th>Sayfa</th><th>Hedef Anahtar Kelime</th><th>Aylık Arama (tahmin)</th></tr>
+  <tr><td>password-generator</td><td>"free password generator"</td><td>Yüksek</td></tr>
+  <tr><td>qr-generator</td><td>"free QR code generator"</td><td>Çok Yüksek</td></tr>
+  <tr><td>word-counter</td><td>"word counter online"</td><td>Yüksek</td></tr>
+  <tr><td>age-calculator</td><td>"age calculator"</td><td>Çok Yüksek</td></tr>
+  <tr><td>uuid-generator</td><td>"UUID generator online"</td><td>Orta</td></tr>
+  <tr><td>lorem-ipsum</td><td>"lorem ipsum generator"</td><td>Orta</td></tr>
+</table>
+
+<h2>📱 Sosyal Medya Şablonları</h2>
+<h3>TikTok / Reels için Caption (İngilizce)</h3>
+<pre>POV: You need a strong password in 2 seconds 🔐
+→ detsh-tool.vercel.app/password-generator
+
+#FreeTool #OnlineTools #PasswordGenerator #Tech #LifeHack</pre>
+
+<h3>Reddit için Post Başlığı</h3>
+<pre>I built a free password generator with no ads or signups
+[detsh-tool.vercel.app/password-generator] (self-promo)</pre>
+
+<h2>✅ Yapılacaklar Sırası</h2>
+<pre>Hafta 1:
+  [x] password-generator.html → GitHub'a yükle
+  [x] about.html → GitHub'a yükle  
+  [x] privacy.html → GitHub'a yükle
+  [x] contact.html → GitHub'a yükle
+  [x] sitemap.xml'i güncelle → Search Console'a gönder
+  [ ] Ana sayfaya (index.html) footer ekle
+  [ ] Tool kartlarına link ekle
+
+Hafta 2:
+  [ ] qr-generator.html
+  [ ] word-counter.html
+  [ ] age-calculator.html
+  [ ] sitemap güncelle
+
+Hafta 3:
+  [ ] uuid-generator.html
+  [ ] binary-converter.html
+  [ ] lorem-ipsum.html
+  [ ] Sosyal medya paylaşımı başlat</pre>
+
+</body>
+</html>

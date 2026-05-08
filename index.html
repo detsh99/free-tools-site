@@ -3,7 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DetshTool — Utility Kit</title>
+<title>DetshTool — Free Online Utility Tools</title>
+<meta name="description" content="DetshTool is a free collection of 16+ online utility tools — password generator, QR code maker, UUID generator, word counter, age calculator and more. No signup required." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://detsh-tool.vercel.app/" />
+<meta property="og:title" content="DetshTool — Free Online Utility Tools" />
+<meta property="og:description" content="16+ free tools: password generator, QR code, UUID, word counter and more. No signup, no tracking." />
+<meta property="og:url" content="https://detsh-tool.vercel.app/" />
+<meta property="og:type" content="website" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -110,6 +117,17 @@
   .tool-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
   .tool-card:hover::before { opacity: 1; }
   .tool-card.active { border-color: currentColor; }
+  .tc-pagelink {
+    position: absolute; top: 8px; right: 8px;
+    width: 22px; height: 22px; border-radius: 6px;
+    background: rgba(255,255,255,0.06);
+    color: var(--muted); font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; opacity: 0; transition: opacity 0.2s;
+    z-index: 2;
+  }
+  .tool-card:hover .tc-pagelink { opacity: 1; }
+  .tc-pagelink:hover { background: rgba(255,255,255,0.12); color: var(--text); }
 
   .tc-pw   { color: var(--accent);  } .tc-pw::before  { background: rgba(200,240,101,0.05); }
   .tc-qr   { color: var(--accent2); } .tc-qr::before  { background: rgba(108,99,255,0.05); }
@@ -342,76 +360,91 @@
 <!-- TOOL NAV CARDS -->
 <div class="grid-nav">
   <div class="tool-card tc-pw" onclick="showTool('password')">
+    <a href="/password-generator.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
     <div class="tc-icon">🔐</div>
     <div class="tc-name">Password Generator</div>
     <div class="tc-desc">Güvenli şifre üret</div>
   </div>
   <div class="tool-card tc-qr" onclick="showTool('qr')">
+    <a href="/qr-generator.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
     <div class="tc-icon">📷</div>
     <div class="tc-name">QR Generator</div>
     <div class="tc-desc">Anında QR oluştur</div>
   </div>
   <div class="tool-card tc-un" onclick="showTool('username')">
+    <a href="/username-generator.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
     <div class="tc-icon">👤</div>
     <div class="tc-name">Username Generator</div>
     <div class="tc-desc">Yaratıcı kullanıcı adı</div>
   </div>
   <div class="tool-card tc-bio" onclick="showTool('bio')">
+    <a href="/bio-generator.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
     <div class="tc-icon">✍️</div>
     <div class="tc-name">Bio Generator</div>
     <div class="tc-desc">Etkileyici biyografi</div>
   </div>
   <div class="tool-card tc-wc" onclick="showTool('wordcount')">
+    <a href="/word-counter.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
     <div class="tc-icon">📝</div>
     <div class="tc-name">Word Counter</div>
     <div class="tc-desc">Kelime & karakter say</div>
   </div>
   <div class="tool-card tc-gr" onclick="showTool('gradient')">
+    <a href="/gradient-generator.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
     <div class="tc-icon">🎨</div>
     <div class="tc-name">Gradient Tool</div>
     <div class="tc-desc">CSS gradient tasarla</div>
   </div>
   <div class="tool-card tc-uuid" onclick="showTool('uuid')">
+    <a href="/uuid-generator.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
     <div class="tc-icon">🔑</div>
     <div class="tc-name">UUID Generator</div>
     <div class="tc-desc">Benzersiz ID üret</div>
   </div>
   <div class="tool-card tc-rep" onclick="showTool('repeater')">
+    <a href="/text-repeater.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
     <div class="tc-icon">🔁</div>
     <div class="tc-name">Text Repeater</div>
     <div class="tc-desc">Metni tekrarla</div>
   </div>
   <div class="tool-card tc-cc" onclick="showTool('charcount')">
+    <a href="/character-counter.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
     <div class="tc-icon">🔢</div>
     <div class="tc-name">Character Counter</div>
     <div class="tc-desc">Karakter analizi</div>
   </div>
   <div class="tool-card tc-rng" onclick="showTool('random')">
+    <a href="/random-number.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
     <div class="tc-icon">🎯</div>
     <div class="tc-name">Random Number</div>
     <div class="tc-desc">Rastgele sayı üret</div>
   </div>
   <div class="tool-card tc-lorem" onclick="showTool('lorem')">
+    <a href="/lorem-ipsum.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
     <div class="tc-icon">📄</div>
     <div class="tc-name">Lorem Ipsum</div>
     <div class="tc-desc">Sahte metin oluştur</div>
   </div>
   <div class="tool-card tc-bin" onclick="showTool('binary')">
+    <a href="/binary-converter.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
     <div class="tc-icon">⚡</div>
     <div class="tc-name">Binary Converter</div>
     <div class="tc-desc">İkili sisteme çevir</div>
   </div>
   <div class="tool-card tc-age" onclick="showTool('age')">
+    <a href="/age-calculator.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
     <div class="tc-icon">🎂</div>
     <div class="tc-name">Age Calculator</div>
     <div class="tc-desc">Yaş hesapla</div>
   </div>
   <div class="tool-card tc-sw" onclick="showTool('stopwatch')">
+    <a href="/stopwatch.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
     <div class="tc-icon">⏱️</div>
     <div class="tc-name">Stopwatch</div>
     <div class="tc-desc">Kronometreyi başlat</div>
   </div>
   <div class="tool-card tc-dice" onclick="showTool('dice')">
+    <a href="/dice-roller.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
     <div class="tc-icon">🎲</div>
     <div class="tc-name">Dice Roller</div>
     <div class="tc-desc">Zar at</div>
@@ -1014,7 +1047,12 @@
 </div>
 
 <footer>
-  ToolBox — 16 araç, sonsuz olasılık ✦ Built with ♥
+  <div style="margin-bottom:12px;">
+    <a href="/about.html" style="color:var(--muted);text-decoration:none;margin:0 10px;font-size:0.82rem;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">About</a>
+    <a href="/privacy.html" style="color:var(--muted);text-decoration:none;margin:0 10px;font-size:0.82rem;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">Privacy Policy</a>
+    <a href="/contact.html" style="color:var(--muted);text-decoration:none;margin:0 10px;font-size:0.82rem;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">Contact</a>
+  </div>
+  <span style="color:var(--accent)">DetshTool</span> — 16 free utility tools ✦ Built with ♥
 </footer>
 
 <script>

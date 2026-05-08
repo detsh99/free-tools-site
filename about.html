@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — DetshTool</title>
+  <meta name="description" content="DetshTool is a free collection of utility tools for everyday tasks — no signup, no tracking, just tools that work." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://detsh-tool.vercel.app/about.html" />
+  <style>
+    :root {
+      --bg: #0a0a0f; --surface: #13131a; --card: #1a1a24; --border: #2a2a3a;
+      --accent: #7c6af7; --accent2: #4ecdc4; --text: #e8e8f0; --muted: #6b6b80;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+    nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 20px; display: flex; align-items: center; gap: 16px; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 14px; }
+    nav a:hover { color: var(--text); }
+    nav .logo { color: var(--accent); font-weight: 700; font-size: 16px; }
+    nav .sep { color: var(--border); }
+    main { max-width: 640px; margin: 0 auto; padding: 48px 20px 80px; }
+    .badge { display: inline-block; background: rgba(124,106,247,0.15); color: var(--accent); border: 1px solid rgba(124,106,247,0.3); border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 16px; }
+    h1 { font-size: clamp(26px, 6vw, 42px); font-weight: 800; line-height: 1.2; margin-bottom: 14px; }
+    h2 { font-size: 20px; font-weight: 700; margin: 36px 0 12px; color: var(--text); }
+    p { color: var(--muted); font-size: 15px; line-height: 1.8; margin-bottom: 14px; }
+    .highlight { color: var(--accent2); font-weight: 600; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 24px 0; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; text-align: center; }
+    .stat-num { font-size: 32px; font-weight: 800; color: var(--accent); }
+    .stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    .tool-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+    .chip { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 13px; color: var(--muted); }
+    footer { text-align: center; padding: 32px 20px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--border); }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">DetshTool</a>
+  <span class="sep">›</span>
+  <span style="color:var(--text)">About</span>
+</nav>
+<main>
+  <div class="badge">About Us</div>
+  <h1>One place for all your <span style="color:var(--accent)">utility needs</span></h1>
+  <p>DetshTool is a <span class="highlight">free, fast, and privacy-first</span> collection of everyday utility tools. No accounts. No tracking. No ads. Just tools that work — right in your browser.</p>
+
+  <div class="grid">
+    <div class="stat-card">
+      <div class="stat-num">16+</div>
+      <div class="stat-label">Free Tools</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">0</div>
+      <div class="stat-label">Required Signups</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Browser-Based</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">Free</div>
+      <div class="stat-label">Always & Forever</div>
+    </div>
+  </div>
+
+  <h2>Our Tools</h2>
+  <p>We currently offer tools across multiple categories — security, text, design, and developer utilities.</p>
+  <div class="tool-chips">
+    <span class="chip">🔐 Password Generator</span>
+    <span class="chip">📷 QR Generator</span>
+    <span class="chip">👤 Username Generator</span>
+    <span class="chip">✍️ Bio Generator</span>
+    <span class="chip">📝 Word Counter</span>
+    <span class="chip">🎨 Gradient Tool</span>
+    <span class="chip">🔑 UUID Generator</span>
+    <span class="chip">🔢 Character Counter</span>
+    <span class="chip">⚡ Binary Converter</span>
+    <span class="chip">🎂 Age Calculator</span>
+    <span class="chip">⏱️ Stopwatch</span>
+    <span class="chip">🎲 Dice Roller</span>
+  </div>
+
+  <h2>Why DetshTool?</h2>
+  <p>Too many "free" tool sites are cluttered with ads, require you to create accounts, or secretly harvest your data. We built DetshTool as a clean alternative — everything runs locally in your browser, so your data never leaves your device.</p>
+  <p>We're adding new tools regularly. If you have a suggestion, <a href="/contact.html" style="color:var(--accent)">let us know</a>.</p>
+
+  <h2>Privacy by Default</h2>
+  <p>All processing happens in your browser. We don't log what you generate, what you type, or who you are. Read our full <a href="/privacy.html" style="color:var(--accent)">Privacy Policy</a>.</p>
+</main>
+<footer>
+  <p>© 2025 <a href="/">DetshTool</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy Policy</a> · <a href="/contact.html">Contact</a></p>
+</footer>
+</body>
+</html>
