@@ -1,1792 +1,1718 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DetshTool — Free Online Utility Tools</title>
-<meta name="description" content="DetshTool is a free collection of 16+ online utility tools — password generator, QR code maker, UUID generator, word counter, age calculator and more. No signup required." />
-<meta name="robots" content="index, follow" />
-<link rel="canonical" href="https://detsh-tool.vercel.app/" />
-<meta property="og:title" content="DetshTool — Free Online Utility Tools" />
-<meta property="og:description" content="16+ free tools: password generator, QR code, UUID, word counter and more. No signup, no tracking." />
-<meta property="og:url" content="https://detsh-tool.vercel.app/" />
-<meta property="og:type" content="website" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DETSH Tools — Tüm Araçlar</title>
+<meta name="description" content="Geliştiriciler, tasarımcılar ve SEO uzmanları için 30+ ücretsiz araç. Hepsi tek sayfada, anında çalışır."/>
+<link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root{
+  --bg:#0a0a0f;--bg2:#111118;--bg3:#1a1a24;--bg4:#222230;
+  --border:#2a2a3a;--border2:#3a3a50;
+  --text:#e8e8f0;--text2:#9090a8;--text3:#5a5a70;
+  --accent:#6c63ff;--accent2:#ff6384;--accent3:#36d9b8;--accent4:#ffaa40;
+  --green:#22d67a;--red:#ff4060;--yellow:#ffcc00;
+  --radius:12px;--radius-sm:8px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Cabinet Grotesk',system-ui,sans-serif;min-height:100vh;overflow-x:hidden;}
+code,pre,textarea.mono,input.mono{font-family:'JetBrains Mono',monospace;}
 
-  :root {
-    --bg: #0a0a0f;
-    --surface: #121218;
-    --surface2: #1a1a24;
-    --border: rgba(255,255,255,0.07);
-    --border-hover: rgba(255,255,255,0.15);
-    --text: #f0eee8;
-    --muted: #7a7888;
-    --accent: #c8f065;
-    --accent2: #6c63ff;
-    --accent3: #ff6b6b;
-    --accent4: #00d4aa;
-    --font-head: 'Syne', sans-serif;
-    --font-mono: 'DM Mono', monospace;
-    --radius: 14px;
-    --radius-sm: 8px;
-  }
+/* NOISE OVERLAY */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.4;}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-head);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+/* HEADER */
+#header{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;background:rgba(10,10,15,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:20px;}
+.logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:18px;color:var(--text);letter-spacing:-0.5px;}
+.logo span{color:var(--accent);}
+.badge{background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:0.5px;}
+#search-header{margin-left:auto;position:relative;}
+#search-header input{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:7px 14px 7px 36px;color:var(--text);font-size:13px;font-family:'Cabinet Grotesk',system-ui,sans-serif;outline:none;width:240px;transition:border-color .2s,width .3s;cursor:pointer;}
+#search-header input:focus{border-color:var(--accent);width:300px;}
+#search-header input::placeholder{color:var(--text3);}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;}
+#tool-count{color:var(--text3);font-size:12px;font-family:'JetBrains Mono',monospace;}
 
-  /* NAV */
-  nav {
-    position: sticky; top: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1.1rem 2.5rem;
-    background: rgba(10,10,15,0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-  }
-  .logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.03em; }
-  .logo span { color: var(--accent); }
-  .nav-pills { display: flex; gap: 6px; flex-wrap: wrap; }
-  .nav-pill {
-    padding: 6px 14px; border-radius: 100px;
-    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.02em;
-    cursor: pointer; border: 1px solid var(--border);
-    background: transparent; color: var(--muted);
-    transition: all 0.2s;
-  }
-  .nav-pill:hover { border-color: var(--border-hover); color: var(--text); }
-  .nav-pill.active { background: var(--accent); color: #0a0a0f; border-color: var(--accent); }
+/* LAYOUT */
+#layout{display:flex;padding-top:56px;min-height:100vh;}
 
-  /* HERO */
-  .hero {
-    text-align: center; padding: 5rem 2rem 3rem;
-    background: radial-gradient(ellipse 70% 40% at 50% 0%, rgba(200,240,101,0.07) 0%, transparent 70%);
-  }
-  .hero-tag {
-    display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--accent); background: rgba(200,240,101,0.1);
-    border: 1px solid rgba(200,240,101,0.25); border-radius: 100px;
-    padding: 5px 14px; margin-bottom: 1.5rem;
-  }
-  .hero h1 {
-    font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800;
-    line-height: 1.05; letter-spacing: -0.04em;
-    margin-bottom: 1rem;
-  }
-  .hero h1 em { font-style: normal; color: var(--accent); }
-  .hero p { color: var(--muted); font-size: 1.05rem; max-width: 500px; margin: 0 auto; }
+/* SIDEBAR */
+#sidebar{width:220px;flex-shrink:0;position:fixed;top:56px;bottom:0;left:0;overflow-y:auto;background:var(--bg2);border-right:1px solid var(--border);padding:16px 12px;}
+#sidebar::-webkit-scrollbar{width:3px;}
+#sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.cat-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);padding:8px 8px 4px;margin-top:8px;}
+.cat-label:first-child{margin-top:0;}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--radius-sm);cursor:pointer;color:var(--text2);font-size:13px;transition:all .15s;margin-bottom:1px;}
+.nav-item:hover{background:var(--bg3);color:var(--text);}
+.nav-item.active{background:rgba(108,99,255,0.15);color:var(--accent);font-weight:500;}
+.nav-icon{font-size:15px;width:20px;text-align:center;}
 
-  /* TOOL GRID */
-  .grid-nav {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    padding: 2.5rem 2.5rem 0;
-    max-width: 1100px; margin: 0 auto;
-  }
-  @media (max-width: 700px) {
-    .grid-nav { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (max-width: 450px) {
-    .grid-nav { grid-template-columns: 1fr; }
-  }
-  .tool-card {
-    position: relative;
-    padding: 1.4rem 1.2rem;
-    border-radius: var(--radius);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: all 0.25s;
-    overflow: hidden;
-  }
-  .tool-card::before {
-    content: '';
-    position: absolute; inset: 0;
-    opacity: 0; transition: opacity 0.25s;
-    border-radius: var(--radius);
-  }
-  .tool-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
-  .tool-card:hover::before { opacity: 1; }
-  .tool-card.active { border-color: currentColor; }
-  .tc-pagelink {
-    position: absolute; top: 8px; right: 8px;
-    width: 22px; height: 22px; border-radius: 6px;
-    background: rgba(255,255,255,0.06);
-    color: var(--muted); font-size: 11px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    text-decoration: none; opacity: 0; transition: opacity 0.2s;
-    z-index: 2;
-  }
-  .tool-card:hover .tc-pagelink { opacity: 1; }
-  .tc-pagelink:hover { background: rgba(255,255,255,0.12); color: var(--text); }
+/* MAIN */
+#main{margin-left:220px;flex:1;padding:24px;position:relative;z-index:1;}
 
-  .tc-pw   { color: var(--accent);  } .tc-pw::before  { background: rgba(200,240,101,0.05); }
-  .tc-qr   { color: var(--accent2); } .tc-qr::before  { background: rgba(108,99,255,0.05); }
-  .tc-un   { color: var(--accent4); } .tc-un::before  { background: rgba(0,212,170,0.05); }
-  .tc-bio  { color: #ff9f5a; }       .tc-bio::before  { background: rgba(255,159,90,0.05); }
-  .tc-wc   { color: var(--accent3); } .tc-wc::before  { background: rgba(255,107,107,0.05); }
-  .tc-gr   { color: #c47eff; }       .tc-gr::before   { background: rgba(196,126,255,0.05); }
-  .tc-uuid { color: #00d4aa; }        .tc-uuid::before { background: rgba(0,212,170,0.05); }
-  .tc-rep  { color: #ffd93d; }        .tc-rep::before  { background: rgba(255,217,61,0.05); }
-  .tc-cc   { color: #ff6b9d; }        .tc-cc::before   { background: rgba(255,107,157,0.05); }
-  .tc-rng  { color: #6c63ff; }        .tc-rng::before  { background: rgba(108,99,255,0.05); }
-  .tc-lorem{ color: #c8f065; }        .tc-lorem::before{ background: rgba(200,240,101,0.05); }
-  .tc-bin  { color: #00b8d9; }        .tc-bin::before  { background: rgba(0,184,217,0.05); }
-  .tc-age  { color: #ff9f5a; }        .tc-age::before  { background: rgba(255,159,90,0.05); }
-  .tc-sw   { color: #c47eff; }        .tc-sw::before   { background: rgba(196,126,255,0.05); }
-  .tc-dice { color: #ff6b6b; }        .tc-dice::before { background: rgba(255,107,107,0.05); }
-  .tc-tip  { color: #ffd93d; }        .tc-tip::before  { background: rgba(255,217,61,0.05); }
-  .tc-unit { color: #00d4aa; }        .tc-unit::before { background: rgba(0,212,170,0.05); }
+/* HERO */
+#hero{text-align:center;padding:40px 0 48px;max-width:600px;margin:0 auto;}
+#hero h1{font-size:42px;font-weight:800;line-height:1.1;margin-bottom:12px;background:linear-gradient(135deg,#fff 30%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+#hero p{color:var(--text2);font-size:16px;line-height:1.6;}
+.stats-row{display:flex;justify-content:center;gap:32px;margin-top:24px;}
+.stat{text-align:center;}
+.stat-n{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:var(--accent);}
+.stat-l{font-size:12px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;}
 
-  /* STOPWATCH */
-  .sw-display {
-    font-family: var(--font-mono); font-size: 3.5rem; font-weight: 400;
-    text-align: center; padding: 2rem; color: var(--accent);
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--radius); margin-bottom: 1.5rem; letter-spacing: 0.05em;
-  }
-  .lap-list { max-height: 250px; overflow-y: auto; margin-top: 1rem; }
-  .lap-item {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 8px 14px; border-bottom: 1px solid var(--border);
-    font-family: var(--font-mono); font-size: 0.88rem;
-  }
-  .lap-item:last-child { border-bottom: none; }
-  .lap-num { color: var(--muted); }
+/* SECTION */
+.section{margin-bottom:40px;animation:fadeup .4s ease;}
+@keyframes fadeup{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+.section-title{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
 
-  /* DICE */
-  .dice-face {
-    width: 100px; height: 100px; border-radius: 16px;
-    background: var(--surface2); border: 2px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 3rem; cursor: pointer; transition: all 0.15s;
-    user-select: none;
-  }
-  .dice-face:hover { border-color: var(--accent); transform: scale(1.05); }
-  .dice-face.rolling { animation: diceRoll 0.4s ease; }
-  @keyframes diceRoll {
-    0%,100%{transform:rotate(0deg) scale(1)} 25%{transform:rotate(-15deg) scale(0.9)} 75%{transform:rotate(15deg) scale(0.9)}
-  }
-  .dice-row { display: flex; gap: 16px; flex-wrap: wrap; margin: 1.5rem 0; }
+/* TOOL GRID */
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;}
 
-  /* BINARY */
-  .bin-result { font-family: var(--font-mono); font-size: 1rem; color: var(--accent4); word-break: break-all; }
+/* TOOL CARD */
+.tool-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;transition:border-color .2s,transform .2s;cursor:pointer;}
+.tool-card:hover{border-color:var(--border2);transform:translateY(-2px);}
+.tool-card.open{border-color:var(--accent);background:var(--bg3);}
+.tool-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.tool-emoji{font-size:20px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--bg3);border-radius:var(--radius-sm);}
+.tool-card.open .tool-emoji{background:rgba(108,99,255,0.15);}
+.tool-name{font-weight:700;font-size:15px;}
+.tool-desc{font-size:12px;color:var(--text2);margin-top:2px;}
+.tool-body{display:none;padding-top:16px;border-top:1px solid var(--border);margin-top:4px;}
+.tool-card.open .tool-body{display:block;}
 
-  /* AGE */
-  .age-result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 1.5rem; }
+/* INPUTS */
+label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:0.3px;}
+input[type=text],input[type=number],input[type=color],textarea,select{width:100%;background:var(--bg4);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;color:var(--text);font-size:13px;outline:none;transition:border-color .2s;font-family:'Cabinet Grotesk',system-ui,sans-serif;}
+input[type=text]:focus,input[type=number]:focus,textarea:focus,select:focus{border-color:var(--accent);}
+textarea{resize:vertical;min-height:90px;}
+input[type=range]{width:100%;accent-color:var(--accent);margin:4px 0;}
+input[type=color]{height:40px;padding:4px;cursor:pointer;}
+select option{background:var(--bg4);color:var(--text);}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.field{margin-bottom:12px;}
+.field:last-child{margin-bottom:0;}
+.hint{font-size:11px;color:var(--text3);margin-top:4px;}
 
-  /* LOREM */
-  .lorem-output { white-space: pre-wrap; line-height: 1.75; font-size: 0.9rem; color: var(--text); font-family: var(--font-mono); }
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:var(--radius-sm);border:none;cursor:pointer;font-size:13px;font-weight:600;font-family:'Cabinet Grotesk',system-ui,sans-serif;transition:all .15s;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{background:#7c74ff;}
+.btn-secondary{background:var(--bg4);color:var(--text);border:1px solid var(--border2);}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+.btn-green{background:rgba(34,214,122,0.15);color:var(--green);border:1px solid rgba(34,214,122,0.3);}
+.btn-green:hover{background:rgba(34,214,122,0.25);}
+.btn-red{background:rgba(255,64,96,0.12);color:var(--red);border:1px solid rgba(255,64,96,0.25);}
+.btn-red:hover{background:rgba(255,64,96,0.2);}
+.btn-sm{padding:6px 12px;font-size:12px;}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
 
-  .tc-icon { font-size: 1.6rem; margin-bottom: 0.8rem; }
-  .tc-name { font-size: 0.85rem; font-weight: 700; letter-spacing: -0.01em; }
-  .tc-desc { font-size: 0.72rem; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+/* OUTPUT */
+.output{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent3);margin-top:10px;min-height:44px;word-break:break-all;white-space:pre-wrap;position:relative;}
+.output-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;}
+.copy-btn{position:absolute;top:8px;right:8px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:10px;cursor:pointer;color:var(--text2);font-family:'Cabinet Grotesk',system-ui,sans-serif;transition:all .15s;}
+.copy-btn:hover{color:var(--accent);border-color:var(--accent);}
+.copy-btn.copied{color:var(--green);border-color:var(--green);}
 
-  /* TOOLS AREA */
-  .tools-area {
-    max-width: 1100px; margin: 2rem auto 4rem;
-    padding: 0 2.5rem;
-  }
-  .tool-panel { display: none; animation: fadeUp 0.3s ease; }
-  .tool-panel.active { display: block; }
+/* PREVIEW BOX */
+.preview-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;margin-top:10px;}
+.preview-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:10px;}
+.color-preview{width:100%;height:80px;border-radius:var(--radius-sm);margin-bottom:8px;transition:all .3s;}
+.palette-row{display:flex;gap:6px;flex-wrap:wrap;}
+.swatch{width:40px;height:40px;border-radius:6px;cursor:pointer;transition:transform .2s;}
+.swatch:hover{transform:scale(1.1);}
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+/* CHECKBOX / TOGGLE */
+.check-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+.check-item{display:flex;align-items:center;gap:5px;background:var(--bg4);border:1px solid var(--border);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:12px;transition:all .15s;}
+.check-item input{accent-color:var(--accent);}
+.check-item:hover{border-color:var(--border2);}
 
-  .panel-header {
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: flex-end; justify-content: space-between;
-    flex-wrap: wrap; gap: 1rem;
-  }
-  .panel-header h2 { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.03em; }
-  .panel-header p { color: var(--muted); font-size: 0.88rem; margin-top: 4px; }
+/* RANGE ROW */
+.range-row{display:flex;align-items:center;gap:10px;}
+.range-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:36px;text-align:right;}
 
-  /* INPUTS & BUTTONS */
-  .field { margin-bottom: 1.2rem; }
-  .field label { display: block; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-  .field input, .field select, .field textarea {
-    width: 100%; padding: 11px 14px;
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); color: var(--text);
-    font-family: var(--font-head); font-size: 0.92rem;
-    transition: border-color 0.2s; outline: none;
-  }
-  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--border-hover); }
-  .field textarea { resize: vertical; min-height: 120px; }
-  .field select option { background: var(--surface2); }
+/* TAG */
+.tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;}
+.tag-purple{background:rgba(108,99,255,0.15);color:var(--accent);}
+.tag-green{background:rgba(34,214,122,0.12);color:var(--green);}
+.tag-red{background:rgba(255,64,96,0.12);color:var(--red);}
+.tag-yellow{background:rgba(255,204,0,0.12);color:var(--yellow);}
+.tag-teal{background:rgba(54,217,184,0.12);color:var(--accent3);}
 
-  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 600px) { .row { grid-template-columns: 1fr; } }
+/* QR */
+#qr-output{display:flex;justify-content:center;margin-top:12px;}
+#qr-output canvas,#qr-output img{border-radius:8px;}
 
-  .checkbox-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .checkbox-row input[type=checkbox] { width: 17px; height: 17px; accent-color: var(--accent); cursor: pointer; }
-  .checkbox-row label { font-size: 0.88rem; cursor: pointer; }
+/* DIFF */
+.diff-result{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-top:10px;}
+.diff-add{background:rgba(34,214,122,0.1);color:var(--green);padding:1px 4px;display:block;}
+.diff-rem{background:rgba(255,64,96,0.1);color:var(--red);padding:1px 4px;display:block;text-decoration:line-through;}
+.diff-same{color:var(--text2);display:block;}
 
-  .range-row { display: flex; align-items: center; gap: 12px; }
-  .range-row input[type=range] { flex: 1; accent-color: var(--accent); }
-  .range-val { font-family: var(--font-mono); font-size: 0.9rem; color: var(--accent); min-width: 28px; text-align: right; }
+/* CSS PREVIEW */
+.css-preview{border:1px solid var(--border);border-radius:var(--radius-sm);margin-top:10px;overflow:hidden;}
+.css-preview-inner{padding:20px;background:#fff;display:flex;align-items:center;justify-content:center;min-height:80px;}
 
-  .btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 11px 22px; border-radius: var(--radius-sm);
-    font-family: var(--font-head); font-size: 0.88rem; font-weight: 700;
-    letter-spacing: 0.02em; cursor: pointer; border: none;
-    transition: all 0.18s; text-decoration: none;
-  }
-  .btn-primary { background: var(--accent); color: #0a0a0f; }
-  .btn-primary:hover { background: #d4f57a; transform: translateY(-1px); }
-  .btn-ghost { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-  .btn-ghost:hover { border-color: var(--border-hover); }
+/* REGEX */
+.regex-match{background:rgba(255,204,0,0.25);color:var(--yellow);border-radius:2px;padding:0 2px;}
 
-  /* OUTPUT BOXES */
-  .output-box {
-    position: relative;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.2rem 1.4rem;
-    margin-top: 1.5rem;
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
-    line-height: 1.7;
-    word-break: break-all;
-    min-height: 60px;
-  }
-  .output-box.large { font-size: 1.5rem; letter-spacing: 0.05em; text-align: center; padding: 2rem; }
-  .copy-btn {
-    position: absolute; top: 10px; right: 10px;
-    padding: 5px 12px; font-size: 0.72rem; font-weight: 700;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 6px; color: var(--muted); cursor: pointer;
-    font-family: var(--font-head); transition: all 0.2s;
-  }
-  .copy-btn:hover { color: var(--text); border-color: var(--border-hover); }
-  .copy-btn.copied { color: var(--accent); border-color: var(--accent); }
+/* CONTRAST */
+.contrast-box{display:flex;border-radius:var(--radius-sm);overflow:hidden;margin-top:10px;min-height:80px;}
+.contrast-half{flex:1;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;padding:16px;}
+.wcag-row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
+.wcag-badge{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;}
+.wcag-pass{background:rgba(34,214,122,0.15);color:var(--green);border:1px solid rgba(34,214,122,0.3);}
+.wcag-fail{background:rgba(255,64,96,0.12);color:var(--red);border:1px solid rgba(255,64,96,0.25);}
 
-  /* QR */
-  #qr-output { display: flex; justify-content: center; padding: 2rem; }
-  #qrcode canvas, #qrcode img { border-radius: 10px; }
+/* PASSWORD STRENGTH */
+.pw-strength-bar{height:6px;border-radius:3px;margin-top:8px;transition:all .3s;background:var(--border);}
+.pw-strength-label{font-size:11px;margin-top:4px;}
 
-  /* USERNAME CHIPS */
-  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1.2rem; }
-  .chip {
-    padding: 8px 16px; border-radius: 100px;
-    background: var(--surface2); border: 1px solid var(--border);
-    font-family: var(--font-mono); font-size: 0.85rem; cursor: pointer;
-    transition: all 0.2s;
-  }
-  .chip:hover { background: var(--surface); border-color: var(--accent); color: var(--accent); }
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--bg3);border:1px solid var(--green);border-radius:var(--radius-sm);padding:10px 18px;color:var(--green);font-size:13px;font-weight:600;z-index:9999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;}
+#toast.show{opacity:1;transform:none;}
 
-  /* WORD COUNTER STATS */
-  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-top: 1.5rem; }
-  .stat-card {
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 1rem;
-    text-align: center;
-  }
-  .stat-val { font-size: 1.8rem; font-weight: 800; color: var(--accent); }
-  .stat-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
+/* SEARCH OVERLAY */
+#search-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;backdrop-filter:blur(4px);}
+#search-overlay.show{display:flex;align-items:flex-start;justify-content:center;padding-top:120px;}
+#search-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);width:520px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+#search-input-big{width:100%;background:transparent;border:none;padding:16px 20px;font-size:16px;color:var(--text);outline:none;font-family:'Cabinet Grotesk',system-ui,sans-serif;border-bottom:1px solid var(--border);}
+#search-results-list{max-height:340px;overflow-y:auto;}
+.search-result-item{padding:12px 20px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:background .15s;}
+.search-result-item:hover{background:var(--bg3);}
+.search-result-item .sri-emoji{font-size:18px;}
+.search-result-item .sri-name{font-weight:600;font-size:14px;}
+.search-result-item .sri-cat{font-size:11px;color:var(--text3);}
+#search-empty{padding:32px;text-align:center;color:var(--text3);font-size:14px;}
 
-  /* GRADIENT TOOL */
-  .gradient-preview {
-    height: 200px; border-radius: var(--radius);
-    margin-bottom: 1.5rem; border: 1px solid var(--border);
-    background: linear-gradient(135deg, #c8f065, #6c63ff);
-    transition: all 0.3s;
-  }
-  .color-stops { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 1.2rem; }
-  .color-stop { display: flex; flex-direction: column; gap: 6px; }
-  .color-stop label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
-  .color-stop input[type=color] {
-    width: 56px; height: 44px; border-radius: 8px;
-    border: 1px solid var(--border); cursor: pointer;
-    background: none; padding: 4px;
-  }
-  .grad-css {
-    font-family: var(--font-mono); font-size: 0.82rem;
-    color: var(--accent4); padding: 12px 14px;
-    background: var(--surface2); border-radius: var(--radius-sm);
-    border: 1px solid var(--border); word-break: break-all;
-    margin-top: 1rem; position: relative;
-  }
+/* UNIT CONVERTER TABLE */
+.unit-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px;}
+.unit-table td,.unit-table th{padding:8px 10px;border:1px solid var(--border);text-align:left;}
+.unit-table th{background:var(--bg4);color:var(--text2);font-size:11px;text-transform:uppercase;letter-spacing:1px;}
+.unit-table td:last-child{font-family:'JetBrains Mono',monospace;color:var(--accent3);}
 
-  /* BIO */
-  .bio-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 0.5rem; }
-  .bio-tag {
-    padding: 5px 12px; border-radius: 100px;
-    font-size: 0.78rem; font-weight: 600;
-    background: var(--surface2); border: 1px solid var(--border); cursor: pointer;
-    transition: all 0.18s;
-  }
-  .bio-tag:hover, .bio-tag.sel { background: rgba(200,240,101,0.12); border-color: var(--accent); color: var(--accent); }
+/* SVG ICON */
+.svg-icon{width:16px;height:16px;display:inline-block;vertical-align:middle;}
 
-  /* STRENGTH BAR */
-  .strength-bar { height: 4px; border-radius: 4px; background: var(--surface2); margin-top: 12px; overflow: hidden; }
-  .strength-fill { height: 100%; border-radius: 4px; transition: all 0.4s; }
-
-  /* FOOTER */
-  footer {
-    text-align: center; padding: 2.5rem;
-    border-top: 1px solid var(--border);
-    color: var(--muted); font-size: 0.78rem;
-  }
-
-  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+/* RESPONSIVE */
+@media(max-width:768px){
+  #sidebar{display:none;}
+  #main{margin-left:0;}
+  .tool-grid{grid-template-columns:1fr;}
+  #hero h1{font-size:28px;}
+}
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="logo">Detsh<span>Tool</span></div>
-</nav>
+<!-- TOAST -->
+<div id="toast">✓ Kopyalandı!</div>
 
-<div class="hero">
-  <div class="hero-tag">18 Tools · One Place</div>
-  <h1>Your <em>creative</em><br>utility kit</h1>
-  <p>Hepsi bir arada — şifre, QR, UUID, tip calculator, unit converter ve daha fazlası.</p>
-</div>
-
-<!-- TOOL NAV CARDS -->
-<div class="grid-nav">
-  <div class="tool-card tc-pw" onclick="showTool('password')">
-    <a href="/password-generator.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
-    <div class="tc-icon">🔐</div>
-    <div class="tc-name">Password Generator</div>
-    <div class="tc-desc">Güvenli şifre üret</div>
-  </div>
-  <div class="tool-card tc-qr" onclick="showTool('qr')">
-    <a href="/qr-generator.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
-    <div class="tc-icon">📷</div>
-    <div class="tc-name">QR Generator</div>
-    <div class="tc-desc">Anında QR oluştur</div>
-  </div>
-  <div class="tool-card tc-un" onclick="showTool('username')">
-    <a href="/username-generator.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
-    <div class="tc-icon">👤</div>
-    <div class="tc-name">Username Generator</div>
-    <div class="tc-desc">Yaratıcı kullanıcı adı</div>
-  </div>
-  <div class="tool-card tc-bio" onclick="showTool('bio')">
-    <a href="/bio-generator.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
-    <div class="tc-icon">✍️</div>
-    <div class="tc-name">Bio Generator</div>
-    <div class="tc-desc">Etkileyici biyografi</div>
-  </div>
-  <div class="tool-card tc-wc" onclick="showTool('wordcount')">
-    <a href="/word-counter.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
-    <div class="tc-icon">📝</div>
-    <div class="tc-name">Word Counter</div>
-    <div class="tc-desc">Kelime & karakter say</div>
-  </div>
-  <div class="tool-card tc-gr" onclick="showTool('gradient')">
-    <a href="/gradient-generator.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
-    <div class="tc-icon">🎨</div>
-    <div class="tc-name">Gradient Tool</div>
-    <div class="tc-desc">CSS gradient tasarla</div>
-  </div>
-  <div class="tool-card tc-uuid" onclick="showTool('uuid')">
-    <a href="/uuid-generator.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
-    <div class="tc-icon">🔑</div>
-    <div class="tc-name">UUID Generator</div>
-    <div class="tc-desc">Benzersiz ID üret</div>
-  </div>
-  <div class="tool-card tc-rep" onclick="showTool('repeater')">
-    <a href="/text-repeater.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
-    <div class="tc-icon">🔁</div>
-    <div class="tc-name">Text Repeater</div>
-    <div class="tc-desc">Metni tekrarla</div>
-  </div>
-  <div class="tool-card tc-cc" onclick="showTool('charcount')">
-    <a href="/character-counter.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
-    <div class="tc-icon">🔢</div>
-    <div class="tc-name">Character Counter</div>
-    <div class="tc-desc">Karakter analizi</div>
-  </div>
-  <div class="tool-card tc-rng" onclick="showTool('random')">
-    <a href="/random-number.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
-    <div class="tc-icon">🎯</div>
-    <div class="tc-name">Random Number</div>
-    <div class="tc-desc">Rastgele sayı üret</div>
-  </div>
-  <div class="tool-card tc-lorem" onclick="showTool('lorem')">
-    <a href="/lorem-ipsum.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
-    <div class="tc-icon">📄</div>
-    <div class="tc-name">Lorem Ipsum</div>
-    <div class="tc-desc">Sahte metin oluştur</div>
-  </div>
-  <div class="tool-card tc-bin" onclick="showTool('binary')">
-    <a href="/binary-converter.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
-    <div class="tc-icon">⚡</div>
-    <div class="tc-name">Binary Converter</div>
-    <div class="tc-desc">İkili sisteme çevir</div>
-  </div>
-  <div class="tool-card tc-age" onclick="showTool('age')">
-    <a href="/age-calculator.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
-    <div class="tc-icon">🎂</div>
-    <div class="tc-name">Age Calculator</div>
-    <div class="tc-desc">Yaş hesapla</div>
-  </div>
-  <div class="tool-card tc-sw" onclick="showTool('stopwatch')">
-    <a href="/stopwatch.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
-    <div class="tc-icon">⏱️</div>
-    <div class="tc-name">Stopwatch</div>
-    <div class="tc-desc">Kronometreyi başlat</div>
-  </div>
-  <div class="tool-card tc-dice" onclick="showTool('dice')">
-    <a href="/dice-roller.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
-    <div class="tc-icon">🎲</div>
-    <div class="tc-name">Dice Roller</div>
-    <div class="tc-desc">Zar at</div>
-  </div>
-  <div class="tool-card tc-tip" onclick="showTool('tip')">
-    <a href="/tip-calculator.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
-    <div class="tc-icon">💰</div>
-    <div class="tc-name">Tip Calculator</div>
-    <div class="tc-desc">Bahşiş & hesap böl</div>
-  </div>
-  <div class="tool-card tc-unit" onclick="showTool('unit')">
-    <a href="/unit-converter.html" class="tc-pagelink" onclick="event.stopPropagation()" title="Open full page">↗</a>
-    <div class="tc-icon">📐</div>
-    <div class="tc-name">Unit Converter</div>
-    <div class="tc-desc">Birim dönüştür</div>
+<!-- SEARCH OVERLAY -->
+<div id="search-overlay" onclick="closeSearch(event)">
+  <div id="search-box">
+    <input id="search-input-big" placeholder="Araç ara... (örn: qr, css, şifre)" oninput="doSearch(this.value)" autofocus/>
+    <div id="search-results-list"></div>
+    <div id="search-empty" style="display:none">Sonuç bulunamadı</div>
   </div>
 </div>
 
-<!-- TOOLS AREA -->
-<div class="tools-area">
-
-  <!-- PASSWORD GENERATOR -->
-  <div id="panel-password" class="tool-panel active">
-    <div class="panel-header">
-      <div>
-        <h2 style="color:var(--accent)">Password Generator</h2>
-        <p>Güvenli ve özelleştirilebilir şifreler üret</p>
-      </div>
-    </div>
-    <div class="field">
-      <label>Uzunluk</label>
-      <div class="range-row">
-        <input type="range" min="6" max="64" value="16" id="pwLen" oninput="updateLen()">
-        <span class="range-val" id="pwLenVal">16</span>
-      </div>
-    </div>
-    <div class="row">
-      <div>
-        <div class="checkbox-row"><input type="checkbox" id="pwUpper" checked><label for="pwUpper">Büyük Harf (A–Z)</label></div>
-        <div class="checkbox-row"><input type="checkbox" id="pwLower" checked><label for="pwLower">Küçük Harf (a–z)</label></div>
-      </div>
-      <div>
-        <div class="checkbox-row"><input type="checkbox" id="pwNum" checked><label for="pwNum">Rakam (0–9)</label></div>
-        <div class="checkbox-row"><input type="checkbox" id="pwSym" checked><label for="pwSym">Sembol (!@#$...)</label></div>
-      </div>
-    </div>
-    <div class="checkbox-row"><input type="checkbox" id="pwExclude"><label for="pwExclude">Benzer karakterleri hariç tut (0, O, l, 1)</label></div>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="generatePassword()">Şifre Üret</button>
-    </div>
-    <div class="output-box large" id="pwOutput">
-      <button class="copy-btn" onclick="copyText('pwOutput', this)">Kopyala</button>
-      <span id="pwText">—</span>
-    </div>
-    <div class="strength-bar"><div class="strength-fill" id="strengthFill" style="width:0%;background:var(--accent3)"></div></div>
-    <p style="font-size:0.78rem;color:var(--muted);margin-top:8px" id="strengthLabel">Şifre gücü burada görünecek</p>
+<!-- HEADER -->
+<div id="header">
+  <div class="logo">DETSH<span>.</span>tools</div>
+  <div class="badge">BETA</div>
+  <span id="tool-count">30 araç</span>
+  <div id="search-header">
+    <span class="search-icon">⌕</span>
+    <input type="text" placeholder="Araç ara... (Ctrl+K)" readonly onclick="openSearch()" onkeydown="if(event.key==='Enter')openSearch()"/>
   </div>
-
-  <!-- QR GENERATOR -->
-  <div id="panel-qr" class="tool-panel">
-    <div class="panel-header">
-      <div>
-        <h2 style="color:var(--accent2)">QR Generator</h2>
-        <p>URL, metin, e-posta — anında QR kodu</p>
-      </div>
-    </div>
-    <div class="field">
-      <label>İçerik</label>
-      <input type="text" id="qrInput" placeholder="https://example.com veya herhangi bir metin" value="https://example.com">
-    </div>
-    <div class="row">
-      <div class="field">
-        <label>Boyut</label>
-        <select id="qrSize">
-          <option value="128">128×128</option>
-          <option value="200" selected>200×200</option>
-          <option value="256">256×256</option>
-          <option value="320">320×320</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Hata Toleransı</label>
-        <select id="qrCorrect">
-          <option value="L">Düşük (L)</option>
-          <option value="M" selected>Orta (M)</option>
-          <option value="Q">Yüksek (Q)</option>
-          <option value="H">Çok Yüksek (H)</option>
-        </select>
-      </div>
-    </div>
-    <div class="row">
-      <div class="field">
-        <label>Koyu Renk</label>
-        <input type="color" id="qrDark" value="#0a0a0f" style="height:44px;padding:4px;">
-      </div>
-      <div class="field">
-        <label>Açık Renk</label>
-        <input type="color" id="qrLight" value="#f0eee8" style="height:44px;padding:4px;">
-      </div>
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="generateQR()">QR Oluştur</button>
-      <button class="btn btn-ghost" onclick="downloadQR()">İndir</button>
-    </div>
-    <div id="qr-output" style="margin-top:1.5rem;display:flex;justify-content:center;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;min-height:100px;">
-      <div id="qrcode"></div>
-    </div>
-  </div>
-
-  <!-- USERNAME GENERATOR -->
-  <div id="panel-username" class="tool-panel">
-    <div class="panel-header">
-      <div>
-        <h2 style="color:var(--accent4)">Username Generator</h2>
-        <p>Yaratıcı, akılda kalıcı kullanıcı adları</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="field">
-        <label>Stil</label>
-        <select id="unStyle">
-          <option value="cool">Cool / Modern</option>
-          <option value="gamer">Gamer</option>
-          <option value="minimal">Minimal</option>
-          <option value="creative">Creative</option>
-          <option value="professional">Professional</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>İlgi Alanı (opsiyonel)</label>
-        <input type="text" id="unKeyword" placeholder="örn: müzik, spor, tech">
-      </div>
-    </div>
-    <div class="row">
-      <div>
-        <div class="checkbox-row"><input type="checkbox" id="unNum"><label for="unNum">Numara ekle</label></div>
-        <div class="checkbox-row"><input type="checkbox" id="unUnder"><label for="unUnder">Alt çizgi kullan</label></div>
-      </div>
-      <div class="field">
-        <label>Adet</label>
-        <select id="unCount">
-          <option value="6">6 adet</option>
-          <option value="12" selected>12 adet</option>
-          <option value="20">20 adet</option>
-        </select>
-      </div>
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="generateUsernames()">Üret</button>
-    </div>
-    <div class="chips" id="unOutput"></div>
-  </div>
-
-  <!-- BIO GENERATOR -->
-  <div id="panel-bio" class="tool-panel">
-    <div class="panel-header">
-      <div>
-        <h2 style="color:#ff9f5a">Bio Generator</h2>
-        <p>Sosyal medya biyografilerinizi saniyeler içinde oluşturun</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="field">
-        <label>İsim / Takma Ad</label>
-        <input type="text" id="bioName" placeholder="Adınız">
-      </div>
-      <div class="field">
-        <label>Meslek / Rol</label>
-        <input type="text" id="bioJob" placeholder="örn: Designer, Developer">
-      </div>
-    </div>
-    <div class="field">
-      <label>Ton</label>
-      <div class="bio-tags" id="bioTone">
-        <span class="bio-tag sel" onclick="selTag(this,'tone')">Profesyonel</span>
-        <span class="bio-tag" onclick="selTag(this,'tone')">Yaratıcı</span>
-        <span class="bio-tag" onclick="selTag(this,'tone')">Eğlenceli</span>
-        <span class="bio-tag" onclick="selTag(this,'tone')">Minimal</span>
-        <span class="bio-tag" onclick="selTag(this,'tone')">Motivasyonel</span>
-      </div>
-    </div>
-    <div class="field">
-      <label>Platform</label>
-      <div class="bio-tags" id="bioPlatform">
-        <span class="bio-tag sel" onclick="selTag(this,'platform')">Instagram</span>
-        <span class="bio-tag" onclick="selTag(this,'platform')">Twitter/X</span>
-        <span class="bio-tag" onclick="selTag(this,'platform')">LinkedIn</span>
-        <span class="bio-tag" onclick="selTag(this,'platform')">TikTok</span>
-      </div>
-    </div>
-    <div class="field">
-      <label>İlgi Alanları (virgülle ayır)</label>
-      <input type="text" id="bioInterests" placeholder="örn: fotoğraf, seyahat, müzik">
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="generateBio()">Bio Üret</button>
-    </div>
-    <div class="output-box" id="bioOutput" style="display:none">
-      <button class="copy-btn" onclick="copyText('bioOutput',this)">Kopyala</button>
-      <span id="bioText"></span>
-    </div>
-  </div>
-
-  <!-- WORD COUNTER -->
-  <div id="panel-wordcount" class="tool-panel">
-    <div class="panel-header">
-      <div>
-        <h2 style="color:var(--accent3)">Word Counter</h2>
-        <p>Metninizi analiz edin — kelime, karakter, cümle ve daha fazlası</p>
-      </div>
-    </div>
-    <div class="field">
-      <label>Metniniz</label>
-      <textarea id="wcInput" placeholder="Metni buraya yapıştırın veya yazmaya başlayın..." oninput="countWords()" style="min-height:200px;"></textarea>
-    </div>
-    <div class="stats-grid">
-      <div class="stat-card"><div class="stat-val" id="wcWords">0</div><div class="stat-label">Kelime</div></div>
-      <div class="stat-card"><div class="stat-val" id="wcChars">0</div><div class="stat-label">Karakter</div></div>
-      <div class="stat-card"><div class="stat-val" id="wcCharsNoSpace">0</div><div class="stat-label">Boşluksuz</div></div>
-      <div class="stat-card"><div class="stat-val" id="wcSentences">0</div><div class="stat-label">Cümle</div></div>
-      <div class="stat-card"><div class="stat-val" id="wcParagraphs">0</div><div class="stat-label">Paragraf</div></div>
-      <div class="stat-card"><div class="stat-val" id="wcReadTime">0</div><div class="stat-label">Okuma (dk)</div></div>
-    </div>
-    <div style="margin-top:1.5rem;">
-      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;font-weight:600;">En Çok Kullanılan Kelimeler</p>
-      <div class="chips" id="topWords"></div>
-    </div>
-  </div>
-
-  <!-- GRADIENT TOOL -->
-  <div id="panel-gradient" class="tool-panel">
-    <div class="panel-header">
-      <div>
-        <h2 style="color:#c47eff">Gradient Tool</h2>
-        <p>Güzel CSS gradientler oluşturun ve kopyalayın</p>
-      </div>
-    </div>
-    <div class="gradient-preview" id="gradPreview"></div>
-    <div class="color-stops">
-      <div class="color-stop">
-        <label>Renk 1</label>
-        <input type="color" id="gc1" value="#c8f065" oninput="updateGrad()">
-      </div>
-      <div class="color-stop">
-        <label>Renk 2</label>
-        <input type="color" id="gc2" value="#6c63ff" oninput="updateGrad()">
-      </div>
-      <div class="color-stop">
-        <label>Renk 3 (opsiyonel)</label>
-        <input type="color" id="gc3" value="#ff6b6b" oninput="updateGrad()">
-      </div>
-    </div>
-    <div class="row">
-      <div class="field">
-        <label>Tip</label>
-        <select id="gradType" onchange="updateGrad()">
-          <option value="linear">Linear</option>
-          <option value="radial">Radial</option>
-          <option value="conic">Conic</option>
-        </select>
-      </div>
-      <div class="field" id="angleField">
-        <label>Açı</label>
-        <div class="range-row">
-          <input type="range" min="0" max="360" value="135" id="gradAngle" oninput="updateGrad()">
-          <span class="range-val" id="gradAngleVal">135°</span>
-        </div>
-      </div>
-    </div>
-    <div class="field">
-      <label>Şeffaflık (Opaklık)</label>
-      <div class="range-row">
-        <input type="range" min="0" max="100" value="100" step="1" id="gradOpacity" oninput="updateGrad()">
-        <span class="range-val" id="gradOpacityVal">100%</span>
-      </div>
-    </div>
-    <div class="field">
-      <label>Hazır Paletler</label>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px" id="gradPresets">
-        <div class="preset-dot" onclick="applyPreset('#c8f065','#6c63ff','#00d4aa')" style="width:48px;height:48px;border-radius:8px;background:linear-gradient(135deg,#c8f065,#6c63ff,#00d4aa);cursor:pointer;border:1px solid var(--border)"></div>
-        <div class="preset-dot" onclick="applyPreset('#ff6b6b','#ff9f5a','#ffd93d')" style="width:48px;height:48px;border-radius:8px;background:linear-gradient(135deg,#ff6b6b,#ff9f5a,#ffd93d);cursor:pointer;border:1px solid var(--border)"></div>
-        <div class="preset-dot" onclick="applyPreset('#0f2027','#203a43','#2c5364')" style="width:48px;height:48px;border-radius:8px;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);cursor:pointer;border:1px solid var(--border)"></div>
-        <div class="preset-dot" onclick="applyPreset('#c47eff','#ff6b9d','#ff9f5a')" style="width:48px;height:48px;border-radius:8px;background:linear-gradient(135deg,#c47eff,#ff6b9d,#ff9f5a);cursor:pointer;border:1px solid var(--border)"></div>
-        <div class="preset-dot" onclick="applyPreset('#00b09b','#96c93d','#00b09b')" style="width:48px;height:48px;border-radius:8px;background:linear-gradient(135deg,#00b09b,#96c93d);cursor:pointer;border:1px solid var(--border)"></div>
-        <div class="preset-dot" onclick="applyPreset('#1a1a2e','#16213e','#0f3460')" style="width:48px;height:48px;border-radius:8px;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);cursor:pointer;border:1px solid var(--border)"></div>
-      </div>
-    </div>
-    <div class="grad-css" id="gradCSS" style="position:relative">
-      <button class="copy-btn" onclick="copyGrad(this)">Kopyala</button>
-      <span id="gradCSSText"></span>
-    </div>
-  </div>
-
-  <!-- UUID GENERATOR -->
-  <div id="panel-uuid" class="tool-panel">
-    <div class="panel-header">
-      <div>
-        <h2 style="color:var(--accent4)">UUID Generator</h2>
-        <p>Evrensel benzersiz tanımlayıcılar üretin (v4)</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="field">
-        <label>Adet</label>
-        <select id="uuidCount">
-          <option value="1">1 adet</option>
-          <option value="5" selected>5 adet</option>
-          <option value="10">10 adet</option>
-          <option value="20">20 adet</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Format</label>
-        <select id="uuidFormat">
-          <option value="standard">Standart (tire ile)</option>
-          <option value="nohyphen">Tiresiz</option>
-          <option value="upper">BÜYÜK HARF</option>
-          <option value="braces">{Parantezli}</option>
-        </select>
-      </div>
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="generateUUID()">UUID Üret</button>
-    </div>
-    <div class="output-box" id="uuidOutput" style="min-height:80px;">
-      <button class="copy-btn" onclick="copyText('uuidOutput',this)">Kopyala</button>
-      <div id="uuidList" style="font-family:var(--font-mono);font-size:0.88rem;line-height:2;"></div>
-    </div>
-  </div>
-
-  <!-- TEXT REPEATER -->
-  <div id="panel-repeater" class="tool-panel">
-    <div class="panel-header">
-      <div>
-        <h2 style="color:#ffd93d">Text Repeater</h2>
-        <p>Bir metni istediğiniz kadar tekrarlayın</p>
-      </div>
-    </div>
-    <div class="field">
-      <label>Metin</label>
-      <textarea id="repInput" placeholder="Tekrarlanacak metni girin..." style="min-height:80px;"></textarea>
-    </div>
-    <div class="row">
-      <div class="field">
-        <label>Tekrar Sayısı</label>
-        <input type="number" id="repCount" value="5" min="1" max="1000">
-      </div>
-      <div class="field">
-        <label>Ayraç</label>
-        <select id="repSep">
-          <option value="\n">Yeni Satır</option>
-          <option value=" ">Boşluk</option>
-          <option value=", ">Virgül</option>
-          <option value=" | ">Pipe ( | )</option>
-          <option value="">Ayraçsız</option>
-        </select>
-      </div>
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="repeatText()">Tekrarla</button>
-    </div>
-    <div class="output-box" id="repOutput" style="min-height:80px;white-space:pre-wrap;max-height:300px;overflow-y:auto;">
-      <button class="copy-btn" onclick="copyText('repOutput',this)">Kopyala</button>
-      <span id="repText" style="font-size:0.88rem;"></span>
-    </div>
-  </div>
-
-  <!-- CHARACTER COUNTER -->
-  <div id="panel-charcount" class="tool-panel">
-    <div class="panel-header">
-      <div>
-        <h2 style="color:#ff6b9d">Character Counter</h2>
-        <p>Metninizin detaylı karakter analizini yapın</p>
-      </div>
-    </div>
-    <div class="field">
-      <label>Metin</label>
-      <textarea id="ccInput" placeholder="Analiz edilecek metni girin..." oninput="countChars()" style="min-height:160px;"></textarea>
-    </div>
-    <div class="stats-grid">
-      <div class="stat-card"><div class="stat-val" id="ccTotal">0</div><div class="stat-label">Toplam</div></div>
-      <div class="stat-card"><div class="stat-val" id="ccNoSpace">0</div><div class="stat-label">Boşluksuz</div></div>
-      <div class="stat-card"><div class="stat-val" id="ccLetters">0</div><div class="stat-label">Harf</div></div>
-      <div class="stat-card"><div class="stat-val" id="ccDigits">0</div><div class="stat-label">Rakam</div></div>
-      <div class="stat-card"><div class="stat-val" id="ccSpaces">0</div><div class="stat-label">Boşluk</div></div>
-      <div class="stat-card"><div class="stat-val" id="ccSpecial">0</div><div class="stat-label">Özel</div></div>
-      <div class="stat-card"><div class="stat-val" id="ccLines">0</div><div class="stat-label">Satır</div></div>
-      <div class="stat-card"><div class="stat-val" id="ccUpper">0</div><div class="stat-label">Büyük</div></div>
-      <div class="stat-card"><div class="stat-val" id="ccLower">0</div><div class="stat-label">Küçük</div></div>
-    </div>
-    <div style="margin-top:1rem;">
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 16px;font-size:0.8rem;">
-          Twitter/X: <span id="ccTwitter" style="color:var(--accent);font-weight:700;">0/280</span>
-        </div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 16px;font-size:0.8rem;">
-          Instagram Bio: <span id="ccInsta" style="color:var(--accent);font-weight:700;">0/150</span>
-        </div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 16px;font-size:0.8rem;">
-          SMS: <span id="ccSms" style="color:var(--accent);font-weight:700;">0/160</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- RANDOM NUMBER GENERATOR -->
-  <div id="panel-random" class="tool-panel">
-    <div class="panel-header">
-      <div>
-        <h2 style="color:var(--accent2)">Random Number Generator</h2>
-        <p>Belirli aralıkta rastgele sayılar üretin</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="field">
-        <label>Minimum</label>
-        <input type="number" id="rngMin" value="1">
-      </div>
-      <div class="field">
-        <label>Maksimum</label>
-        <input type="number" id="rngMax" value="100">
-      </div>
-    </div>
-    <div class="row">
-      <div class="field">
-        <label>Adet</label>
-        <input type="number" id="rngCount" value="1" min="1" max="100">
-      </div>
-      <div class="field">
-        <label>Seçenekler</label>
-        <div style="margin-top:8px;">
-          <div class="checkbox-row"><input type="checkbox" id="rngUnique"><label for="rngUnique">Tekrarsız sayılar</label></div>
-        </div>
-      </div>
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="generateRandom()">Üret</button>
-    </div>
-    <div class="output-box large" id="rngOutput" style="font-size:2rem;min-height:80px;">
-      <button class="copy-btn" onclick="copyText('rngOutput',this)">Kopyala</button>
-      <span id="rngText">—</span>
-    </div>
-    <div id="rngStats" style="margin-top:1rem;display:none;">
-      <div class="stats-grid">
-        <div class="stat-card"><div class="stat-val" id="rngSum">—</div><div class="stat-label">Toplam</div></div>
-        <div class="stat-card"><div class="stat-val" id="rngAvg">—</div><div class="stat-label">Ortalama</div></div>
-        <div class="stat-card"><div class="stat-val" id="rngMinR">—</div><div class="stat-label">En Küçük</div></div>
-        <div class="stat-card"><div class="stat-val" id="rngMaxR">—</div><div class="stat-label">En Büyük</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- LOREM IPSUM -->
-  <div id="panel-lorem" class="tool-panel">
-    <div class="panel-header">
-      <div>
-        <h2 style="color:var(--accent)">Lorem Ipsum</h2>
-        <p>Tasarım ve prototip için sahte metin oluşturun</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="field">
-        <label>Tip</label>
-        <select id="loremType">
-          <option value="paragraphs">Paragraf</option>
-          <option value="sentences">Cümle</option>
-          <option value="words">Kelime</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Adet</label>
-        <input type="number" id="loremCount" value="3" min="1" max="20">
-      </div>
-    </div>
-    <div class="checkbox-row" style="margin-bottom:1rem;"><input type="checkbox" id="loremStart" checked><label for="loremStart">Klasik başlangıç (Lorem ipsum dolor sit amet...)</label></div>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="generateLorem()">Oluştur</button>
-    </div>
-    <div class="output-box" id="loremOutput" style="min-height:120px;max-height:400px;overflow-y:auto;">
-      <button class="copy-btn" onclick="copyText('loremOutput',this)">Kopyala</button>
-      <span id="loremText" class="lorem-output"></span>
-    </div>
-  </div>
-
-  <!-- BINARY CONVERTER -->
-  <div id="panel-binary" class="tool-panel">
-    <div class="panel-header">
-      <div>
-        <h2 style="color:#00b8d9">Binary Converter</h2>
-        <p>Metin, sayı ve ikili sistem arasında dönüştürün</p>
-      </div>
-    </div>
-    <div class="field">
-      <label>Dönüştürme Yönü</label>
-      <select id="binMode" onchange="clearBinFields()">
-        <option value="text2bin">Metin → Binary</option>
-        <option value="bin2text">Binary → Metin</option>
-        <option value="dec2bin">Ondalık → Binary</option>
-        <option value="bin2dec">Binary → Ondalık</option>
-        <option value="dec2hex">Ondalık → Hex</option>
-        <option value="hex2dec">Hex → Ondalık</option>
-      </select>
-    </div>
-    <div class="field">
-      <label id="binInputLabel">Giriş</label>
-      <textarea id="binInput" placeholder="Dönüştürülecek değeri girin..." style="min-height:80px;font-family:var(--font-mono);"></textarea>
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="convertBinary()">Dönüştür</button>
-    </div>
-    <div class="output-box" id="binOutput" style="min-height:80px;">
-      <button class="copy-btn" onclick="copyText('binOutput',this)">Kopyala</button>
-      <span id="binResult" class="bin-result"></span>
-    </div>
-  </div>
-
-  <!-- AGE CALCULATOR -->
-  <div id="panel-age" class="tool-panel">
-    <div class="panel-header">
-      <div>
-        <h2 style="color:#ff9f5a">Age Calculator</h2>
-        <p>Doğum tarihinizden detaylı yaş bilgisi hesaplayın</p>
-      </div>
-    </div>
-    <div class="field">
-      <label>Doğum Tarihi</label>
-      <input type="date" id="ageInput" onchange="calcAge()">
-    </div>
-    <div class="field">
-      <label>Hesaplama Tarihi</label>
-      <input type="date" id="ageTo" onchange="calcAge()">
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="calcAge()">Hesapla</button>
-      <button class="btn btn-ghost" onclick="resetAgeTo()">Bugüne Sıfırla</button>
-    </div>
-    <div id="ageResult" style="display:none;">
-      <div class="age-result-grid">
-        <div class="stat-card"><div class="stat-val" id="ageYears">—</div><div class="stat-label">Yıl</div></div>
-        <div class="stat-card"><div class="stat-val" id="ageMonths">—</div><div class="stat-label">Ay</div></div>
-        <div class="stat-card"><div class="stat-val" id="ageDays">—</div><div class="stat-label">Gün</div></div>
-        <div class="stat-card"><div class="stat-val" id="ageWeeks">—</div><div class="stat-label">Hafta</div></div>
-        <div class="stat-card"><div class="stat-val" id="ageHours">—</div><div class="stat-label">Saat</div></div>
-        <div class="stat-card"><div class="stat-val" id="ageNextBday">—</div><div class="stat-label">Sonraki Doğum</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- STOPWATCH -->
-  <div id="panel-stopwatch" class="tool-panel">
-    <div class="panel-header">
-      <div>
-        <h2 style="color:#c47eff">Stopwatch</h2>
-        <p>Hassas kronometre — tur zamanlarıyla</p>
-      </div>
-    </div>
-    <div class="sw-display" id="swDisplay">00:00.000</div>
-    <div class="btn-row" style="justify-content:center;">
-      <button class="btn btn-primary" id="swStartBtn" onclick="swToggle()">▶ Başlat</button>
-      <button class="btn btn-ghost" onclick="swLap()" id="swLapBtn" disabled>🏁 Tur</button>
-      <button class="btn btn-ghost" onclick="swReset()">↺ Sıfırla</button>
-    </div>
-    <div id="swLaps" style="margin-top:1.5rem;display:none;">
-      <p style="font-size:0.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-bottom:8px;">Tur Zamanları</p>
-      <div class="lap-list" id="swLapList"></div>
-    </div>
-  </div>
-
-  <!-- DICE ROLLER -->
-  <div id="panel-dice" class="tool-panel">
-    <div class="panel-header">
-      <div>
-        <h2 style="color:var(--accent3)">Dice Roller</h2>
-        <p>Farklı yüzlü zarları sanal olarak atın</p>
-      </div>
-    </div>
-    <div class="field">
-      <label>Zar Tipi</label>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;" id="diceTypeRow">
-        <button class="bio-tag sel" onclick="selectDice(this,4)">D4</button>
-        <button class="bio-tag" onclick="selectDice(this,6)">D6</button>
-        <button class="bio-tag" onclick="selectDice(this,8)">D8</button>
-        <button class="bio-tag" onclick="selectDice(this,10)">D10</button>
-        <button class="bio-tag" onclick="selectDice(this,12)">D12</button>
-        <button class="bio-tag" onclick="selectDice(this,20)">D20</button>
-        <button class="bio-tag" onclick="selectDice(this,100)">D100</button>
-      </div>
-    </div>
-    <div class="field">
-      <label>Kaç Zar</label>
-      <div class="range-row">
-        <input type="range" min="1" max="6" value="1" id="diceCount" oninput="diceCountVal()">
-        <span class="range-val" id="diceCountVal">1</span>
-      </div>
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="rollDice()">🎲 At!</button>
-    </div>
-    <div class="dice-row" id="diceResults"></div>
-    <div id="diceSumBox" style="display:none;margin-top:0.5rem;">
-      <div class="stat-card" style="text-align:center;max-width:200px;">
-        <div class="stat-val" id="diceSum">—</div>
-        <div class="stat-label">Toplam</div>
-      </div>
-    </div>
-    <div style="margin-top:1rem;" id="diceHistory" style="display:none;">
-      <p style="font-size:0.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-bottom:8px;">Son Atışlar</p>
-      <div class="chips" id="diceHistoryList"></div>
-    </div>
-  </div>
-
-  <!-- TIP CALCULATOR -->
-  <div id="panel-tip" class="tool-panel">
-    <div class="panel-header">
-      <div>
-        <h2 style="color:#ffd93d">Tip Calculator</h2>
-        <p>Bahşiş hesapla ve hesabı kişilere böl</p>
-      </div>
-    </div>
-    <div class="field">
-      <label>Bill Amount ($)</label>
-      <input type="number" id="tipBill" placeholder="0.00" min="0" step="0.01" oninput="calcTip()">
-    </div>
-    <div class="field">
-      <label>Tip Percentage</label>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
-        <button class="bio-tag" data-tip="10" onclick="selectTipPct(this)">10%</button>
-        <button class="bio-tag sel" data-tip="15" onclick="selectTipPct(this)">15%</button>
-        <button class="bio-tag" data-tip="20" onclick="selectTipPct(this)">20%</button>
-        <button class="bio-tag" data-tip="25" onclick="selectTipPct(this)">25%</button>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span style="color:var(--muted);font-size:0.82rem;white-space:nowrap;">Custom %</span>
-        <input type="number" id="tipCustom" placeholder="e.g. 18" min="0" max="100" oninput="selectCustomPct()" style="max-width:120px;">
-      </div>
-    </div>
-    <div class="field">
-      <label>Split Between</label>
-      <div style="display:flex;align-items:center;gap:12px;">
-        <button class="btn btn-ghost" style="padding:8px 16px;font-size:1.1rem;" onclick="changeSplit(-1)">−</button>
-        <span id="tipSplitCount" style="font-family:var(--font-mono);font-size:1.4rem;font-weight:600;min-width:28px;text-align:center;">1</span>
-        <button class="btn btn-ghost" style="padding:8px 16px;font-size:1.1rem;" onclick="changeSplit(1)">+</button>
-        <span style="color:var(--muted);font-size:0.85rem;">person(s)</span>
-      </div>
-    </div>
-    <div class="stats-grid" style="margin-top:1.5rem;">
-      <div class="stat-card"><div class="stat-val" id="tipAmount" style="color:#ffd93d;">$0.00</div><div class="stat-label">Tip Amount</div></div>
-      <div class="stat-card"><div class="stat-val" id="tipTotal" style="color:var(--accent4);">$0.00</div><div class="stat-label">Total Bill</div></div>
-      <div class="stat-card" style="grid-column:span 2;"><div class="stat-val" id="tipPerPerson" style="color:var(--accent);font-size:2rem;">$0.00</div><div class="stat-label">Per Person</div></div>
-    </div>
-    <div class="btn-row" style="margin-top:1rem;">
-      <button class="btn btn-ghost" onclick="resetTip()">↺ Reset</button>
-    </div>
-  </div>
-
-  <!-- UNIT CONVERTER -->
-  <div id="panel-unit" class="tool-panel">
-    <div class="panel-header">
-      <div>
-        <h2 style="color:var(--accent4)">Unit Converter</h2>
-        <p>Uzunluk, ağırlık, sıcaklık, hız, alan, veri ve daha fazlası</p>
-      </div>
-    </div>
-    <div class="field">
-      <label>Kategori</label>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px;" id="unitCatRow">
-        <button class="bio-tag sel" onclick="selectUnitCat(this,'Length')">Length</button>
-        <button class="bio-tag" onclick="selectUnitCat(this,'Weight')">Weight</button>
-        <button class="bio-tag" onclick="selectUnitCat(this,'Temperature')">Temperature</button>
-        <button class="bio-tag" onclick="selectUnitCat(this,'Speed')">Speed</button>
-        <button class="bio-tag" onclick="selectUnitCat(this,'Area')">Area</button>
-        <button class="bio-tag" onclick="selectUnitCat(this,'Volume')">Volume</button>
-        <button class="bio-tag" onclick="selectUnitCat(this,'Data')">Data</button>
-        <button class="bio-tag" onclick="selectUnitCat(this,'Time')">Time</button>
-      </div>
-    </div>
-    <div class="row">
-      <div class="field">
-        <label>From</label>
-        <select id="unitFrom" onchange="convertUnit()"></select>
-        <input type="number" id="unitFromVal" placeholder="Value" oninput="convertUnit()" style="margin-top:8px;">
-      </div>
-      <div class="field">
-        <label>To</label>
-        <select id="unitTo" onchange="convertUnit()"></select>
-        <input type="number" id="unitToVal" placeholder="Result" readonly style="margin-top:8px;opacity:.7;cursor:default;">
-      </div>
-    </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:0.5rem;">
-      <button class="btn btn-ghost" onclick="swapUnitConv()">⇄ Swap</button>
-      <button class="btn btn-ghost" onclick="copyUnitResult()" id="unitCopyBtn">Copy Result</button>
-    </div>
-    <div class="output-box" id="unitResultBox" style="display:none;margin-top:1.2rem;">
-      <span id="unitResultText" style="color:var(--accent4);font-size:1rem;"></span>
-    </div>
-  </div>
-
 </div>
 
-<footer>
-  <div style="margin-bottom:12px;">
-    <a href="/about.html" style="color:var(--muted);text-decoration:none;margin:0 10px;font-size:0.82rem;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">About</a>
-    <a href="/privacy.html" style="color:var(--muted);text-decoration:none;margin:0 10px;font-size:0.82rem;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">Privacy Policy</a>
-    <a href="/contact.html" style="color:var(--muted);text-decoration:none;margin:0 10px;font-size:0.82rem;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">Contact</a>
+<!-- LAYOUT -->
+<div id="layout">
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="cat-label">⚡ Popüler</div>
+  <div class="nav-item active" onclick="scrollTo_('sec-popular')"><span class="nav-icon">🔥</span> Popüler Araçlar</div>
+
+  <div class="cat-label">🔐 Güvenlik</div>
+  <div class="nav-item" onclick="openTool('password-tool');scrollTo_('sec-security')"><span class="nav-icon">🔑</span> Şifre Üretici</div>
+  <div class="nav-item" onclick="openTool('hash-tool');scrollTo_('sec-security')"><span class="nav-icon">🔒</span> Hash Üretici</div>
+  <div class="nav-item" onclick="openTool('base64-tool');scrollTo_('sec-security')"><span class="nav-icon">📦</span> Base64</div>
+  <div class="nav-item" onclick="openTool('jwt-tool');scrollTo_('sec-security')"><span class="nav-icon">🎫</span> JWT Çözücü</div>
+  <div class="nav-item" onclick="openTool('html-entity-tool');scrollTo_('sec-security')"><span class="nav-icon">🛡️</span> HTML Entity</div>
+
+  <div class="cat-label">🎨 CSS Araçları</div>
+  <div class="nav-item" onclick="openTool('shadow-tool');scrollTo_('sec-css')"><span class="nav-icon">🌫️</span> Box Shadow</div>
+  <div class="nav-item" onclick="openTool('gradient-tool');scrollTo_('sec-css')"><span class="nav-icon">🌈</span> Gradient</div>
+  <div class="nav-item" onclick="openTool('border-tool');scrollTo_('sec-css')"><span class="nav-icon">⬜</span> Border Radius</div>
+  <div class="nav-item" onclick="openTool('animation-tool');scrollTo_('sec-css')"><span class="nav-icon">✨</span> Animasyon</div>
+  <div class="nav-item" onclick="openTool('contrast-tool');scrollTo_('sec-css')"><span class="nav-icon">♿</span> Kontrast</div>
+  <div class="nav-item" onclick="openTool('unit-tool');scrollTo_('sec-css')"><span class="nav-icon">📐</span> CSS Birim</div>
+
+  <div class="cat-label">🛠️ Geliştirici</div>
+  <div class="nav-item" onclick="openTool('json-tool');scrollTo_('sec-dev')"><span class="nav-icon">📋</span> JSON Formatter</div>
+  <div class="nav-item" onclick="openTool('regex-tool');scrollTo_('sec-dev')"><span class="nav-icon">🔍</span> Regex Tester</div>
+  <div class="nav-item" onclick="openTool('diff-tool');scrollTo_('sec-dev')"><span class="nav-icon">↔️</span> Diff Checker</div>
+  <div class="nav-item" onclick="openTool('url-tool');scrollTo_('sec-dev')"><span class="nav-icon">🔗</span> URL Encode</div>
+  <div class="nav-item" onclick="openTool('markdown-tool');scrollTo_('sec-dev')"><span class="nav-icon">📝</span> Markdown</div>
+  <div class="nav-item" onclick="openTool('cron-tool');scrollTo_('sec-dev')"><span class="nav-icon">⏱️</span> Cron Builder</div>
+  <div class="nav-item" onclick="openTool('svg-tool');scrollTo_('sec-dev')"><span class="nav-icon">🖋️</span> SVG Optimizer</div>
+
+  <div class="cat-label">🎯 SEO & Meta</div>
+  <div class="nav-item" onclick="openTool('meta-tool');scrollTo_('sec-seo')"><span class="nav-icon">🏷️</span> Meta Tags</div>
+  <div class="nav-item" onclick="openTool('og-tool');scrollTo_('sec-seo')"><span class="nav-icon">📢</span> Open Graph</div>
+  <div class="nav-item" onclick="openTool('robots-tool');scrollTo_('sec-seo')"><span class="nav-icon">🤖</span> Robots.txt</div>
+
+  <div class="cat-label">🖼️ Görsel & Araçlar</div>
+  <div class="nav-item" onclick="openTool('qr-tool');scrollTo_('sec-visual')"><span class="nav-icon">📱</span> QR Kod</div>
+  <div class="nav-item" onclick="openTool('color-tool');scrollTo_('sec-visual')"><span class="nav-icon">🎨</span> Renk Paleti</div>
+  <div class="nav-item" onclick="openTool('timestamp-tool');scrollTo_('sec-visual')"><span class="nav-icon">⏰</span> Timestamp</div>
+  <div class="nav-item" onclick="openTool('lorem-tool');scrollTo_('sec-visual')"><span class="nav-icon">📄</span> Lorem Ipsum</div>
+  <div class="nav-item" onclick="openTool('wordcount-tool');scrollTo_('sec-visual')"><span class="nav-icon">🔢</span> Kelime Sayacı</div>
+  <div class="nav-item" onclick="openTool('ascii-tool');scrollTo_('sec-visual')"><span class="nav-icon">🔤</span> Metin Dönüştür</div>
+  <div class="nav-item" onclick="openTool('number-tool');scrollTo_('sec-visual')"><span class="nav-icon">🔣</span> Sayı Tabanı</div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+
+<!-- HERO -->
+<div id="hero">
+  <h1>Her şey burada.</h1>
+  <p>Geliştiriciler, tasarımcılar ve SEO uzmanları için 30+ ücretsiz araç. Hepsi tek sayfada, anında çalışır.</p>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-n">30+</div><div class="stat-l">Araç</div></div>
+    <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Ücretsiz</div></div>
+    <div class="stat"><div class="stat-n">0</div><div class="stat-l">Kayıt Gerekmiyor</div></div>
   </div>
-  <span style="color:var(--accent)">DetshTool</span> — 18 free utility tools ✦ Built with ♥
-</footer>
+</div>
+
+<!-- POPULAR -->
+<div class="section" id="sec-popular">
+  <div class="section-title">🔥 Popüler Araçlar</div>
+  <div class="tool-grid">
+
+    <!-- QR CODE -->
+    <div class="tool-card" id="qr-tool">
+      <div class="tool-header" onclick="toggleTool('qr-tool')">
+        <div class="tool-emoji">📱</div>
+        <div><div class="tool-name">QR Kod Üretici</div><div class="tool-desc">Anlık QR kod oluştur & indir</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="field"><label>İçerik (URL, metin, telefon...)</label><input type="text" id="qr-input" placeholder="https://detsh-tool.vercel.app" oninput="genQR()"/></div>
+        <div class="row2">
+          <div class="field"><label>Boyut</label>
+            <div class="range-row"><input type="range" min="100" max="400" value="200" id="qr-size" oninput="document.getElementById('qr-size-v').textContent=this.value+'px';genQR()"/><span class="range-val" id="qr-size-v">200px</span></div>
+          </div>
+          <div class="field"><label>Renk</label><input type="color" id="qr-color" value="#6c63ff" onchange="genQR()"/></div>
+        </div>
+        <div id="qr-output"></div>
+        <div class="btn-row"><button class="btn btn-primary" onclick="dlQR()">⬇ İndir</button><button class="btn btn-secondary" onclick="genQR()">↻ Yenile</button></div>
+      </div>
+    </div>
+
+    <!-- PASSWORD -->
+    <div class="tool-card" id="password-tool">
+      <div class="tool-header" onclick="toggleTool('password-tool')">
+        <div class="tool-emoji">🔑</div>
+        <div><div class="tool-name">Şifre Üretici</div><div class="tool-desc">Güçlü & rastgele şifre</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="field"><label>Uzunluk: <span id="pw-len-v" style="color:var(--accent)">16</span></label>
+          <input type="range" min="4" max="128" value="16" id="pw-len" oninput="document.getElementById('pw-len-v').textContent=this.value;genPass()"/>
+        </div>
+        <div class="field"><label>Karakter Seti</label>
+          <div class="check-group">
+            <label class="check-item"><input type="checkbox" id="pw-upper" checked onchange="genPass()"> A-Z</label>
+            <label class="check-item"><input type="checkbox" id="pw-lower" checked onchange="genPass()"> a-z</label>
+            <label class="check-item"><input type="checkbox" id="pw-num" checked onchange="genPass()"> 0-9</label>
+            <label class="check-item"><input type="checkbox" id="pw-sym" onchange="genPass()"> !@#$</label>
+          </div>
+        </div>
+        <div class="output-label">Üretilen Şifre</div>
+        <div class="output" id="pw-out" style="font-size:15px;letter-spacing:1px;">—<button class="copy-btn" onclick="copyEl('pw-out')">Kopyala</button></div>
+        <div id="pw-strength-bar" class="pw-strength-bar"></div>
+        <div id="pw-strength-label" class="pw-strength-label"></div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="genPass()">↻ Yeni Şifre</button>
+          <button class="btn btn-secondary" onclick="genMultiPass()">× 5 Şifre</button>
+        </div>
+        <div id="multi-pw" style="margin-top:8px;"></div>
+      </div>
+    </div>
+
+    <!-- JSON FORMATTER -->
+    <div class="tool-card" id="json-tool">
+      <div class="tool-header" onclick="toggleTool('json-tool')">
+        <div class="tool-emoji">📋</div>
+        <div><div class="tool-name">JSON Formatter</div><div class="tool-desc">Format & doğrula & minify</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="field"><label>JSON Gir</label><textarea id="json-in" class="mono" placeholder='{"name":"Detsh","version":1}' style="min-height:120px"></textarea></div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="fmtJSON()">⚡ Formatla</button>
+          <button class="btn btn-secondary" onclick="minJSON()">Minify</button>
+          <button class="btn btn-secondary" onclick="validateJSON()">Doğrula</button>
+        </div>
+        <div class="output-label" style="margin-top:10px">Çıktı</div>
+        <div class="output" id="json-out">—<button class="copy-btn" onclick="copyEl('json-out')">Kopyala</button></div>
+      </div>
+    </div>
+
+    <!-- BASE64 -->
+    <div class="tool-card" id="base64-tool">
+      <div class="tool-header" onclick="toggleTool('base64-tool')">
+        <div class="tool-emoji">📦</div>
+        <div><div class="tool-name">Base64 Encode/Decode</div><div class="tool-desc">Anlık dönüştürme</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="field"><label>Metin</label><textarea id="b64-in" class="mono" placeholder="Metin veya Base64 gir..."></textarea></div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="encB64()">→ Encode</button>
+          <button class="btn btn-secondary" onclick="decB64()">← Decode</button>
+        </div>
+        <div class="output-label" style="margin-top:10px">Sonuç</div>
+        <div class="output" id="b64-out">—<button class="copy-btn" onclick="copyEl('b64-out')">Kopyala</button></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SECURITY SECTION -->
+<div class="section" id="sec-security">
+  <div class="section-title">🔐 Güvenlik Araçları</div>
+  <div class="tool-grid">
+
+    <!-- HASH -->
+    <div class="tool-card" id="hash-tool">
+      <div class="tool-header" onclick="toggleTool('hash-tool')">
+        <div class="tool-emoji">🔒</div>
+        <div><div class="tool-name">Hash Üretici</div><div class="tool-desc">SHA-1 · SHA-256 · SHA-512</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="field"><label>Metin</label><textarea id="hash-in" class="mono" placeholder="Hash'lenecek metin..."></textarea></div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="genHash()">⚡ Hash Üret</button>
+        </div>
+        <div id="hash-results" style="margin-top:10px;display:flex;flex-direction:column;gap:8px;"></div>
+        <p class="hint" style="margin-top:8px">⚠️ Yalnızca HTTPS üzerinde çalışır (Vercel bunu karşılar).</p>
+      </div>
+    </div>
+
+    <!-- JWT DECODER -->
+    <div class="tool-card" id="jwt-tool">
+      <div class="tool-header" onclick="toggleTool('jwt-tool')">
+        <div class="tool-emoji">🎫</div>
+        <div><div class="tool-name">JWT Çözücü</div><div class="tool-desc">JWT token'ı decode et</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="field"><label>JWT Token</label><textarea id="jwt-in" class="mono" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." oninput="decodeJWT()"></textarea></div>
+        <div id="jwt-result" style="margin-top:10px;"></div>
+      </div>
+    </div>
+
+    <!-- URL ENCODER -->
+    <div class="tool-card" id="url-tool">
+      <div class="tool-header" onclick="toggleTool('url-tool')">
+        <div class="tool-emoji">🔗</div>
+        <div><div class="tool-name">URL Encode/Decode</div><div class="tool-desc">URL güvenli dönüşüm</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="field"><label>Metin veya URL</label><textarea id="url-in" class="mono" placeholder="https://example.com/arama?q=merhaba dünya"></textarea></div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="encURL()">→ Encode</button>
+          <button class="btn btn-secondary" onclick="decURL()">← Decode</button>
+        </div>
+        <div class="output-label" style="margin-top:10px">Sonuç</div>
+        <div class="output" id="url-out">—<button class="copy-btn" onclick="copyEl('url-out')">Kopyala</button></div>
+      </div>
+    </div>
+
+    <!-- HTML ENTITY ENCODER -->
+    <div class="tool-card" id="html-entity-tool">
+      <div class="tool-header" onclick="toggleTool('html-entity-tool')">
+        <div class="tool-emoji">🛡️</div>
+        <div><div class="tool-name">HTML Entity Encoder</div><div class="tool-desc">XSS güvenli HTML dönüşümü</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="field"><label>Metin</label><textarea id="ent-in" class="mono" placeholder='<script>alert("xss")</script>'></textarea></div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="encEntities()">→ Encode</button>
+          <button class="btn btn-secondary" onclick="decEntities()">← Decode</button>
+        </div>
+        <div class="output-label" style="margin-top:10px">Sonuç</div>
+        <div class="output" id="ent-out">—<button class="copy-btn" onclick="copyEl('ent-out')">Kopyala</button></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CSS SECTION -->
+<div class="section" id="sec-css">
+  <div class="section-title">🎨 CSS Araçları</div>
+  <div class="tool-grid">
+
+    <!-- BOX SHADOW -->
+    <div class="tool-card" id="shadow-tool">
+      <div class="tool-header" onclick="toggleTool('shadow-tool')">
+        <div class="tool-emoji">🌫️</div>
+        <div><div class="tool-name">Box Shadow Generator</div><div class="tool-desc">Görsel CSS gölge oluşturucu</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="row2">
+          <div class="field"><label>X Offset <span id="sh-x-v" style="color:var(--accent)">0px</span></label><input type="range" min="-50" max="50" value="0" id="sh-x" oninput="document.getElementById('sh-x-v').textContent=this.value+'px';updateShadow()"/></div>
+          <div class="field"><label>Y Offset <span id="sh-y-v" style="color:var(--accent)">8px</span></label><input type="range" min="-50" max="50" value="8" id="sh-y" oninput="document.getElementById('sh-y-v').textContent=this.value+'px';updateShadow()"/></div>
+          <div class="field"><label>Blur <span id="sh-b-v" style="color:var(--accent)">24px</span></label><input type="range" min="0" max="100" value="24" id="sh-b" oninput="document.getElementById('sh-b-v').textContent=this.value+'px';updateShadow()"/></div>
+          <div class="field"><label>Spread <span id="sh-s-v" style="color:var(--accent)">0px</span></label><input type="range" min="-30" max="30" value="0" id="sh-s" oninput="document.getElementById('sh-s-v').textContent=this.value+'px';updateShadow()"/></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Renk</label><input type="color" id="sh-color" value="#6c63ff" onchange="updateShadow()"/></div>
+          <div class="field"><label>Opaklık <span id="sh-a-v" style="color:var(--accent)">50%</span></label><input type="range" min="0" max="100" value="50" id="sh-a" oninput="document.getElementById('sh-a-v').textContent=this.value+'%';updateShadow()"/></div>
+        </div>
+        <div class="preview-box">
+          <div class="preview-label">Önizleme</div>
+          <div style="display:flex;justify-content:center;padding:20px;">
+            <div id="sh-preview" style="width:100px;height:60px;background:#fff;border-radius:8px;transition:box-shadow .2s;"></div>
+          </div>
+        </div>
+        <div class="output-label" style="margin-top:10px">CSS Kodu</div>
+        <div class="output" id="sh-out">—<button class="copy-btn" onclick="copyEl('sh-out')">Kopyala</button></div>
+      </div>
+    </div>
+
+    <!-- GRADIENT -->
+    <div class="tool-card" id="gradient-tool">
+      <div class="tool-header" onclick="toggleTool('gradient-tool')">
+        <div class="tool-emoji">🌈</div>
+        <div><div class="tool-name">CSS Gradient Üretici</div><div class="tool-desc">Linear & radial & conic gradientler</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="row3">
+          <div class="field"><label>Renk 1</label><input type="color" id="g-c1" value="#6c63ff" onchange="updateGrad()"/></div>
+          <div class="field"><label>Renk 2</label><input type="color" id="g-c2" value="#ff6384" onchange="updateGrad()"/></div>
+          <div class="field"><label>Renk 3 (opsiyonel)</label><input type="color" id="g-c3" value="#36d9b8" onchange="updateGrad()"/></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Tür</label>
+            <select id="g-type" onchange="updateGrad()">
+              <option value="linear">Linear</option>
+              <option value="radial">Radial</option>
+              <option value="conic">Conic</option>
+            </select>
+          </div>
+          <div class="field"><label>Açı: <span id="g-ang-v" style="color:var(--accent)">135°</span></label>
+            <input type="range" min="0" max="360" value="135" id="g-ang" oninput="document.getElementById('g-ang-v').textContent=this.value+'°';updateGrad()"/>
+          </div>
+        </div>
+        <div class="color-preview" id="grad-preview"></div>
+        <div class="output-label">CSS Kodu</div>
+        <div class="output" id="grad-out">—<button class="copy-btn" onclick="copyEl('grad-out')">Kopyala</button></div>
+        <div class="btn-row"><button class="btn btn-secondary btn-sm" onclick="randomGrad()">🎲 Rastgele</button></div>
+      </div>
+    </div>
+
+    <!-- BORDER RADIUS -->
+    <div class="tool-card" id="border-tool">
+      <div class="tool-header" onclick="toggleTool('border-tool')">
+        <div class="tool-emoji">⬜</div>
+        <div><div class="tool-name">Border Radius Üretici</div><div class="tool-desc">Köşe yuvarlama aracı</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="row2">
+          <div class="field"><label>Sol Üst <span id="br-tl-v" style="color:var(--accent)">12px</span></label><input type="range" min="0" max="100" value="12" id="br-tl" oninput="document.getElementById('br-tl-v').textContent=this.value+'px';updateBR()"/></div>
+          <div class="field"><label>Sağ Üst <span id="br-tr-v" style="color:var(--accent)">12px</span></label><input type="range" min="0" max="100" value="12" id="br-tr" oninput="document.getElementById('br-tr-v').textContent=this.value+'px';updateBR()"/></div>
+          <div class="field"><label>Sol Alt <span id="br-bl-v" style="color:var(--accent)">12px</span></label><input type="range" min="0" max="100" value="12" id="br-bl" oninput="document.getElementById('br-bl-v').textContent=this.value+'px';updateBR()"/></div>
+          <div class="field"><label>Sağ Alt <span id="br-br-v" style="color:var(--accent)">12px</span></label><input type="range" min="0" max="100" value="12" id="br-br" oninput="document.getElementById('br-br-v').textContent=this.value+'px';updateBR()"/></div>
+        </div>
+        <div class="preview-box">
+          <div class="preview-label">Önizleme</div>
+          <div style="display:flex;justify-content:center;padding:16px;">
+            <div id="br-preview" style="width:120px;height:70px;background:linear-gradient(135deg,#6c63ff,#ff6384);transition:border-radius .2s;"></div>
+          </div>
+        </div>
+        <div class="output-label" style="margin-top:10px">CSS Kodu</div>
+        <div class="output" id="br-out">—<button class="copy-btn" onclick="copyEl('br-out')">Kopyala</button></div>
+      </div>
+    </div>
+
+    <!-- CSS ANIMATION -->
+    <div class="tool-card" id="animation-tool">
+      <div class="tool-header" onclick="toggleTool('animation-tool')">
+        <div class="tool-emoji">✨</div>
+        <div><div class="tool-name">CSS Animasyon Üretici</div><div class="tool-desc">Hazır keyframe animasyonlar</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="field"><label>Animasyon Türü</label>
+          <select id="anim-type" onchange="updateAnim()">
+            <option value="fadeIn">Fade In</option>
+            <option value="fadeOut">Fade Out</option>
+            <option value="slideIn">Slide In (Sol)</option>
+            <option value="slideInRight">Slide In (Sağ)</option>
+            <option value="slideUp">Slide Up</option>
+            <option value="bounce">Bounce</option>
+            <option value="spin">Spin</option>
+            <option value="pulse">Pulse</option>
+            <option value="shake">Shake</option>
+            <option value="flip">Flip</option>
+            <option value="zoom">Zoom In</option>
+            <option value="rubber">Rubber Band</option>
+          </select>
+        </div>
+        <div class="row3">
+          <div class="field"><label>Süre (s)</label><input type="number" id="anim-dur" value="1" min="0.1" max="10" step="0.1" oninput="updateAnim()"/></div>
+          <div class="field"><label>Gecikme (s)</label><input type="number" id="anim-del" value="0" min="0" max="5" step="0.1" oninput="updateAnim()"/></div>
+          <div class="field"><label>Tekrar</label>
+            <select id="anim-iter" onchange="updateAnim()">
+              <option value="1">1x</option><option value="2">2x</option><option value="3">3x</option><option value="infinite">∞</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label>Easing</label>
+          <select id="anim-ease" onchange="updateAnim()">
+            <option value="ease">ease</option>
+            <option value="ease-in">ease-in</option>
+            <option value="ease-out">ease-out</option>
+            <option value="ease-in-out">ease-in-out</option>
+            <option value="linear">linear</option>
+          </select>
+        </div>
+        <div class="preview-box">
+          <div class="preview-label">Önizleme <button class="btn btn-sm btn-secondary" onclick="playAnim()" style="margin-left:8px">▶ Oynat</button></div>
+          <div style="display:flex;justify-content:center;padding:20px;">
+            <div id="anim-preview" style="width:80px;height:50px;background:linear-gradient(135deg,#6c63ff,#36d9b8);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;">DETSH</div>
+          </div>
+        </div>
+        <div class="output-label" style="margin-top:10px">CSS Kodu</div>
+        <div class="output" id="anim-out" style="font-size:11px;">—<button class="copy-btn" onclick="copyEl('anim-out')">Kopyala</button></div>
+      </div>
+    </div>
+
+    <!-- CONTRAST CHECKER -->
+    <div class="tool-card" id="contrast-tool">
+      <div class="tool-header" onclick="toggleTool('contrast-tool')">
+        <div class="tool-emoji">♿</div>
+        <div><div class="tool-name">Renk Kontrast Checker</div><div class="tool-desc">WCAG AA / AAA erişilebilirlik testi</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="row2">
+          <div class="field"><label>Ön Plan Rengi</label><input type="color" id="ct-fg" value="#ffffff" onchange="checkContrast()"/></div>
+          <div class="field"><label>Arka Plan Rengi</label><input type="color" id="ct-bg" value="#6c63ff" onchange="checkContrast()"/></div>
+        </div>
+        <div class="contrast-box" id="ct-preview">
+          <div class="contrast-half" id="ct-preview-inner">Aa — Örnek Metin</div>
+        </div>
+        <div style="margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:14px;">
+          Kontrast Oranı: <span id="ct-ratio" style="color:var(--accent);font-weight:700;">—</span>
+        </div>
+        <div class="wcag-row" id="ct-badges"></div>
+      </div>
+    </div>
+
+    <!-- CSS UNIT CONVERTER -->
+    <div class="tool-card" id="unit-tool">
+      <div class="tool-header" onclick="toggleTool('unit-tool')">
+        <div class="tool-emoji">📐</div>
+        <div><div class="tool-name">CSS Birim Dönüştürücü</div><div class="tool-desc">px ↔ rem ↔ em ↔ vw</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="row2">
+          <div class="field"><label>Değer</label><input type="number" id="unit-val" value="16" oninput="convertUnit()"/></div>
+          <div class="field"><label>Base Font Size (px)</label><input type="number" id="unit-base" value="16" oninput="convertUnit()"/></div>
+        </div>
+        <div class="field"><label>Viewport Genişliği (px)</label><input type="number" id="unit-vw" value="1440" oninput="convertUnit()"/></div>
+        <table class="unit-table" id="unit-table">
+          <thead><tr><th>Birim</th><th>Değer</th></tr></thead>
+          <tbody id="unit-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- DEV SECTION -->
+<div class="section" id="sec-dev">
+  <div class="section-title">🛠️ Geliştirici Araçları</div>
+  <div class="tool-grid">
+
+    <!-- REGEX TESTER -->
+    <div class="tool-card" id="regex-tool">
+      <div class="tool-header" onclick="toggleTool('regex-tool')">
+        <div class="tool-emoji">🔍</div>
+        <div><div class="tool-name">Regex Tester</div><div class="tool-desc">Düzenli ifade test aracı</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="row2">
+          <div class="field"><label>Pattern</label><input type="text" id="rx-pat" class="mono" placeholder="[a-z]+" oninput="testRegex()"/></div>
+          <div class="field"><label>Flags</label><input type="text" id="rx-flags" class="mono" placeholder="gi" value="gi" oninput="testRegex()"/></div>
+        </div>
+        <div class="field"><label>Test Metni</label><textarea id="rx-text" class="mono" placeholder="Test metni buraya..." oninput="testRegex()">Merhaba Dünya! detsh-tool.vercel.app — 2025</textarea></div>
+        <div class="field"><label>Sonuç</label><div class="output" id="rx-out" style="min-height:60px">—</div></div>
+        <div id="rx-matches" style="margin-top:8px;font-size:12px;color:var(--text2);"></div>
+      </div>
+    </div>
+
+    <!-- DIFF CHECKER -->
+    <div class="tool-card" id="diff-tool">
+      <div class="tool-header" onclick="toggleTool('diff-tool')">
+        <div class="tool-emoji">↔️</div>
+        <div><div class="tool-name">Diff Checker</div><div class="tool-desc">İki metni karşılaştır</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="row2">
+          <div class="field"><label>Metin A</label><textarea id="diff-a" class="mono" placeholder="Orijinal metin..." style="min-height:100px"></textarea></div>
+          <div class="field"><label>Metin B</label><textarea id="diff-b" class="mono" placeholder="Yeni metin..." style="min-height:100px"></textarea></div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" onclick="doDiff()">↔ Karşılaştır</button><button class="btn btn-secondary" onclick="document.getElementById('diff-a').value='';document.getElementById('diff-b').value='';document.getElementById('diff-out').innerHTML=''">🗑 Temizle</button></div>
+        <div id="diff-out" class="diff-result" style="margin-top:10px;display:none;"></div>
+      </div>
+    </div>
+
+    <!-- MARKDOWN PREVIEW -->
+    <div class="tool-card" id="markdown-tool">
+      <div class="tool-header" onclick="toggleTool('markdown-tool')">
+        <div class="tool-emoji">📝</div>
+        <div><div class="tool-name">Markdown Önizleme</div><div class="tool-desc">Anlık markdown render</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="field"><label>Markdown</label><textarea id="md-in" class="mono" oninput="renderMD()" style="min-height:120px"># Merhaba DETSH Tools!
+
+Bu bir **markdown** önizlemesidir.
+
+- Madde 1
+- Madde 2  
+- Madde 3
+
+`code()` ve [link](https://detsh-tool.vercel.app) desteklenir.</textarea></div>
+        <div class="preview-box">
+          <div class="preview-label">Önizleme</div>
+          <div id="md-out" style="font-size:14px;line-height:1.7;color:var(--text);"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMESTAMP -->
+    <div class="tool-card" id="timestamp-tool">
+      <div class="tool-header" onclick="toggleTool('timestamp-tool')">
+        <div class="tool-emoji">⏰</div>
+        <div><div class="tool-name">Timestamp Dönüştürücü</div><div class="tool-desc">Unix timestamp ↔ Tarih</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="field"><label>Unix Timestamp</label><input type="number" id="ts-unix" placeholder="1746748800" oninput="ts2date()"/></div>
+        <div class="output-label">Tarih</div><div class="output" id="ts-date">—<button class="copy-btn" onclick="copyEl('ts-date')">Kopyala</button></div>
+        <div class="field" style="margin-top:12px"><label>Tarih → Timestamp</label><input type="text" id="ts-date-in" placeholder="2025-05-09 12:00:00" oninput="date2ts()"/></div>
+        <div class="output-label">Timestamp</div><div class="output" id="ts-unix-out">—<button class="copy-btn" onclick="copyEl('ts-unix-out')">Kopyala</button></div>
+        <div class="btn-row"><button class="btn btn-secondary btn-sm" onclick="tsNow()">📍 Şimdi</button></div>
+      </div>
+    </div>
+
+    <!-- CRON BUILDER -->
+    <div class="tool-card" id="cron-tool">
+      <div class="tool-header" onclick="toggleTool('cron-tool')">
+        <div class="tool-emoji">⏱️</div>
+        <div><div class="tool-name">Cron Expression Builder</div><div class="tool-desc">Cron ifadesi oluştur & açıkla</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="field"><label>Hazır Şablonlar</label>
+          <div class="check-group" style="gap:6px;">
+            <button class="btn btn-secondary btn-sm" onclick="setCron('0 * * * *')">Her Saat</button>
+            <button class="btn btn-secondary btn-sm" onclick="setCron('0 0 * * *')">Günlük</button>
+            <button class="btn btn-secondary btn-sm" onclick="setCron('0 0 * * 1')">Haftalık</button>
+            <button class="btn btn-secondary btn-sm" onclick="setCron('0 0 1 * *')">Aylık</button>
+            <button class="btn btn-secondary btn-sm" onclick="setCron('*/5 * * * *')">5 dk'da bir</button>
+            <button class="btn btn-secondary btn-sm" onclick="setCron('0 9-17 * * 1-5')">Mesai saatleri</button>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:10px;">
+          <div class="field"><label>Dakika</label><input type="text" id="cr-min" value="0" oninput="buildCron()" class="mono"/></div>
+          <div class="field"><label>Saat</label><input type="text" id="cr-hr" value="*" oninput="buildCron()" class="mono"/></div>
+          <div class="field"><label>Gün</label><input type="text" id="cr-dom" value="*" oninput="buildCron()" class="mono"/></div>
+          <div class="field"><label>Ay</label><input type="text" id="cr-mon" value="*" oninput="buildCron()" class="mono"/></div>
+          <div class="field"><label>Hafta Günü</label><input type="text" id="cr-dow" value="*" oninput="buildCron()" class="mono"/></div>
+        </div>
+        <div class="output-label">Cron İfadesi</div>
+        <div class="output" id="cron-out" style="font-size:16px;letter-spacing:2px;">0 * * * *<button class="copy-btn" onclick="copyEl('cron-out')">Kopyala</button></div>
+        <div id="cron-desc" style="margin-top:8px;font-size:13px;color:var(--accent3);"></div>
+      </div>
+    </div>
+
+    <!-- SVG OPTIMIZER -->
+    <div class="tool-card" id="svg-tool">
+      <div class="tool-header" onclick="toggleTool('svg-tool')">
+        <div class="tool-emoji">🖋️</div>
+        <div><div class="tool-name">SVG Optimizer</div><div class="tool-desc">SVG kodunu temizle & küçült</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="field"><label>SVG Kodu</label><textarea id="svg-in" class="mono" placeholder="<svg>...</svg>" style="min-height:120px" oninput="svgPreview()"></textarea></div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="optimizeSVG()">⚡ Optimize Et</button>
+          <button class="btn btn-secondary" onclick="svgPreview()">👁 Önizle</button>
+        </div>
+        <div id="svg-preview-box" style="display:none;" class="preview-box">
+          <div class="preview-label">Önizleme</div>
+          <div id="svg-preview-inner" style="display:flex;justify-content:center;padding:16px;max-height:200px;overflow:hidden;"></div>
+        </div>
+        <div id="svg-stats" style="margin-top:8px;font-size:12px;color:var(--text2);"></div>
+        <div class="output-label" style="margin-top:10px">Optimize SVG</div>
+        <div class="output" id="svg-out" style="font-size:11px;max-height:150px;overflow-y:auto;">—<button class="copy-btn" onclick="copyEl('svg-out')">Kopyala</button></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SEO SECTION -->
+<div class="section" id="sec-seo">
+  <div class="section-title">🎯 SEO & Meta Araçları</div>
+  <div class="tool-grid">
+
+    <!-- META TAGS -->
+    <div class="tool-card" id="meta-tool">
+      <div class="tool-header" onclick="toggleTool('meta-tool')">
+        <div class="tool-emoji">🏷️</div>
+        <div><div class="tool-name">Meta Tags Üretici</div><div class="tool-desc">SEO meta etiketleri oluştur</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="field"><label>Sayfa Başlığı</label><input type="text" id="mt-title" placeholder="DETSH Tools — Ücretsiz Web Araçları" oninput="genMeta()"/></div>
+        <div class="field"><label>Açıklama</label><textarea id="mt-desc" placeholder="Geliştiriciler için 20+ ücretsiz araç..." style="min-height:70px" oninput="genMeta()"></textarea></div>
+        <div class="field"><label>Anahtar Kelimeler</label><input type="text" id="mt-keys" placeholder="tool, css generator, qr code" oninput="genMeta()"/></div>
+        <div class="row2">
+          <div class="field"><label>Yazar</label><input type="text" id="mt-author" placeholder="Detsh" oninput="genMeta()"/></div>
+          <div class="field"><label>Dil</label><select id="mt-lang" onchange="genMeta()"><option value="tr">Türkçe</option><option value="en">English</option><option value="de">Deutsch</option></select></div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" onclick="genMeta()">⚡ Üret</button></div>
+        <div class="output-label" style="margin-top:10px">HTML Kodu</div>
+        <div class="output" id="meta-out" style="font-size:11px;">—<button class="copy-btn" onclick="copyEl('meta-out')">Kopyala</button></div>
+      </div>
+    </div>
+
+    <!-- OPEN GRAPH -->
+    <div class="tool-card" id="og-tool">
+      <div class="tool-header" onclick="toggleTool('og-tool')">
+        <div class="tool-emoji">📢</div>
+        <div><div class="tool-name">Open Graph Üretici</div><div class="tool-desc">Sosyal medya önizleme etiketleri</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="field"><label>Başlık</label><input type="text" id="og-title" placeholder="DETSH Tools" oninput="genOG()"/></div>
+        <div class="field"><label>Açıklama</label><textarea id="og-desc" placeholder="Ücretsiz web araçları" style="min-height:60px" oninput="genOG()"></textarea></div>
+        <div class="field"><label>URL</label><input type="text" id="og-url" placeholder="https://detsh-tool.vercel.app" oninput="genOG()"/></div>
+        <div class="field"><label>Görsel URL</label><input type="text" id="og-img" placeholder="https://detsh-tool.vercel.app/og.png" oninput="genOG()"/></div>
+        <div class="field"><label>Tür</label>
+          <select id="og-type" onchange="genOG()">
+            <option value="website">Website</option>
+            <option value="article">Article</option>
+            <option value="product">Product</option>
+          </select>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" onclick="genOG()">⚡ Üret</button></div>
+        <div class="output-label" style="margin-top:10px">HTML Kodu</div>
+        <div class="output" id="og-out" style="font-size:11px;">—<button class="copy-btn" onclick="copyEl('og-out')">Kopyala</button></div>
+      </div>
+    </div>
+
+    <!-- ROBOTS TXT -->
+    <div class="tool-card" id="robots-tool">
+      <div class="tool-header" onclick="toggleTool('robots-tool')">
+        <div class="tool-emoji">🤖</div>
+        <div><div class="tool-name">Robots.txt Üretici</div><div class="tool-desc">SEO crawler kuralları</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="field"><label>Sitemap URL</label><input type="text" id="rb-sitemap" placeholder="https://detsh-tool.vercel.app/sitemap.xml" oninput="genRobots()"/></div>
+        <div class="field"><label>İzin Verilen Yollar</label><textarea id="rb-allow" class="mono" placeholder="/&#10;/blog/&#10;/tools/" style="min-height:70px" oninput="genRobots()"></textarea></div>
+        <div class="field"><label>Engellenen Yollar</label><textarea id="rb-disallow" class="mono" placeholder="/admin/&#10;/private/" style="min-height:70px" oninput="genRobots()"></textarea></div>
+        <div class="field"><label>Bot</label>
+          <select id="rb-bot" onchange="genRobots()">
+            <option value="*">Tüm Botlar (*)</option>
+            <option value="Googlebot">Googlebot</option>
+            <option value="Bingbot">Bingbot</option>
+          </select>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" onclick="genRobots()">⚡ Üret</button></div>
+        <div class="output-label" style="margin-top:10px">robots.txt</div>
+        <div class="output" id="rb-out" style="font-size:12px;">—<button class="copy-btn" onclick="copyEl('rb-out')">Kopyala</button></div>
+        <div class="btn-row"><button class="btn btn-green btn-sm" onclick="dlRobots()">⬇ robots.txt indir</button></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- VISUAL SECTION -->
+<div class="section" id="sec-visual">
+  <div class="section-title">🖼️ Görsel & Diğer Araçlar</div>
+  <div class="tool-grid">
+
+    <!-- COLOR PALETTE -->
+    <div class="tool-card" id="color-tool">
+      <div class="tool-header" onclick="toggleTool('color-tool')">
+        <div class="tool-emoji">🎨</div>
+        <div><div class="tool-name">Renk Paleti Üretici</div><div class="tool-desc">HEX · RGB · HSL dönüşüm + palet</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="row2">
+          <div class="field"><label>Temel Renk</label><input type="color" id="cp-base" value="#6c63ff" onchange="genPalette()"/></div>
+          <div class="field"><label>Palet Türü</label>
+            <select id="cp-type" onchange="genPalette()">
+              <option value="analogous">Analogous</option>
+              <option value="complementary">Complementary</option>
+              <option value="triadic">Triadic</option>
+              <option value="monochromatic">Monochromatic</option>
+              <option value="tints">Tints (Açık)</option>
+              <option value="shades">Shades (Koyu)</option>
+            </select>
+          </div>
+        </div>
+        <div class="preview-box">
+          <div class="preview-label">Palet</div>
+          <div class="palette-row" id="palette-swatches"></div>
+        </div>
+        <div class="field" style="margin-top:10px"><label>Dönüşüm — HEX</label><input type="text" id="cp-hex" placeholder="#6c63ff" oninput="convColor('hex')"/></div>
+        <div class="output-label">RGB / HSL</div>
+        <div class="output" id="cp-out">—<button class="copy-btn" onclick="copyEl('cp-out')">Kopyala</button></div>
+      </div>
+    </div>
+
+    <!-- LOREM IPSUM -->
+    <div class="tool-card" id="lorem-tool">
+      <div class="tool-header" onclick="toggleTool('lorem-tool')">
+        <div class="tool-emoji">📄</div>
+        <div><div class="tool-name">Lorem Ipsum Üretici</div><div class="tool-desc">Dolgu metin oluşturucu</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="row2">
+          <div class="field"><label>Paragraf Sayısı</label><input type="number" id="li-count" value="2" min="1" max="20"/></div>
+          <div class="field"><label>Dil</label>
+            <select id="li-lang">
+              <option value="latin">Klasik Latin</option>
+              <option value="tr">Türkçe Dolgu</option>
+            </select>
+          </div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" onclick="genLorem()">⚡ Üret</button></div>
+        <div class="output-label" style="margin-top:10px">Metin</div>
+        <div class="output" id="li-out" style="font-size:12px;font-family:inherit;max-height:200px;overflow-y:auto;">—<button class="copy-btn" onclick="copyEl('li-out')">Kopyala</button></div>
+      </div>
+    </div>
+
+    <!-- WORD COUNT -->
+    <div class="tool-card" id="wordcount-tool">
+      <div class="tool-header" onclick="toggleTool('wordcount-tool')">
+        <div class="tool-emoji">🔢</div>
+        <div><div class="tool-name">Kelime Sayacı</div><div class="tool-desc">Kelime · karakter · cümle · okuma süresi</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="field"><label>Metin</label><textarea id="wc-in" oninput="countWords()" placeholder="Metnini buraya yapıştır..." style="min-height:120px"></textarea></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
+          <div style="background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:22px;font-weight:800;color:var(--accent)" id="wc-words">0</div>
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px">Kelime</div>
+          </div>
+          <div style="background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:22px;font-weight:800;color:var(--accent2)" id="wc-chars">0</div>
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px">Karakter</div>
+          </div>
+          <div style="background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:22px;font-weight:800;color:var(--accent3)" id="wc-sents">0</div>
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px">Cümle</div>
+          </div>
+          <div style="background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:22px;font-weight:800;color:var(--accent4)" id="wc-read">0 dk</div>
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px">Okuma Süresi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEXT TRANSFORMER -->
+    <div class="tool-card" id="ascii-tool">
+      <div class="tool-header" onclick="toggleTool('ascii-tool')">
+        <div class="tool-emoji">🔤</div>
+        <div><div class="tool-name">Metin Dönüştürücü</div><div class="tool-desc">UPPER · lower · Title · camelCase · slug</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="field"><label>Metin</label><textarea id="tx-in" placeholder="Dönüştürülecek metin..." oninput="transformText('upper')" style="min-height:80px"></textarea></div>
+        <div class="btn-row" style="flex-wrap:wrap;">
+          <button class="btn btn-secondary btn-sm" onclick="transformText('upper')">UPPER</button>
+          <button class="btn btn-secondary btn-sm" onclick="transformText('lower')">lower</button>
+          <button class="btn btn-secondary btn-sm" onclick="transformText('title')">Title Case</button>
+          <button class="btn btn-secondary btn-sm" onclick="transformText('camel')">camelCase</button>
+          <button class="btn btn-secondary btn-sm" onclick="transformText('pascal')">PascalCase</button>
+          <button class="btn btn-secondary btn-sm" onclick="transformText('snake')">snake_case</button>
+          <button class="btn btn-secondary btn-sm" onclick="transformText('kebab')">kebab-case</button>
+          <button class="btn btn-secondary btn-sm" onclick="transformText('slug')">slug</button>
+          <button class="btn btn-secondary btn-sm" onclick="transformText('reverse')">esreveR</button>
+          <button class="btn btn-secondary btn-sm" onclick="transformText('nospace')">Boşluksuz</button>
+        </div>
+        <div class="output-label" style="margin-top:10px">Sonuç</div>
+        <div class="output" id="tx-out">—<button class="copy-btn" onclick="copyEl('tx-out')">Kopyala</button></div>
+      </div>
+    </div>
+
+    <!-- NUMBER BASE CONVERTER -->
+    <div class="tool-card" id="number-tool">
+      <div class="tool-header" onclick="toggleTool('number-tool')">
+        <div class="tool-emoji">🔣</div>
+        <div><div class="tool-name">Sayı Tabanı Dönüştürücü</div><div class="tool-desc">Binary · Octal · Decimal · Hex</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="row2">
+          <div class="field"><label>Giriş</label><input type="text" id="nb-in" class="mono" placeholder="255" oninput="convertBase()"/></div>
+          <div class="field"><label>Giriş Tabanı</label>
+            <select id="nb-base" onchange="convertBase()">
+              <option value="10">Decimal (10)</option>
+              <option value="2">Binary (2)</option>
+              <option value="8">Octal (8)</option>
+              <option value="16">Hex (16)</option>
+            </select>
+          </div>
+        </div>
+        <table class="unit-table">
+          <thead><tr><th>Taban</th><th>Değer</th></tr></thead>
+          <tbody id="nb-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="text-align:center;padding:40px 0 24px;color:var(--text3);font-size:13px;border-top:1px solid var(--border);margin-top:20px;">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--text2);margin-bottom:8px;">DETSH<span style="color:var(--accent)">.tools</span></div>
+  30+ ücretsiz araç · Tamamen açık kaynak · Kayıt gerektirmez<br>
+  <a href="https://detsh-tool.vercel.app" style="color:var(--accent);text-decoration:none;margin-top:6px;display:inline-block;">detsh-tool.vercel.app</a>
+</div>
+
+</div><!-- /main -->
+</div><!-- /layout -->
 
 <script>
-// ── NAVIGATION ──────────────────────────────────
-function showTool(id) {
-  document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
-  document.getElementById('panel-' + id).classList.add('active');
-  const pills = ['password','qr','username','bio','wordcount','gradient','uuid','repeater','charcount','random','lorem','binary','age','stopwatch','dice','tip','unit'];
-  const idx = pills.indexOf(id);
-  if (idx >= 0) {
-    document.querySelectorAll('.nav-pill')[idx].classList.add('active');
-    document.querySelectorAll('.tool-card')[idx].classList.add('active');
-  }
+// ============================================================
+// UTILS
+// ============================================================
+function toast(msg='✓ Kopyalandı!'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
 }
-
-// ── PASSWORD ──────────────────────────────────
-function updateLen() {
-  document.getElementById('pwLenVal').textContent = document.getElementById('pwLen').value;
-}
-function generatePassword() {
-  const len = +document.getElementById('pwLen').value;
-  const upper = document.getElementById('pwUpper').checked;
-  const lower = document.getElementById('pwLower').checked;
-  const num = document.getElementById('pwNum').checked;
-  const sym = document.getElementById('pwSym').checked;
-  const excl = document.getElementById('pwExclude').checked;
-  let chars = '';
-  if (upper) chars += excl ? 'ABCDEFGHJKLMNPQRSTUVWXYZ' : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  if (lower) chars += excl ? 'abcdefghjkmnpqrstuvwxyz' : 'abcdefghijklmnopqrstuvwxyz';
-  if (num) chars += excl ? '23456789' : '0123456789';
-  if (sym) chars += '!@#$%^&*()-_=+[]{}|;:,.<>?';
-  if (!chars) { document.getElementById('pwText').textContent = 'En az bir seçenek seçin!'; return; }
-  let pw = '';
-  const arr = new Uint32Array(len);
-  crypto.getRandomValues(arr);
-  for (let i = 0; i < len; i++) pw += chars[arr[i] % chars.length];
-  document.getElementById('pwText').textContent = pw;
-  updateStrength(pw);
-}
-function updateStrength(pw) {
-  let score = 0;
-  if (pw.length >= 12) score++;
-  if (pw.length >= 16) score++;
-  if (/[A-Z]/.test(pw)) score++;
-  if (/[a-z]/.test(pw)) score++;
-  if (/[0-9]/.test(pw)) score++;
-  if (/[^A-Za-z0-9]/.test(pw)) score++;
-  const pct = Math.round((score / 6) * 100);
-  const colors = ['#ff6b6b','#ff9f5a','#ffd93d','#c8f065','#00d4aa'];
-  const labels = ['Çok Zayıf','Zayıf','Orta','Güçlü','Çok Güçlü'];
-  const ci = Math.min(Math.floor(score / 1.5), 4);
-  document.getElementById('strengthFill').style.width = pct + '%';
-  document.getElementById('strengthFill').style.background = colors[ci];
-  document.getElementById('strengthLabel').textContent = 'Şifre gücü: ' + labels[ci];
-}
-
-// ── QR ──────────────────────────────────────
-let qrInst = null;
-function generateQR() {
-  const text = document.getElementById('qrInput').value.trim();
-  if (!text) return;
-  const size = +document.getElementById('qrSize').value;
-  const correct = document.getElementById('qrCorrect').value;
-  const dark = document.getElementById('qrDark').value;
-  const light = document.getElementById('qrLight').value;
-  const el = document.getElementById('qrcode');
-  el.innerHTML = '';
-  qrInst = new QRCode(el, {
-    text, width: size, height: size,
-    colorDark: dark, colorLight: light,
-    correctLevel: QRCode.CorrectLevel[correct]
+function copyEl(id){
+  const el=document.getElementById(id);
+  const text=el.innerText.replace(/Kopyala$/,'').replace(/✓ Kopyalandı$/,'').trim();
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=el.querySelector('.copy-btn');
+    if(btn){btn.textContent='✓ Kopyalandı';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Kopyala';btn.classList.remove('copied');},2000);}
+    toast();
   });
 }
-function downloadQR() {
-  const canvas = document.querySelector('#qrcode canvas');
-  if (!canvas) { generateQR(); setTimeout(downloadQR, 400); return; }
-  const a = document.createElement('a');
-  a.download = 'qrcode.png';
-  a.href = canvas.toDataURL();
-  a.click();
+function copyText(t){navigator.clipboard.writeText(t).then(()=>toast());}
+function toggleTool(id){document.getElementById(id).classList.toggle('open');}
+function openTool(id){document.getElementById(id).classList.add('open');}
+function scrollTo_(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+function hex2rgb(hex){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return{r,g,b};}
+function rgb2hex(r,g,b){return'#'+[r,g,b].map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join('');}
+function hex2hsl(hex){let{r,g,b}=hex2rgb(hex);r/=255;g/=255;b/=255;const max=Math.max(r,g,b),min=Math.min(r,g,b);let h,s,l=(max+min)/2;if(max===min){h=s=0;}else{const d=max-min;s=l>0.5?d/(2-max-min):d/(max+min);switch(max){case r:h=((g-b)/d+(g<b?6:0))/6;break;case g:h=((b-r)/d+2)/6;break;case b:h=((r-g)/d+4)/6;break;}}return{h:Math.round(h*360),s:Math.round(s*100),l:Math.round(l*100)};}
+function hsl2hex(h,s,l){s/=100;l/=100;const k=n=>(n+h/30)%12;const a=s*Math.min(l,1-l);const f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));return rgb2hex(Math.round(f(0)*255),Math.round(f(8)*255),Math.round(f(4)*255));}
+function setOut(id,txt){
+  const el=document.getElementById(id);
+  el.innerHTML='';
+  el.appendChild(document.createTextNode(txt));
+  const btn=document.createElement('button');
+  btn.className='copy-btn';btn.textContent='Kopyala';
+  btn.onclick=()=>copyEl(id);
+  el.appendChild(btn);
 }
 
-// ── USERNAME ─────────────────────────────────
-const adjectives = ['swift','dark','bold','neon','cool','mystic','hyper','shadow','ultra','prime','cyber','ghost','pixel','solar','blaze','alpha','zero','nova','flux','quantum','frozen','silent','rare','epic','void'];
-const nouns = ['wolf','hawk','fox','titan','storm','blade','byte','drift','pulse','orbit','nexus','echo','vortex','comet','surge','spike','frost','night','lunar','circuit','surge','wave','apex','arc','grid'];
-const gamerPre = ['xX','_','gg','pro','ez','the','dark','real','only','true','og'];
-const gamerSuf = ['Xx','_','_yt','tv','gg','official','real','xd','69','420','pro'];
-function generateUsernames() {
-  const style = document.getElementById('unStyle').value;
-  const kw = document.getElementById('unKeyword').value.trim().toLowerCase().replace(/\s+/g,'');
-  const addNum = document.getElementById('unNum').checked;
-  const under = document.getElementById('unUnder').checked;
-  const count = +document.getElementById('unCount').value;
-  const sep = under ? '_' : '';
-  const results = [];
-  const rand = a => a[Math.floor(Math.random() * a.length)];
-  const num = () => Math.floor(Math.random() * 9000) + 100;
-  const num2 = () => Math.floor(Math.random() * 99) + 1;
-  for (let i = 0; i < count; i++) {
-    let u = '';
-    const adj = rand(adjectives), noun = rand(nouns);
-    if (style === 'gamer') {
-      u = rand(gamerPre) + (kw || noun) + (addNum ? num2() : rand(gamerSuf));
-    } else if (style === 'minimal') {
-      u = (kw || adj) + (addNum ? num2() : '');
-    } else if (style === 'professional') {
-      const base = kw ? kw : adj + sep + noun;
-      u = base + (addNum ? '.' + num2() : '');
-    } else if (style === 'creative') {
-      const extras = ['ify','lab','hub','box','studio','works','craft','code'];
-      u = (kw || rand(adjectives)) + rand(extras);
-    } else {
-      u = adj + sep + (kw || noun) + (addNum ? num() : '');
-    }
-    results.push(u);
+// ============================================================
+// QR CODE
+// ============================================================
+let qrInst=null;
+function genQR(){
+  const val=document.getElementById('qr-input').value||'https://detsh-tool.vercel.app';
+  const size=parseInt(document.getElementById('qr-size').value);
+  const color=document.getElementById('qr-color').value;
+  const out=document.getElementById('qr-output');
+  out.innerHTML='';
+  qrInst=new QRCode(out,{text:val,width:size,height:size,colorDark:color,colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});
+}
+function dlQR(){
+  const canvas=document.querySelector('#qr-output canvas');
+  if(!canvas){genQR();setTimeout(dlQR,300);return;}
+  const a=document.createElement('a');a.download='qrcode.png';a.href=canvas.toDataURL();a.click();
+}
+setTimeout(genQR,200);
+
+// ============================================================
+// PASSWORD
+// ============================================================
+function genPass(){
+  const len=parseInt(document.getElementById('pw-len').value);
+  const u=document.getElementById('pw-upper').checked;
+  const l=document.getElementById('pw-lower').checked;
+  const n=document.getElementById('pw-num').checked;
+  const s=document.getElementById('pw-sym').checked;
+  let chars='';
+  if(u)chars+='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  if(l)chars+='abcdefghijklmnopqrstuvwxyz';
+  if(n)chars+='0123456789';
+  if(s)chars+='!@#$%^&*()-_=+[]{}|;:,.<>?';
+  if(!chars)chars='abcdefghijklmnopqrstuvwxyz';
+  let pw='';
+  const arr=new Uint32Array(len);
+  crypto.getRandomValues(arr);
+  arr.forEach(v=>pw+=chars[v%chars.length]);
+  const out=document.getElementById('pw-out');
+  out.innerHTML='';
+  out.appendChild(document.createTextNode(pw));
+  const btn=document.createElement('button');btn.className='copy-btn';btn.textContent='Kopyala';btn.onclick=()=>copyEl('pw-out');out.appendChild(btn);
+  document.getElementById('multi-pw').innerHTML='';
+  // strength indicator
+  let score=0;
+  if(len>=8)score++;if(len>=12)score++;if(len>=20)score++;
+  if(u&&l)score++;if(n)score++;if(s)score++;
+  const colors=['#ff4060','#ff4060','#ffcc00','#ffaa40','#22d67a','#22d67a'];
+  const labels=['Çok Zayıf','Zayıf','Orta','İyi','Güçlü','Çok Güçlü'];
+  const bar=document.getElementById('pw-strength-bar');
+  const lbl=document.getElementById('pw-strength-label');
+  bar.style.background=colors[Math.min(score,5)];
+  bar.style.width=(score/5*100)+'%';
+  lbl.textContent=labels[Math.min(score,5)];
+  lbl.style.color=colors[Math.min(score,5)];
+}
+function genMultiPass(){
+  const len=parseInt(document.getElementById('pw-len').value);
+  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$';
+  const rows=[];
+  for(let i=0;i<5;i++){
+    let pw='';const arr=new Uint32Array(len);crypto.getRandomValues(arr);
+    arr.forEach(v=>pw+=chars[v%chars.length]);
+    rows.push(`<div style="background:var(--bg4);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-family:'JetBrains Mono',monospace;font-size:12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;word-break:break-all;"><span>${pw}</span><button class="copy-btn" style="position:relative;top:0;right:0;flex-shrink:0;margin-left:8px" onclick="copyText('${pw}')">Kopyala</button></div>`);
   }
-  const el = document.getElementById('unOutput');
-  el.innerHTML = results.map(u => `<div class="chip" onclick="copyChip(this)" title="Kopyala">${u}</div>`).join('');
+  document.getElementById('multi-pw').innerHTML=rows.join('');
 }
-function copyChip(el) {
-  navigator.clipboard.writeText(el.textContent);
-  const orig = el.textContent;
-  el.textContent = '✓ Kopyalandı';
-  setTimeout(() => el.textContent = orig, 1200);
+genPass();
+
+// ============================================================
+// JSON
+// ============================================================
+function fmtJSON(){
+  try{setOut('json-out',JSON.stringify(JSON.parse(document.getElementById('json-in').value),null,2));}
+  catch(e){setOut('json-out','❌ Hata: '+e.message);}
+}
+function minJSON(){
+  try{setOut('json-out',JSON.stringify(JSON.parse(document.getElementById('json-in').value)));}
+  catch(e){setOut('json-out','❌ Hata: '+e.message);}
+}
+function validateJSON(){
+  try{JSON.parse(document.getElementById('json-in').value);setOut('json-out','✅ Geçerli JSON!');}
+  catch(e){setOut('json-out','❌ Geçersiz: '+e.message);}
 }
 
-// ── BIO ──────────────────────────────────────
-function selTag(el, group) {
-  const par = el.closest('.bio-tags');
-  par.querySelectorAll('.bio-tag').forEach(t => t.classList.remove('sel'));
-  el.classList.add('sel');
+// ============================================================
+// BASE64
+// ============================================================
+function encB64(){
+  try{setOut('b64-out',btoa(unescape(encodeURIComponent(document.getElementById('b64-in').value))));}
+  catch(e){setOut('b64-out','❌ Hata: '+e.message);}
 }
-function getSelTag(id) {
-  const el = document.querySelector('#' + id + ' .bio-tag.sel');
-  return el ? el.textContent : '';
-}
-function generateBio() {
-  const name = document.getElementById('bioName').value.trim() || 'Ben';
-  const job = document.getElementById('bioJob').value.trim() || 'Yaratıcı';
-  const tone = getSelTag('bioTone');
-  const platform = getSelTag('bioPlatform');
-  const interests = document.getElementById('bioInterests').value.trim();
-  const interestList = interests ? interests.split(',').map(s => s.trim()).filter(Boolean) : [];
-
-  const bios = {
-    'Profesyonel': {
-      'Instagram': `${job} | ${name} ✦ ${interestList.length ? interestList.slice(0,2).join(' · ') + ' ·' : ''} İşbirliği için DM 📩`,
-      'Twitter/X': `${job} olarak çalışıyorum. ${interestList.length ? interestList.join(', ') + ' üzerine' : 'Teknoloji ve inovasyon üzerine'} düşüncelerimi paylaşıyorum. ${name}`,
-      'LinkedIn': `${job} | ${interestList.length ? interestList.join(' & ') : 'İnovasyon & Teknoloji'} alanında uzmanlaşmış profesyonel. İletişim için açığım.`,
-      'TikTok': `${name} | ${job} 🎯 ${interestList.length ? interestList[0] : 'İçerik'} hakkında her şey ⬇️`
-    },
-    'Yaratıcı': {
-      'Instagram': `✨ ${name} · Hayatı ${job} gözüyle görüyorum 🎨 ${interestList.length ? interestList.map(i=>'#'+i.replace(/\s/g,'')).join(' ') : '#yaratıcılık #sanat'}`,
-      'Twitter/X': `${name} burada 🌱 ${job} olarak her gün yeni bir şeyler keşfediyorum. ${interestList.length ? interestList.join(', ') + ' beni besliyor.' : ''}`,
-      'LinkedIn': `${job} & Yaratıcı Düşünür | ${name} | ${interestList.length ? interestList.join(', ') + ' ile' : 'Yenilikçi projelerle'} anlam yaratıyorum.`,
-      'TikTok': `${name} 🎨 ${job} vibes ${interestList.length ? '· ' + interestList[0] : ''} ✨ Günlük içerik ⬇️`
-    },
-    'Eğlenceli': {
-      'Instagram': `${name} 🤙 ${job} geceleri, ${interestList.length ? interestList[0] : 'macera'} düşkünü gündüzleri 😂 DM açık, ego yok!`,
-      'Twitter/X': `${name} | ${job} falan. ${interestList.length ? interestList.join(', ') + ' dışında' : 'Hayat'} bir bilmece 🤷 tweeting my chaos daily`,
-      'LinkedIn': `${job} (ve tam zamanlı kahve bağımlısı ☕) | ${name} | Ciddiye alınan biri gibi görünmeye çalışıyorum.`,
-      'TikTok': `${name} 😂 ${job} ama önce ${interestList.length ? interestList[0] : 'eğlence'} 🔥 Yorum bırak ⬇️`
-    },
-    'Minimal': {
-      'Instagram': `${name}. ${job}. ${interestList.length ? interestList[0] + '.' : ''}`,
-      'Twitter/X': `${name} / ${job}${interestList.length ? ' / ' + interestList[0] : ''}`,
-      'LinkedIn': `${job} · ${name}`,
-      'TikTok': `${name} · ${job}`
-    },
-    'Motivasyonel': {
-      'Instagram': `${name} 🚀 ${job} olarak her gün daha iyisini hedefliyorum. ${interestList.length ? interestList.join(' + ') + ' = hayatım.' : 'Çünkü durdurulamam.'}`,
-      'Twitter/X': `${job} olarak büyümeye inanıyorum 💡 ${interestList.length ? interestList.join(', ') + ' hakkında' : 'Fikirler'} paylaşıyorum. — ${name}`,
-      'LinkedIn': `"${job} olarak her proje bir fırsattır." — ${name} | ${interestList.length ? interestList.join(' & ') : 'Büyüme & Gelişim'} odaklı.`,
-      'TikTok': `${name} 💪 ${job} yolculuğu | ${interestList.length ? interestList[0] : 'Hedef'} için her gün ⬇️`
-    }
-  };
-
-  const bio = (bios[tone] && bios[tone][platform]) || `${name} · ${job} ${interestList.length ? '· ' + interestList.join(', ') : ''}`;
-  document.getElementById('bioText').textContent = bio;
-  document.getElementById('bioOutput').style.display = 'block';
+function decB64(){
+  try{setOut('b64-out',decodeURIComponent(escape(atob(document.getElementById('b64-in').value))));}
+  catch{setOut('b64-out','❌ Geçersiz Base64');}
 }
 
-// ── WORD COUNTER ─────────────────────────────
-function countWords() {
-  const text = document.getElementById('wcInput').value;
-  const words = text.trim() === '' ? [] : text.trim().split(/\s+/);
-  const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
-  const paragraphs = text.split(/\n\n+/).filter(p => p.trim().length > 0);
-  document.getElementById('wcWords').textContent = words.length;
-  document.getElementById('wcChars').textContent = text.length;
-  document.getElementById('wcCharsNoSpace').textContent = text.replace(/\s/g,'').length;
-  document.getElementById('wcSentences').textContent = sentences.length;
-  document.getElementById('wcParagraphs').textContent = paragraphs.length || (text.trim() ? 1 : 0);
-  document.getElementById('wcReadTime').textContent = Math.max(1, Math.ceil(words.length / 200));
-  // Top words
-  const freq = {};
-  const stopwords = new Set(['ve','ile','bir','bu','da','de','ki','mi','mu','mü','için','ben','sen','o','biz','siz','onlar','the','a','an','and','or','but','in','on','at','to','of','is','it','that','was','are','as']);
-  words.forEach(w => { const wl = w.toLowerCase().replace(/[^a-zğüşıöçA-ZĞÜŞİÖÇ]/g,''); if (wl.length > 2 && !stopwords.has(wl)) freq[wl] = (freq[wl]||0)+1; });
-  const sorted = Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  document.getElementById('topWords').innerHTML = sorted.map(([w,c]) => `<div class="chip" style="cursor:default">${w} <span style="color:var(--accent);font-size:0.75rem">${c}</span></div>`).join('');
+// ============================================================
+// HTML ENTITY
+// ============================================================
+function encEntities(){
+  const t=document.getElementById('ent-in').value;
+  const encoded=t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  setOut('ent-out',encoded);
+}
+function decEntities(){
+  const t=document.getElementById('ent-in').value;
+  const decoded=t.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&nbsp;/g,' ');
+  setOut('ent-out',decoded);
 }
 
-// ── GRADIENT ─────────────────────────────────
-function updateGrad() {
-  const c1 = document.getElementById('gc1').value;
-  const c2 = document.getElementById('gc2').value;
-  const c3 = document.getElementById('gc3').value;
-  const type = document.getElementById('gradType').value;
-  const angle = document.getElementById('gradAngle').value;
-  const opacity = document.getElementById('gradOpacity').value;
-  document.getElementById('gradAngleVal').textContent = angle + '°';
-  document.getElementById('gradOpacityVal').textContent = opacity + '%';
-  document.getElementById('angleField').style.display = type === 'linear' ? 'block' : 'none';
-  const op = Math.round(opacity) / 100;
-  const toRgba = (hex, a) => {
-    const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
-    return `rgba(${r},${g},${b},${a})`;
-  };
-  const s1 = toRgba(c1, op), s2 = toRgba(c2, op), s3 = toRgba(c3, op);
-  let css = '';
-  if (type === 'linear') css = `linear-gradient(${angle}deg, ${s1}, ${s2}, ${s3})`;
-  else if (type === 'radial') css = `radial-gradient(circle, ${s1}, ${s2}, ${s3})`;
-  else css = `conic-gradient(from ${angle}deg, ${s1}, ${s2}, ${s3}, ${s1})`;
-  document.getElementById('gradPreview').style.background = css;
-  const cssStr = `background: ${css};`;
-  document.getElementById('gradCSSText').textContent = cssStr;
-  document.getElementById('gradCSS')._css = cssStr;
+// ============================================================
+// HASH (SHA via SubtleCrypto — requires HTTPS)
+// ============================================================
+async function genHash(){
+  const text=document.getElementById('hash-in').value;
+  if(!text){setOut('hash-results',' ');document.getElementById('hash-results').innerHTML='<span style="color:var(--yellow)">Metin girin</span>';return;}
+  if(!crypto.subtle){document.getElementById('hash-results').innerHTML='<span style="color:var(--red)">❌ SubtleCrypto yalnızca HTTPS üzerinde çalışır.</span>';return;}
+  const enc=new TextEncoder();
+  const data=enc.encode(text);
+  const algos=['SHA-1','SHA-256','SHA-512'];
+  try{
+    const results=await Promise.all(algos.map(a=>crypto.subtle.digest(a,data)));
+    const hashes=results.map(b=>Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join(''));
+    const cont=document.getElementById('hash-results');
+    cont.innerHTML=algos.map((l,i)=>{
+      const safe=l.replace(/[^a-z0-9]/gi,'');
+      return `<div><div class="output-label">${l}</div><div class="output" id="h-${safe}" style="word-break:break-all">${hashes[i]}<button class="copy-btn" onclick="copyText('${hashes[i]}')">Kopyala</button></div></div>`;
+    }).join('');
+  }catch(e){document.getElementById('hash-results').innerHTML=`<span style="color:var(--red)">❌ Hata: ${e.message}</span>`;}
 }
-function applyPreset(c1, c2, c3) {
-  document.getElementById('gc1').value = c1;
-  document.getElementById('gc2').value = c2;
-  document.getElementById('gc3').value = c3;
+
+// ============================================================
+// JWT
+// ============================================================
+function decodeJWT(){
+  const token=document.getElementById('jwt-in').value.trim();
+  const parts=token.split('.');
+  if(parts.length!==3){document.getElementById('jwt-result').innerHTML='<span style="color:var(--red)">❌ Geçersiz JWT formatı (3 parça gerekli)</span>';return;}
+  try{
+    const dec=p=>{try{return JSON.parse(atob(p.replace(/-/g,'+').replace(/_/g,'/')));}catch{return null;}};
+    const header=dec(parts[0]),payload=dec(parts[1]);
+    const now=Math.floor(Date.now()/1000);
+    const exp=payload&&payload.exp?new Date(payload.exp*1000).toLocaleString('tr-TR'):'—';
+    const expired=payload&&payload.exp&&payload.exp<now;
+    const expColor=expired?'var(--red)':'var(--green)';
+    document.getElementById('jwt-result').innerHTML=
+      `<div class="output-label">Header</div><div class="output" style="font-size:11px;margin-bottom:8px">${JSON.stringify(header,null,2)}</div>`+
+      `<div class="output-label">Payload</div><div class="output" style="font-size:11px;margin-bottom:8px">${JSON.stringify(payload,null,2)}</div>`+
+      `<div style="font-size:12px;color:var(--text2)">⏰ Bitiş: <span style="color:${expColor}">${exp}${expired?' (Süresi Dolmuş!)':''}</span></div>`;
+  }catch{document.getElementById('jwt-result').innerHTML='<span style="color:var(--red)">❌ Decode hatası</span>';}
+}
+
+// ============================================================
+// URL ENCODE
+// ============================================================
+function encURL(){setOut('url-out',encodeURIComponent(document.getElementById('url-in').value));}
+function decURL(){try{setOut('url-out',decodeURIComponent(document.getElementById('url-in').value));}catch{setOut('url-out','❌ Hata: Geçersiz URL encoding');}}
+
+// ============================================================
+// BOX SHADOW
+// ============================================================
+function updateShadow(){
+  const x=document.getElementById('sh-x').value;
+  const y=document.getElementById('sh-y').value;
+  const b=document.getElementById('sh-b').value;
+  const s=document.getElementById('sh-s').value;
+  const hex=document.getElementById('sh-color').value;
+  const a=parseInt(document.getElementById('sh-a').value)/100;
+  const bg=hex2rgb(hex);
+  const rgba=`rgba(${bg.r},${bg.g},${bg.b},${a.toFixed(2)})`;
+  const css=`box-shadow: ${x}px ${y}px ${b}px ${s}px ${rgba};`;
+  document.getElementById('sh-preview').style.boxShadow=`${x}px ${y}px ${b}px ${s}px ${rgba}`;
+  setOut('sh-out',css);
+}
+updateShadow();
+
+// ============================================================
+// GRADIENT
+// ============================================================
+function updateGrad(){
+  const c1=document.getElementById('g-c1').value;
+  const c2=document.getElementById('g-c2').value;
+  const c3=document.getElementById('g-c3').value;
+  const type=document.getElementById('g-type').value;
+  const ang=document.getElementById('g-ang').value;
+  let css,display;
+  if(type==='linear'){css=`background: linear-gradient(${ang}deg, ${c1}, ${c2}, ${c3});`;display=`linear-gradient(${ang}deg,${c1},${c2},${c3})`;}
+  else if(type==='radial'){css=`background: radial-gradient(circle, ${c1}, ${c2}, ${c3});`;display=`radial-gradient(circle,${c1},${c2},${c3})`;}
+  else{css=`background: conic-gradient(from ${ang}deg, ${c1}, ${c2}, ${c3}, ${c1});`;display=`conic-gradient(from ${ang}deg,${c1},${c2},${c3},${c1})`;}
+  document.getElementById('grad-preview').style.background=display;
+  setOut('grad-out',css);
+}
+function randomGrad(){
+  const rand=()=>'#'+Math.floor(Math.random()*0xffffff).toString(16).padStart(6,'0');
+  document.getElementById('g-c1').value=rand();document.getElementById('g-c2').value=rand();document.getElementById('g-c3').value=rand();
+  document.getElementById('g-ang').value=Math.floor(Math.random()*360);
+  document.getElementById('g-ang-v').textContent=document.getElementById('g-ang').value+'°';
   updateGrad();
 }
-function copyGrad(btn) {
-  const css = document.getElementById('gradCSS')._css || document.getElementById('gradCSSText').textContent;
-  navigator.clipboard.writeText(css);
-  btn.textContent = '✓ Kopyalandı'; btn.classList.add('copied');
-  setTimeout(() => { btn.textContent = 'Kopyala'; btn.classList.remove('copied'); }, 1500);
-}
-
-// ── COPY UTILITY ─────────────────────────────
-function copyText(elId, btn) {
-  const el = document.getElementById(elId);
-  const text = el.querySelector('span') ? el.querySelector('span').textContent : el.textContent;
-  navigator.clipboard.writeText(text.trim());
-  btn.textContent = '✓ Kopyalandı'; btn.classList.add('copied');
-  setTimeout(() => { btn.textContent = 'Kopyala'; btn.classList.remove('copied'); }, 1500);
-}
-
-// ── INIT ─────────────────────────────────────
-generatePassword();
-generateQR();
 updateGrad();
 
-// ── UUID GENERATOR ────────────────────────────
-function generateUUID() {
-  const count = +document.getElementById('uuidCount').value;
-  const format = document.getElementById('uuidFormat').value;
-  const uuids = [];
-  for (let i = 0; i < count; i++) {
-    let uuid = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-    );
-    if (format === 'nohyphen') uuid = uuid.replace(/-/g,'');
-    else if (format === 'upper') uuid = uuid.toUpperCase();
-    else if (format === 'braces') uuid = '{' + uuid + '}';
-    uuids.push(uuid);
-  }
-  document.getElementById('uuidList').innerHTML = uuids.join('<br>');
+// ============================================================
+// BORDER RADIUS
+// ============================================================
+function updateBR(){
+  const tl=document.getElementById('br-tl').value,tr=document.getElementById('br-tr').value;
+  const bl=document.getElementById('br-bl').value,br=document.getElementById('br-br').value;
+  const css=`border-radius: ${tl}px ${tr}px ${br}px ${bl}px;`;
+  document.getElementById('br-preview').style.borderRadius=`${tl}px ${tr}px ${br}px ${bl}px`;
+  setOut('br-out',css);
 }
+updateBR();
 
-// ── TEXT REPEATER ─────────────────────────────
-function repeatText() {
-  const text = document.getElementById('repInput').value;
-  const count = +document.getElementById('repCount').value || 1;
-  const sepRaw = document.getElementById('repSep').value;
-  const sep = sepRaw === '\\n' ? '\n' : sepRaw;
-  if (!text) return;
-  const result = Array(count).fill(text).join(sep);
-  document.getElementById('repText').textContent = result;
-}
-
-// ── CHARACTER COUNTER ─────────────────────────
-function countChars() {
-  const t = document.getElementById('ccInput').value;
-  document.getElementById('ccTotal').textContent = t.length;
-  document.getElementById('ccNoSpace').textContent = t.replace(/\s/g,'').length;
-  document.getElementById('ccLetters').textContent = (t.match(/[a-zA-ZğüşıöçĞÜŞİÖÇ]/g)||[]).length;
-  document.getElementById('ccDigits').textContent = (t.match(/[0-9]/g)||[]).length;
-  document.getElementById('ccSpaces').textContent = (t.match(/ /g)||[]).length;
-  document.getElementById('ccSpecial').textContent = (t.match(/[^a-zA-ZğüşıöçĞÜŞİÖÇ0-9\s]/g)||[]).length;
-  document.getElementById('ccLines').textContent = t ? t.split('\n').length : 0;
-  document.getElementById('ccUpper').textContent = (t.match(/[A-ZĞÜŞİÖÇ]/g)||[]).length;
-  document.getElementById('ccLower').textContent = (t.match(/[a-zğüşıöç]/g)||[]).length;
-  document.getElementById('ccTwitter').textContent = t.length + '/280';
-  document.getElementById('ccTwitter').style.color = t.length > 280 ? 'var(--accent3)' : 'var(--accent)';
-  document.getElementById('ccInsta').textContent = t.length + '/150';
-  document.getElementById('ccInsta').style.color = t.length > 150 ? 'var(--accent3)' : 'var(--accent)';
-  document.getElementById('ccSms').textContent = t.length + '/160';
-  document.getElementById('ccSms').style.color = t.length > 160 ? 'var(--accent3)' : 'var(--accent)';
-}
-
-// ── RANDOM NUMBER ─────────────────────────────
-function generateRandom() {
-  const min = +document.getElementById('rngMin').value;
-  const max = +document.getElementById('rngMax').value;
-  const count = Math.min(+document.getElementById('rngCount').value || 1, 100);
-  const unique = document.getElementById('rngUnique').checked;
-  if (min >= max) { document.getElementById('rngText').textContent = 'Min < Max olmalı!'; return; }
-  let nums = [];
-  const range = max - min + 1;
-  if (unique && count > range) { document.getElementById('rngText').textContent = 'Aralık çok dar!'; return; }
-  while (nums.length < count) {
-    const n = Math.floor(Math.random() * range) + min;
-    if (!unique || !nums.includes(n)) nums.push(n);
-  }
-  document.getElementById('rngText').textContent = nums.join(', ');
-  if (count > 1) {
-    document.getElementById('rngStats').style.display = 'block';
-    const sum = nums.reduce((a,b)=>a+b,0);
-    document.getElementById('rngSum').textContent = sum;
-    document.getElementById('rngAvg').textContent = (sum/count).toFixed(1);
-    document.getElementById('rngMinR').textContent = Math.min(...nums);
-    document.getElementById('rngMaxR').textContent = Math.max(...nums);
-  } else {
-    document.getElementById('rngStats').style.display = 'none';
-  }
-}
-
-// ── LOREM IPSUM ───────────────────────────────
-const loremWords = ['lorem','ipsum','dolor','sit','amet','consectetur','adipiscing','elit','sed','do','eiusmod','tempor','incididunt','ut','labore','et','dolore','magna','aliqua','enim','ad','minim','veniam','quis','nostrud','exercitation','ullamco','laboris','nisi','aliquip','ex','ea','commodo','consequat','duis','aute','irure','in','reprehenderit','voluptate','velit','esse','cillum','eu','fugiat','nulla','pariatur','excepteur','sint','occaecat','cupidatat','non','proident','sunt','culpa','qui','officia','deserunt','mollit','anim','id','est','laborum','perspiciatis','unde','omnis','iste','natus','error','accusantium','doloremque','laudantium','totam','rem','aperiam','eaque','ipsa','quae','ab','illo','inventore','veritatis','quasi','architecto','beatae','vitae','dicta','explicabo','nemo','ipsam','voluptatem','quia','voluptas','aspernatur','aut','odit','fugit','quo','porro','quisquam','dolorem','adipisci','numquam','eius','modi','tempora','incidunt','magnam','quaerat'];
-function loremSentence() {
-  const len = 8 + Math.floor(Math.random()*10);
-  let words = [];
-  for (let i=0;i<len;i++) words.push(loremWords[Math.floor(Math.random()*loremWords.length)]);
-  words[0] = words[0][0].toUpperCase() + words[0].slice(1);
-  return words.join(' ') + '.';
-}
-function loremParagraph() {
-  const sCount = 4 + Math.floor(Math.random()*4);
-  return Array.from({length:sCount}, loremSentence).join(' ');
-}
-function generateLorem() {
-  const type = document.getElementById('loremType').value;
-  const count = +document.getElementById('loremCount').value || 1;
-  const classic = document.getElementById('loremStart').checked;
-  const classicStart = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
-  let result = '';
-  if (type === 'paragraphs') {
-    const paras = [];
-    for (let i=0;i<count;i++) {
-      paras.push(i===0 && classic ? classicStart + ' ' + loremParagraph() : loremParagraph());
-    }
-    result = paras.join('\n\n');
-  } else if (type === 'sentences') {
-    const sents = [];
-    for (let i=0;i<count;i++) {
-      sents.push(i===0 && classic ? classicStart : loremSentence());
-    }
-    result = sents.join(' ');
-  } else {
-    let words = classic ? ['Lorem','ipsum','dolor','sit','amet'] : [];
-    while (words.length < count) words.push(loremWords[Math.floor(Math.random()*loremWords.length)]);
-    result = words.slice(0,count).join(' ');
-  }
-  document.getElementById('loremText').textContent = result;
-}
-
-// ── BINARY CONVERTER ──────────────────────────
-function clearBinFields() {
-  document.getElementById('binInput').value = '';
-  document.getElementById('binResult').textContent = '';
-  const labels = {
-    'text2bin':'Metin', 'bin2text':'Binary (boşlukla ayrılmış)',
-    'dec2bin':'Ondalık sayı', 'bin2dec':'Binary sayı',
-    'dec2hex':'Ondalık sayı', 'hex2dec':'Hex değer'
-  };
-  document.getElementById('binInputLabel').textContent = labels[document.getElementById('binMode').value] || 'Giriş';
-}
-function convertBinary() {
-  const mode = document.getElementById('binMode').value;
-  const input = document.getElementById('binInput').value.trim();
-  let result = '';
-  try {
-    if (mode === 'text2bin') {
-      result = input.split('').map(c => c.charCodeAt(0).toString(2).padStart(8,'0')).join(' ');
-    } else if (mode === 'bin2text') {
-      result = input.split(' ').map(b => String.fromCharCode(parseInt(b,2))).join('');
-    } else if (mode === 'dec2bin') {
-      result = parseInt(input).toString(2);
-    } else if (mode === 'bin2dec') {
-      result = parseInt(input, 2).toString(10);
-    } else if (mode === 'dec2hex') {
-      result = parseInt(input).toString(16).toUpperCase();
-    } else if (mode === 'hex2dec') {
-      result = parseInt(input, 16).toString(10);
-    }
-    if (result === 'NaN' || !result) result = 'Geçersiz giriş!';
-  } catch(e) { result = 'Hata: ' + e.message; }
-  document.getElementById('binResult').textContent = result;
-}
-
-// ── AGE CALCULATOR ────────────────────────────
-function resetAgeTo() {
-  document.getElementById('ageTo').value = new Date().toISOString().split('T')[0];
-  calcAge();
-}
-function calcAge() {
-  const birth = new Date(document.getElementById('ageInput').value);
-  const toVal = document.getElementById('ageTo').value;
-  const to = toVal ? new Date(toVal) : new Date();
-  if (!document.getElementById('ageInput').value) return;
-  const diff = to - birth;
-  if (diff < 0) { document.getElementById('ageResult').style.display = 'none'; return; }
-  const totalDays = Math.floor(diff / 86400000);
-  const totalWeeks = Math.floor(totalDays / 7);
-  const totalHours = Math.floor(diff / 3600000);
-  let y = to.getFullYear() - birth.getFullYear();
-  let m = to.getMonth() - birth.getMonth();
-  let d = to.getDate() - birth.getDate();
-  if (d < 0) { m--; d += new Date(to.getFullYear(), to.getMonth(), 0).getDate(); }
-  if (m < 0) { y--; m += 12; }
-  // Next birthday
-  let nextBday = new Date(to.getFullYear(), birth.getMonth(), birth.getDate());
-  if (nextBday <= to) nextBday.setFullYear(to.getFullYear() + 1);
-  const daysToNext = Math.ceil((nextBday - to) / 86400000);
-  document.getElementById('ageYears').textContent = y;
-  document.getElementById('ageMonths').textContent = m;
-  document.getElementById('ageDays').textContent = d;
-  document.getElementById('ageWeeks').textContent = totalWeeks.toLocaleString();
-  document.getElementById('ageHours').textContent = totalHours.toLocaleString();
-  document.getElementById('ageNextBday').textContent = daysToNext + ' gün';
-  document.getElementById('ageResult').style.display = 'block';
-}
-// Set default dates
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('ageTo').value = new Date().toISOString().split('T')[0];
-  buildUnitSelects();
-});
-let swRunning = false, swStart = 0, swElapsed = 0, swTimer = null, swLapCount = 0, swLapStart = 0;
-function swFormat(ms) {
-  const min = Math.floor(ms/60000).toString().padStart(2,'0');
-  const sec = Math.floor((ms%60000)/1000).toString().padStart(2,'0');
-  const mss = (ms%1000).toString().padStart(3,'0');
-  return `${min}:${sec}.${mss}`;
-}
-function swToggle() {
-  if (!swRunning) {
-    swStart = Date.now() - swElapsed;
-    swLapStart = swLapStart || swStart;
-    swTimer = setInterval(() => {
-      swElapsed = Date.now() - swStart;
-      document.getElementById('swDisplay').textContent = swFormat(swElapsed);
-    }, 30);
-    swRunning = true;
-    document.getElementById('swStartBtn').textContent = '⏸ Durdur';
-    document.getElementById('swLapBtn').disabled = false;
-  } else {
-    clearInterval(swTimer);
-    swRunning = false;
-    document.getElementById('swStartBtn').textContent = '▶ Devam';
-    document.getElementById('swLapBtn').disabled = true;
-  }
-}
-function swLap() {
-  if (!swRunning) return;
-  swLapCount++;
-  const lapTime = Date.now() - swLapStart;
-  swLapStart = Date.now();
-  const list = document.getElementById('swLapList');
-  const item = document.createElement('div');
-  item.className = 'lap-item';
-  item.innerHTML = `<span class="lap-num">Tur ${swLapCount}</span><span style="color:var(--accent)">${swFormat(lapTime)}</span><span style="color:var(--muted)">${swFormat(swElapsed)}</span>`;
-  list.prepend(item);
-  document.getElementById('swLaps').style.display = 'block';
-}
-function swReset() {
-  clearInterval(swTimer);
-  swRunning = false; swElapsed = 0; swStart = 0; swLapCount = 0; swLapStart = 0;
-  document.getElementById('swDisplay').textContent = '00:00.000';
-  document.getElementById('swStartBtn').textContent = '▶ Başlat';
-  document.getElementById('swLapBtn').disabled = true;
-  document.getElementById('swLapList').innerHTML = '';
-  document.getElementById('swLaps').style.display = 'none';
-}
-
-// ── DICE ROLLER ───────────────────────────────
-let diceType = 4;
-const diceFaces = {4:'🔺',6:'⬡',8:'◈',10:'⬟',12:'🔷',20:'🔵',100:'💯'};
-function selectDice(el, type) {
-  document.querySelectorAll('#diceTypeRow .bio-tag').forEach(b => b.classList.remove('sel'));
-  el.classList.add('sel');
-  diceType = type;
-}
-function diceCountVal() {
-  document.getElementById('diceCountVal').textContent = document.getElementById('diceCount').value;
-}
-function rollDice() {
-  const count = +document.getElementById('diceCount').value;
-  const results = document.getElementById('diceResults');
-  const nums = [];
-  results.innerHTML = '';
-  for (let i=0;i<count;i++) {
-    nums.push(Math.floor(Math.random()*diceType)+1);
-  }
-  nums.forEach((n,i) => {
-    const face = document.createElement('div');
-    face.className = 'dice-face rolling';
-    face.textContent = n;
-    face.style.color = 'var(--accent)';
-    face.addEventListener('animationend', () => face.classList.remove('rolling'));
-    face.onclick = rollDice;
-    results.appendChild(face);
-  });
-  if (count > 1) {
-    const sum = nums.reduce((a,b)=>a+b,0);
-    document.getElementById('diceSum').textContent = sum;
-    document.getElementById('diceSumBox').style.display = 'block';
-  } else {
-    document.getElementById('diceSumBox').style.display = 'none';
-  }
-  // History
-  const hist = document.getElementById('diceHistoryList');
-  document.getElementById('diceHistory').style.display = 'block';
-  const chip = document.createElement('div');
-  chip.className = 'chip';
-  chip.style.cursor = 'default';
-  chip.textContent = `D${diceType}: [${nums.join(', ')}]`;
-  if (hist.children.length >= 8) hist.removeChild(hist.lastChild);
-  hist.prepend(chip);
-// ── TIP CALCULATOR ────────────────────────────
-let tipPct = 15, tipSplit = 1;
-function selectTipPct(btn) {
-  document.querySelectorAll('[data-tip]').forEach(b => b.classList.remove('sel'));
-  btn.classList.add('sel');
-  tipPct = parseFloat(btn.dataset.tip);
-  document.getElementById('tipCustom').value = '';
-  calcTip();
-}
-function selectCustomPct() {
-  const v = parseFloat(document.getElementById('tipCustom').value);
-  document.querySelectorAll('[data-tip]').forEach(b => b.classList.remove('sel'));
-  if (!isNaN(v) && v >= 0) { tipPct = v; calcTip(); }
-}
-function changeSplit(d) {
-  tipSplit = Math.max(1, tipSplit + d);
-  document.getElementById('tipSplitCount').textContent = tipSplit;
-  calcTip();
-}
-function calcTip() {
-  const bill = parseFloat(document.getElementById('tipBill').value) || 0;
-  const tip = bill * (tipPct / 100);
-  const total = bill + tip;
-  const per = total / tipSplit;
-  document.getElementById('tipAmount').textContent = '$' + tip.toFixed(2);
-  document.getElementById('tipTotal').textContent = '$' + total.toFixed(2);
-  document.getElementById('tipPerPerson').textContent = '$' + per.toFixed(2);
-}
-function resetTip() {
-  document.getElementById('tipBill').value = '';
-  document.getElementById('tipCustom').value = '';
-  tipSplit = 1; tipPct = 15;
-  document.getElementById('tipSplitCount').textContent = '1';
-  document.querySelectorAll('[data-tip]').forEach(b => b.classList.remove('sel'));
-  document.querySelector('[data-tip="15"]').classList.add('sel');
-  calcTip();
-}
-
-// ── UNIT CONVERTER ────────────────────────────
-const unitCats = {
-  Length: { units:['Meter','Kilometer','Centimeter','Millimeter','Mile','Yard','Foot','Inch'], base:'Meter', toBase:{Meter:1,Kilometer:1000,Centimeter:.01,Millimeter:.001,Mile:1609.344,Yard:.9144,Foot:.3048,Inch:.0254} },
-  Weight: { units:['Kilogram','Gram','Milligram','Pound','Ounce','Ton'], base:'Kilogram', toBase:{Kilogram:1,Gram:.001,Milligram:1e-6,Pound:.453592,Ounce:.0283495,Ton:1000} },
-  Temperature: { units:['Celsius','Fahrenheit','Kelvin'], base:null, toBase:null },
-  Speed: { units:['m/s','km/h','mph','knot'], base:'m/s', toBase:{'m/s':1,'km/h':0.27778,'mph':0.44704,'knot':0.514444} },
-  Area: { units:['m²','km²','cm²','Hectare','Acre','ft²'], base:'m²', toBase:{'m²':1,'km²':1e6,'cm²':1e-4,'Hectare':10000,'Acre':4046.856,'ft²':0.092903} },
-  Volume: { units:['Liter','Milliliter','Gallon (US)','Quart','Pint','fl oz'], base:'Liter', toBase:{'Liter':1,'Milliliter':.001,'Gallon (US)':3.78541,'Quart':0.946353,'Pint':0.473176,'fl oz':0.0295735} },
-  Data: { units:['Byte','Kilobyte','Megabyte','Gigabyte','Terabyte','Bit'], base:'Byte', toBase:{Byte:1,Kilobyte:1000,Megabyte:1e6,Gigabyte:1e9,Terabyte:1e12,Bit:0.125} },
-  Time: { units:['Second','Minute','Hour','Day','Week','Month','Year','Millisecond'], base:'Second', toBase:{Second:1,Minute:60,Hour:3600,Day:86400,Week:604800,Month:2628000,Year:31536000,Millisecond:0.001} }
+// ============================================================
+// ANIMATION
+// ============================================================
+const ANIMS={
+  fadeIn:{kf:'@keyframes fadeIn{from{opacity:0}to{opacity:1}}',prop:'fadeIn'},
+  fadeOut:{kf:'@keyframes fadeOut{from{opacity:1}to{opacity:0}}',prop:'fadeOut'},
+  slideIn:{kf:'@keyframes slideIn{from{transform:translateX(-30px);opacity:0}to{transform:none;opacity:1}}',prop:'slideIn'},
+  slideInRight:{kf:'@keyframes slideInRight{from{transform:translateX(30px);opacity:0}to{transform:none;opacity:1}}',prop:'slideInRight'},
+  slideUp:{kf:'@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}',prop:'slideUp'},
+  bounce:{kf:'@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}',prop:'bounce'},
+  spin:{kf:'@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}',prop:'spin'},
+  pulse:{kf:'@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}',prop:'pulse'},
+  shake:{kf:'@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}',prop:'shake'},
+  flip:{kf:'@keyframes flip{0%{transform:rotateY(0)}50%{transform:rotateY(180deg)}100%{transform:rotateY(360deg)}}',prop:'flip'},
+  zoom:{kf:'@keyframes zoom{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}',prop:'zoom'},
+  rubber:{kf:'@keyframes rubber{0%{transform:scaleX(1)}30%{transform:scaleX(1.25) scaleY(0.75)}40%{transform:scaleX(0.75) scaleY(1.25)}50%{transform:scaleX(1.15) scaleY(0.85)}65%{transform:scaleX(0.95) scaleY(1.05)}75%{transform:scaleX(1.05) scaleY(0.95)}100%{transform:scaleX(1)}}',prop:'rubber'},
 };
-let currentUnitCat = 'Length';
-function selectUnitCat(btn, cat) {
-  document.querySelectorAll('#unitCatRow .bio-tag').forEach(b => b.classList.remove('sel'));
-  btn.classList.add('sel');
-  currentUnitCat = cat;
-  buildUnitSelects();
-  convertUnit();
+let animStyleTag=null;
+function updateAnim(){
+  const type=document.getElementById('anim-type').value;
+  const dur=document.getElementById('anim-dur').value;
+  const del=document.getElementById('anim-del').value;
+  const iter=document.getElementById('anim-iter').value;
+  const ease=document.getElementById('anim-ease').value;
+  const a=ANIMS[type];
+  const css=`${a.kf}\n\n.element {\n  animation: ${a.prop} ${dur}s ${ease} ${del}s ${iter};\n}`;
+  setOut('anim-out',css);
 }
-function buildUnitSelects() {
-  const cat = unitCats[currentUnitCat];
-  ['unitFrom','unitTo'].forEach((id, i) => {
-    const sel = document.getElementById(id);
-    sel.innerHTML = cat.units.map(u => `<option value="${u}">${u}</option>`).join('');
-    sel.selectedIndex = i;
-  });
-  document.getElementById('unitFromVal').value = '';
-  document.getElementById('unitToVal').value = '';
-  document.getElementById('unitResultBox').style.display = 'none';
+function playAnim(){
+  const type=document.getElementById('anim-type').value;
+  const dur=parseFloat(document.getElementById('anim-dur').value);
+  const del=parseFloat(document.getElementById('anim-del').value);
+  const iter=document.getElementById('anim-iter').value;
+  const ease=document.getElementById('anim-ease').value;
+  const prev=document.getElementById('anim-preview');
+  const a=ANIMS[type];
+  if(!animStyleTag){animStyleTag=document.createElement('style');document.head.appendChild(animStyleTag);}
+  animStyleTag.textContent=a.kf+`.playing{animation:${a.prop} ${dur}s ${ease} ${del}s ${iter==='infinite'?'infinite':iter} !important;}`;
+  prev.classList.remove('playing');
+  void prev.offsetWidth;
+  prev.classList.add('playing');
+  if(iter!=='infinite')setTimeout(()=>prev.classList.remove('playing'),(dur+del)*1000*parseInt(iter||1)+100);
 }
-function tempConv(val, from, to) {
-  let c = from==='Celsius' ? val : from==='Fahrenheit' ? (val-32)*5/9 : val-273.15;
-  return to==='Celsius' ? c : to==='Fahrenheit' ? c*9/5+32 : c+273.15;
+updateAnim();
+
+// ============================================================
+// CONTRAST CHECKER (WCAG)
+// ============================================================
+function getLuminance(hex){
+  const {r,g,b}=hex2rgb(hex);
+  const sRGB=[r,g,b].map(v=>{v/=255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4);});
+  return 0.2126*sRGB[0]+0.7152*sRGB[1]+0.0722*sRGB[2];
 }
-function convertUnit() {
-  const cat = unitCats[currentUnitCat];
-  const from = document.getElementById('unitFrom').value;
-  const to = document.getElementById('unitTo').value;
-  const val = parseFloat(document.getElementById('unitFromVal').value);
-  if (isNaN(val)) { document.getElementById('unitToVal').value=''; document.getElementById('unitResultBox').style.display='none'; return; }
-  let result;
-  if (currentUnitCat === 'Temperature') { result = tempConv(val, from, to); }
-  else { result = val * cat.toBase[from] / cat.toBase[to]; }
-  const fmt = Math.abs(result)<0.0001||Math.abs(result)>1e9 ? result.toExponential(4) : parseFloat(result.toFixed(6)).toString();
-  document.getElementById('unitToVal').value = fmt;
-  document.getElementById('unitResultText').textContent = `${val} ${from} = ${fmt} ${to}`;
-  document.getElementById('unitResultBox').style.display = 'block';
+function checkContrast(){
+  const fg=document.getElementById('ct-fg').value;
+  const bg=document.getElementById('ct-bg').value;
+  const l1=getLuminance(fg),l2=getLuminance(bg);
+  const ratio=(Math.max(l1,l2)+0.05)/(Math.min(l1,l2)+0.05);
+  document.getElementById('ct-ratio').textContent=ratio.toFixed(2)+':1';
+  const box=document.getElementById('ct-preview-inner');
+  box.style.background=bg;box.style.color=fg;
+  document.getElementById('ct-preview').style.background=bg;
+  const aa_normal=ratio>=4.5,aa_large=ratio>=3,aaa_normal=ratio>=7,aaa_large=ratio>=4.5;
+  document.getElementById('ct-badges').innerHTML=[
+    ['AA Normal',aa_normal],['AA Büyük',aa_large],['AAA Normal',aaa_normal],['AAA Büyük',aaa_large]
+  ].map(([label,pass])=>`<span class="wcag-badge ${pass?'wcag-pass':'wcag-fail'}">${pass?'✓':'✗'} ${label}</span>`).join('');
 }
-function swapUnitConv() {
-  const f = document.getElementById('unitFrom'), t = document.getElementById('unitTo');
-  const fv = document.getElementById('unitFromVal'), tv = document.getElementById('unitToVal');
-  [f.value, t.value] = [t.value, f.value];
-  fv.value = tv.value;
-  convertUnit();
+checkContrast();
+
+// ============================================================
+// CSS UNIT CONVERTER
+// ============================================================
+function convertUnit(){
+  const val=parseFloat(document.getElementById('unit-val').value)||0;
+  const base=parseFloat(document.getElementById('unit-base').value)||16;
+  const vw=parseFloat(document.getElementById('unit-vw').value)||1440;
+  const rows=[
+    ['px',val.toFixed(2)+'px'],
+    ['rem',(val/base).toFixed(4)+'rem'],
+    ['em',(val/base).toFixed(4)+'em'],
+    ['%',(val/base*100).toFixed(2)+'%'],
+    ['vw',(val/vw*100).toFixed(4)+'vw'],
+    ['pt',(val*0.75).toFixed(2)+'pt'],
+  ];
+  document.getElementById('unit-tbody').innerHTML=rows.map(([u,v])=>`<tr><td>${u}</td><td>${v}</td></tr>`).join('');
 }
-function copyUnitResult() {
-  const text = document.getElementById('unitResultText').textContent;
-  if (!text) return;
-  navigator.clipboard.writeText(text);
-  const btn = document.getElementById('unitCopyBtn');
-  btn.textContent = '✓ Copied';
-  setTimeout(() => btn.textContent = 'Copy Result', 1500);
+convertUnit();
+
+// ============================================================
+// REGEX
+// ============================================================
+function testRegex(){
+  const pat=document.getElementById('rx-pat').value;
+  const flags=document.getElementById('rx-flags').value.replace(/[^gimsuy]/g,'');
+  const text=document.getElementById('rx-text').value;
+  if(!pat){document.getElementById('rx-out').innerHTML='<span style="color:var(--text3)">Pattern girin...</span>';return;}
+  try{
+    const globalFlags=flags.includes('g')?flags:flags+'g';
+    const matches=[...text.matchAll(new RegExp(pat,globalFlags))];
+    const div=document.createElement('div');div.textContent=text;
+    let highlighted=text.replace(new RegExp(pat,globalFlags),m=>`\x00${m}\x01`);
+    highlighted=highlighted.replace(/\x00/g,'<span class="regex-match">').replace(/\x01/g,'</span>');
+    document.getElementById('rx-out').innerHTML=highlighted;
+    document.getElementById('rx-matches').innerHTML=`<span class="tag tag-green">${matches.length} eşleşme</span> ${matches.slice(0,10).map(m=>`<span class="tag tag-yellow">"${m[0].slice(0,30)}"</span>`).join(' ')}`;
+  }catch(e){document.getElementById('rx-out').innerHTML=`<span style="color:var(--red)">❌ ${e.message}</span>`;}
 }
+testRegex();
+
+// ============================================================
+// DIFF
+// ============================================================
+function doDiff(){
+  const a=document.getElementById('diff-a').value.split('\n');
+  const b=document.getElementById('diff-b').value.split('\n');
+  const out=document.getElementById('diff-out');
+  out.style.display='block';
+  let html='';
+  const maxLen=Math.max(a.length,b.length);
+  let added=0,removed=0,same=0;
+  for(let i=0;i<maxLen;i++){
+    if(i>=a.length){html+=`<div class="diff-add">+ ${escHtml(b[i])}</div>`;added++;}
+    else if(i>=b.length){html+=`<div class="diff-rem">- ${escHtml(a[i])}</div>`;removed++;}
+    else if(a[i]===b[i]){html+=`<div class="diff-same">  ${escHtml(a[i])}</div>`;same++;}
+    else{html+=`<div class="diff-rem">- ${escHtml(a[i])}</div><div class="diff-add">+ ${escHtml(b[i])}</div>`;added++;removed++;}
+  }
+  if(!html)html='<span style="color:var(--text3)">Fark bulunamadı — metinler aynı</span>';
+  else html=`<div style="margin-bottom:8px;font-size:11px;color:var(--text3)"><span class="tag tag-green">+${added} eklendi</span> <span class="tag tag-red">-${removed} silindi</span> <span class="tag-purple tag">${same} aynı</span></div>`+html;
+  out.innerHTML=html;
+}
+function escHtml(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ============================================================
+// MARKDOWN — with XSS protection
+// ============================================================
+function renderMD(){
+  // Sanitize first — strip script tags
+  let t=document.getElementById('md-in').value;
+  t=t.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<[^>]+on\w+\s*=/gi,'');
+  t=t.replace(/^# (.+)$/gm,'<h1 style="font-size:22px;font-weight:800;margin:12px 0 6px">$1</h1>');
+  t=t.replace(/^## (.+)$/gm,'<h2 style="font-size:18px;font-weight:700;margin:10px 0 5px">$1</h2>');
+  t=t.replace(/^### (.+)$/gm,'<h3 style="font-size:15px;font-weight:600;margin:8px 0 4px">$1</h3>');
+  t=t.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  t=t.replace(/\*(.+?)\*/g,'<em>$1</em>');
+  t=t.replace(/~~(.+?)~~/g,'<del>$1</del>');
+  t=t.replace(/`([^`]+)`/g,'<code style="background:var(--bg4);padding:2px 6px;border-radius:4px;font-size:12px">$1</code>');
+  t=t.replace(/\[(.+?)\]\((.+?)\)/g,'<a href="$2" target="_blank" rel="noopener" style="color:var(--accent)">$1</a>');
+  t=t.replace(/^> (.+)$/gm,'<blockquote style="border-left:3px solid var(--accent);padding-left:12px;color:var(--text2);margin:4px 0">$1</blockquote>');
+  t=t.replace(/^---$/gm,'<hr style="border:none;border-top:1px solid var(--border);margin:12px 0">');
+  t=t.replace(/^- (.+)$/gm,'<li style="margin-left:16px;margin-bottom:2px">$1</li>');
+  t=t.replace(/\n/g,'<br>');
+  document.getElementById('md-out').innerHTML=t;
+}
+renderMD();
+
+// ============================================================
+// TIMESTAMP
+// ============================================================
+function ts2date(){
+  const v=document.getElementById('ts-unix').value;
+  if(!v)return;
+  const d=new Date(parseInt(v)*1000);
+  if(isNaN(d)){setOut('ts-date','❌ Geçersiz timestamp');return;}
+  setOut('ts-date',d.toLocaleString('tr-TR')+'\nISO: '+d.toISOString()+'\nUTC: '+d.toUTCString());
+}
+function date2ts(){
+  const v=document.getElementById('ts-date-in').value;
+  const d=new Date(v);
+  if(isNaN(d)){setOut('ts-unix-out','❌ Geçersiz tarih');return;}
+  setOut('ts-unix-out',Math.floor(d.getTime()/1000).toString());
+}
+function tsNow(){
+  const now=Math.floor(Date.now()/1000);
+  document.getElementById('ts-unix').value=now;
+  ts2date();
+}
+
+// ============================================================
+// CRON BUILDER
+// ============================================================
+function buildCron(){
+  const min=document.getElementById('cr-min').value||'*';
+  const hr=document.getElementById('cr-hr').value||'*';
+  const dom=document.getElementById('cr-dom').value||'*';
+  const mon=document.getElementById('cr-mon').value||'*';
+  const dow=document.getElementById('cr-dow').value||'*';
+  const expr=`${min} ${hr} ${dom} ${mon} ${dow}`;
+  setOut('cron-out',expr);
+  document.getElementById('cron-desc').textContent=describeCron(min,hr,dom,mon,dow);
+}
+function setCron(expr){
+  const p=expr.split(' ');
+  document.getElementById('cr-min').value=p[0];
+  document.getElementById('cr-hr').value=p[1];
+  document.getElementById('cr-dom').value=p[2];
+  document.getElementById('cr-mon').value=p[3];
+  document.getElementById('cr-dow').value=p[4];
+  buildCron();
+}
+function describeCron(min,hr,dom,mon,dow){
+  if(min==='*/5'&&hr==='*'&&dom==='*')return'Her 5 dakikada bir çalışır';
+  if(min==='0'&&hr==='*')return'Her saatin başında çalışır';
+  if(min==='0'&&hr==='0'&&dom==='*'&&mon==='*'&&dow==='*')return'Her gün gece yarısı çalışır';
+  if(min==='0'&&hr==='0'&&dom==='*'&&mon==='*'&&dow==='1')return'Her Pazartesi gece yarısı çalışır';
+  if(min==='0'&&hr==='0'&&dom==='1')return'Her ayın 1\'inde gece yarısı çalışır';
+  if(dow==='1-5')return`Haftaiçi ${hr==='*'?'her saat':hr+'. saatte'}, ${min==='*'?'her dakika':min+'. dakikada'} çalışır`;
+  return`Dakika: ${min} | Saat: ${hr} | Gün: ${dom} | Ay: ${mon} | Haftanın günü: ${dow}`;
+}
+buildCron();
+
+// ============================================================
+// SVG OPTIMIZER
+// ============================================================
+function svgPreview(){
+  const raw=document.getElementById('svg-in').value.trim();
+  const box=document.getElementById('svg-preview-box');
+  const inner=document.getElementById('svg-preview-inner');
+  if(!raw.includes('<svg')){box.style.display='none';return;}
+  // Sanitize: remove script tags and event handlers
+  const safe=raw.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/on\w+\s*=\s*["'][^"']*["']/gi,'');
+  box.style.display='block';
+  inner.innerHTML=safe;
+  const svgEl=inner.querySelector('svg');
+  if(svgEl){svgEl.style.maxWidth='100%';svgEl.style.maxHeight='160px';}
+}
+function optimizeSVG(){
+  let svg=document.getElementById('svg-in').value.trim();
+  if(!svg){setOut('svg-out','SVG girin');return;}
+  const original=svg.length;
+  // Remove comments
+  svg=svg.replace(/<!--[\s\S]*?-->/g,'');
+  // Remove metadata/title/desc
+  svg=svg.replace(/<metadata[\s\S]*?<\/metadata>/g,'');
+  // Remove empty attributes
+  svg=svg.replace(/\s+xmlns:xlink="[^"]*"/g,'').replace(/\s+xml:space="[^"]*"/g,'');
+  // Collapse whitespace
+  svg=svg.replace(/\s+/g,' ').replace(/> </g,'><').trim();
+  // Remove style="" empty
+  svg=svg.replace(/\s+style=""/g,'');
+  const optimized=svg.length;
+  const saved=Math.round((1-optimized/original)*100);
+  document.getElementById('svg-stats').innerHTML=`<span class="tag tag-green">Orijinal: ${original} bayt</span> → <span class="tag tag-teal">Optimize: ${optimized} bayt</span> <span class="tag tag-purple">%${saved} küçüldü</span>`;
+  setOut('svg-out',svg);
+  svgPreview();
+}
+
+// ============================================================
+// META TAGS
+// ============================================================
+function genMeta(){
+  const t=escHtml(document.getElementById('mt-title').value||'');
+  const d=escHtml(document.getElementById('mt-desc').value||'');
+  const k=escHtml(document.getElementById('mt-keys').value||'');
+  const a=escHtml(document.getElementById('mt-author').value||'');
+  const l=document.getElementById('mt-lang').value;
+  const code=`<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="${l}">
+<title>${t}</title>
+<meta name="description" content="${d}">
+<meta name="keywords" content="${k}">
+<meta name="author" content="${a}">`;
+  setOut('meta-out',code);
+}
+
+// ============================================================
+// OPEN GRAPH
+// ============================================================
+function genOG(){
+  const t=escHtml(document.getElementById('og-title').value||'');
+  const d=escHtml(document.getElementById('og-desc').value||'');
+  const u=escHtml(document.getElementById('og-url').value||'');
+  const i=escHtml(document.getElementById('og-img').value||'');
+  const tp=document.getElementById('og-type').value;
+  const code=`<!-- Open Graph -->
+<meta property="og:type" content="${tp}">
+<meta property="og:title" content="${t}">
+<meta property="og:description" content="${d}">
+<meta property="og:url" content="${u}">
+<meta property="og:image" content="${i}">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${t}">
+<meta name="twitter:description" content="${d}">
+<meta name="twitter:image" content="${i}">`;
+  setOut('og-out',code);
+}
+
+// ============================================================
+// ROBOTS.TXT
+// ============================================================
+function genRobots(){
+  const bot=document.getElementById('rb-bot').value;
+  const sitemap=document.getElementById('rb-sitemap').value;
+  const allow=document.getElementById('rb-allow').value.split('\n').filter(Boolean);
+  const disallow=document.getElementById('rb-disallow').value.split('\n').filter(Boolean);
+  let txt=`User-agent: ${bot}\n`;
+  allow.forEach(a=>txt+=`Allow: ${a}\n`);
+  disallow.forEach(d=>txt+=`Disallow: ${d}\n`);
+  if(sitemap)txt+=`\nSitemap: ${sitemap}`;
+  setOut('rb-out',txt);
+}
+function dlRobots(){
+  const content=document.getElementById('rb-out').innerText.replace(/Kopyala$/,'').trim();
+  const blob=new Blob([content],{type:'text/plain'});
+  const a=document.createElement('a');a.download='robots.txt';a.href=URL.createObjectURL(blob);a.click();
+}
+
+// ============================================================
+// COLOR PALETTE
+// ============================================================
+function genPalette(){
+  const base=document.getElementById('cp-base').value;
+  const type=document.getElementById('cp-type').value;
+  const {h,s,l}=hex2hsl(base);
+  let colors=[];
+  if(type==='analogous'){colors=[hsl2hex((h-30+360)%360,s,l),hsl2hex((h-15+360)%360,s,l),base,hsl2hex((h+15)%360,s,l),hsl2hex((h+30)%360,s,l)];}
+  else if(type==='complementary'){colors=[base,hsl2hex((h+120)%360,s,l),hsl2hex((h+180)%360,s,l),hsl2hex((h+240)%360,s,l),hsl2hex((h+300)%360,s,l)];}
+  else if(type==='triadic'){colors=[base,hsl2hex((h+120)%360,s,l),hsl2hex((h+240)%360,s,l),hsl2hex((h+60)%360,s,l),hsl2hex((h+180)%360,s,l)];}
+  else if(type==='monochromatic'){colors=[hsl2hex(h,s,Math.min(90,l+30)),hsl2hex(h,s,Math.min(80,l+15)),base,hsl2hex(h,s,Math.max(10,l-15)),hsl2hex(h,s,Math.max(5,l-30))];}
+  else if(type==='tints'){colors=[hsl2hex(h,s,90),hsl2hex(h,s,75),hsl2hex(h,s,60),hsl2hex(h,s,45),base];}
+  else{colors=[base,hsl2hex(h,s,Math.max(5,l-12)),hsl2hex(h,s,Math.max(5,l-24)),hsl2hex(h,s,Math.max(5,l-36)),hsl2hex(h,s,Math.max(5,l-48))];}
+  const sw=document.getElementById('palette-swatches');
+  sw.innerHTML=colors.map(c=>`<div class="swatch" style="background:${c};flex:1;height:50px;" title="${c}" onclick="copyText('${c}');document.getElementById('cp-hex').value='${c}';convColor('hex')"></div>`).join('');
+  document.getElementById('cp-hex').value=base;
+  convColor('hex');
+}
+function convColor(from){
+  const hex=document.getElementById('cp-hex').value.trim();
+  if(!/^#[0-9a-fA-F]{6}$/.test(hex))return;
+  const {r,g,b}=hex2rgb(hex);
+  const {h,s,l}=hex2hsl(hex);
+  setOut('cp-out',`HEX: ${hex}\nRGB: rgb(${r}, ${g}, ${b})\nHSL: hsl(${h}, ${s}%, ${l}%)`);
+}
+genPalette();
+
+// ============================================================
+// LOREM IPSUM
+// ============================================================
+const LOREM_LATIN=['Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.','Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.','Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.','At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint.'];
+const LOREM_TR=['Bu bir dolgu metnidir ve sayfa düzenini test etmek amacıyla kullanılmaktadır. Gerçek içerik bu alanda yer alacaktır. Tasarım ve yerleşim çalışmalarında yaygın olarak tercih edilmektedir.','Web tasarımı ve yazılım geliştirme projelerinde sıklıkla kullanılan bu metin, içerik boyutunu simüle etmek için idealdir. Arayüz testlerinde kolaylık sağlamaktadır.','Dijital projeler için hazırlanan bu örnek paragraf, gerçekçi metin uzunluğunu simüle eder. Kullanıcı deneyimi testlerinde ve prototip çalışmalarında işlevsel bir araç olarak öne çıkar.','Yaratıcı süreçlerin başlangıcında kullanılan bu metin, tasarımcılara yerleşim kararlarını verirken içerikten bağımsız düşünme fırsatı sunar.','Tipografi ve mizanpaj çalışmalarında tercih edilen dolgu metin, görsel hiyerarşinin değerlendirilmesini kolaylaştırır. Modern tasarım araçlarında yaygın biçimde yer almaktadır.'];
+function genLorem(){
+  const count=Math.min(20,parseInt(document.getElementById('li-count').value)||2);
+  const lang=document.getElementById('li-lang').value;
+  const pool=lang==='tr'?LOREM_TR:LOREM_LATIN;
+  let out='';
+  for(let i=0;i<count;i++)out+=pool[i%pool.length]+'\n\n';
+  setOut('li-out',out.trim());
+}
+
+// ============================================================
+// WORD COUNT
+// ============================================================
+function countWords(){
+  const text=document.getElementById('wc-in').value;
+  const words=text.trim()?text.trim().split(/\s+/).length:0;
+  const chars=text.length;
+  const sents=text.split(/[.!?]+/).filter(s=>s.trim()).length;
+  const read=Math.max(1,Math.ceil(words/200));
+  document.getElementById('wc-words').textContent=words;
+  document.getElementById('wc-chars').textContent=chars;
+  document.getElementById('wc-sents').textContent=sents;
+  document.getElementById('wc-read').textContent=read+' dk';
+}
+
+// ============================================================
+// TEXT TRANSFORMER
+// ============================================================
+function transformText(type){
+  const t=document.getElementById('tx-in').value;
+  let result='';
+  switch(type){
+    case 'upper':result=t.toUpperCase();break;
+    case 'lower':result=t.toLowerCase();break;
+    case 'title':result=t.replace(/\b\w/g,c=>c.toUpperCase());break;
+    case 'camel':result=t.trim().replace(/[\s_-]+(.)/g,(_,c)=>c.toUpperCase()).replace(/^./,c=>c.toLowerCase());break;
+    case 'pascal':result=t.trim().replace(/[\s_-]+(.)/g,(_,c)=>c.toUpperCase()).replace(/^./,c=>c.toUpperCase());break;
+    case 'snake':result=t.trim().toLowerCase().replace(/[\s-]+/g,'_').replace(/[^\w]/g,'');break;
+    case 'kebab':result=t.trim().toLowerCase().replace(/[\s_]+/g,'-').replace(/[^\w-]/g,'');break;
+    case 'slug':result=t.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ş/g,'s').replace(/ğ/g,'g').replace(/ı/g,'i').replace(/ö/g,'o').replace(/ü/g,'u').replace(/ç/g,'c').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');break;
+    case 'reverse':result=t.split('').reverse().join('');break;
+    case 'nospace':result=t.replace(/\s+/g,'');break;
+    default:result=t;
+  }
+  setOut('tx-out',result);
+}
+
+// ============================================================
+// NUMBER BASE CONVERTER
+// ============================================================
+function convertBase(){
+  const raw=document.getElementById('nb-in').value.trim();
+  const base=parseInt(document.getElementById('nb-base').value);
+  if(!raw){document.getElementById('nb-tbody').innerHTML='';return;}
+  try{
+    const dec=parseInt(raw,base);
+    if(isNaN(dec))throw new Error('Geçersiz giriş');
+    const rows=[
+      ['Binary (2)',dec.toString(2)],
+      ['Octal (8)',dec.toString(8)],
+      ['Decimal (10)',dec.toString(10)],
+      ['Hex (16)',dec.toString(16).toUpperCase()],
+    ];
+    document.getElementById('nb-tbody').innerHTML=rows.map(([u,v])=>`<tr><td>${u}</td><td>${v}</td></tr>`).join('');
+  }catch(e){document.getElementById('nb-tbody').innerHTML=`<tr><td colspan="2" style="color:var(--red)">❌ ${e.message}</td></tr>`;}
+}
+convertBase();
+
+// ============================================================
+// SEARCH
+// ============================================================
+const ALL_TOOLS=[
+  {id:'qr-tool',name:'QR Kod Üretici',cat:'Görsel'},
+  {id:'password-tool',name:'Şifre Üretici',cat:'Güvenlik'},
+  {id:'json-tool',name:'JSON Formatter',cat:'Geliştirici'},
+  {id:'base64-tool',name:'Base64 Encode/Decode',cat:'Güvenlik'},
+  {id:'hash-tool',name:'Hash Üretici',cat:'Güvenlik'},
+  {id:'jwt-tool',name:'JWT Çözücü',cat:'Güvenlik'},
+  {id:'url-tool',name:'URL Encode/Decode',cat:'Güvenlik'},
+  {id:'html-entity-tool',name:'HTML Entity Encoder',cat:'Güvenlik'},
+  {id:'shadow-tool',name:'Box Shadow Generator',cat:'CSS'},
+  {id:'gradient-tool',name:'CSS Gradient Üretici',cat:'CSS'},
+  {id:'border-tool',name:'Border Radius Üretici',cat:'CSS'},
+  {id:'animation-tool',name:'CSS Animasyon Üretici',cat:'CSS'},
+  {id:'contrast-tool',name:'Renk Kontrast Checker',cat:'CSS'},
+  {id:'unit-tool',name:'CSS Birim Dönüştürücü',cat:'CSS'},
+  {id:'regex-tool',name:'Regex Tester',cat:'Geliştirici'},
+  {id:'diff-tool',name:'Diff Checker',cat:'Geliştirici'},
+  {id:'markdown-tool',name:'Markdown Önizleme',cat:'Geliştirici'},
+  {id:'timestamp-tool',name:'Timestamp Dönüştürücü',cat:'Geliştirici'},
+  {id:'cron-tool',name:'Cron Expression Builder',cat:'Geliştirici'},
+  {id:'svg-tool',name:'SVG Optimizer',cat:'Geliştirici'},
+  {id:'meta-tool',name:'Meta Tags Üretici',cat:'SEO'},
+  {id:'og-tool',name:'Open Graph Üretici',cat:'SEO'},
+  {id:'robots-tool',name:'Robots.txt Üretici',cat:'SEO'},
+  {id:'color-tool',name:'Renk Paleti Üretici',cat:'Görsel'},
+  {id:'lorem-tool',name:'Lorem Ipsum Üretici',cat:'Geliştirici'},
+  {id:'wordcount-tool',name:'Kelime Sayacı',cat:'Geliştirici'},
+  {id:'ascii-tool',name:'Metin Dönüştürücü',cat:'Geliştirici'},
+  {id:'number-tool',name:'Sayı Tabanı Dönüştürücü',cat:'Geliştirici'},
+];
+const EMOJIS={'qr-tool':'📱','password-tool':'🔑','json-tool':'📋','base64-tool':'📦','hash-tool':'🔒','jwt-tool':'🎫','url-tool':'🔗','html-entity-tool':'🛡️','shadow-tool':'🌫️','gradient-tool':'🌈','border-tool':'⬜','animation-tool':'✨','contrast-tool':'♿','unit-tool':'📐','regex-tool':'🔍','diff-tool':'↔️','markdown-tool':'📝','timestamp-tool':'⏰','cron-tool':'⏱️','svg-tool':'🖋️','meta-tool':'🏷️','og-tool':'📢','robots-tool':'🤖','color-tool':'🎨','lorem-tool':'📄','wordcount-tool':'🔢','ascii-tool':'🔤','number-tool':'🔣'};
+
+function openSearch(){
+  document.getElementById('search-overlay').classList.add('show');
+  setTimeout(()=>document.getElementById('search-input-big').focus(),50);
+  doSearch('');
+}
+function closeSearch(e){if(e.target===document.getElementById('search-overlay'))document.getElementById('search-overlay').classList.remove('show');}
+function doSearch(q){
+  const list=document.getElementById('search-results-list');
+  const empty=document.getElementById('search-empty');
+  const filtered=q?ALL_TOOLS.filter(t=>t.name.toLowerCase().includes(q.toLowerCase())||t.cat.toLowerCase().includes(q.toLowerCase())):ALL_TOOLS;
+  if(!filtered.length){list.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  list.innerHTML=filtered.map(t=>{
+    const em=EMOJIS[t.id]||'🔧';
+    return `<div class="search-result-item" onclick="pickSearch('${t.id}')"><span class="sri-emoji">${em}</span><div><div class="sri-name">${t.name}</div><div class="sri-cat">${t.cat}</div></div></div>`;
+  }).join('');
+}
+function pickSearch(id){
+  document.getElementById('search-overlay').classList.remove('show');
+  openTool(id);
+  setTimeout(()=>document.getElementById(id).scrollIntoView({behavior:'smooth',block:'center'}),100);
+}
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();openSearch();}
+  if(e.key==='Escape')document.getElementById('search-overlay').classList.remove('show');
+});
 </script>
 </body>
 </html>
