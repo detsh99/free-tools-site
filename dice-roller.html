@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Online Dice Roller — DetshTool</title>
+  <meta name="description" content="Roll virtual dice online. Supports D4, D6, D8, D10, D12, D20 and custom dice. Roll multiple dice at once. Free online dice roller for tabletop games." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://detsh-tool.vercel.app/dice-roller.html" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Dice Roller","description":"Free online dice roller","url":"https://detsh-tool.vercel.app/dice-roller.html","applicationCategory":"UtilityApplication","offers":{"@type":"Offer","price":"0"}}</script>
+  <style>
+    :root{--bg:#0a0a0f;--surface:#121218;--surface2:#1a1a24;--border:rgba(255,255,255,0.07);--border-hover:rgba(255,255,255,0.15);--text:#f0eee8;--muted:#7a7888;--accent:#c8f065;--font-head:'Syne',sans-serif;--font-mono:'DM Mono',monospace;--radius:14px;--radius-sm:8px;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-height:100vh;}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:1rem 1.5rem;background:rgba(10,10,15,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+    .logo{font-size:1.2rem;font-weight:800;text-decoration:none;color:var(--text);}.logo span{color:var(--accent);}
+    nav a.bc{color:var(--muted);font-size:0.82rem;text-decoration:none;}nav a.bc:hover{color:var(--text);}
+    nav .sep{color:var(--border-hover);font-size:0.8rem;}nav .cur{color:var(--text);font-size:0.82rem;}
+    main{max-width:680px;margin:0 auto;padding:40px 20px 80px;}
+    .badge{display:inline-block;font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:16px;background:rgba(255,209,102,0.12);color:#ffd166;border:1px solid rgba(255,209,102,0.25);}
+    h1{font-size:clamp(24px,5vw,38px);font-weight:800;letter-spacing:-0.03em;line-height:1.15;margin-bottom:10px;}
+    .subtitle{color:var(--muted);font-size:0.95rem;line-height:1.7;margin-bottom:36px;}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:24px;}
+    .dice-grid{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;}
+    .die-btn{padding:10px 18px;border-radius:var(--radius-sm);background:var(--surface2);border:2px solid var(--border);color:var(--muted);font-family:var(--font-head);font-size:0.88rem;font-weight:700;cursor:pointer;transition:all 0.15s;}
+    .die-btn:hover,.die-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(200,240,101,0.07);}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:1.2rem;}
+    @media(max-width:480px){.row{grid-template-columns:1fr;}}
+    .field label{display:block;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+    .field input{width:100%;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font-mono);font-size:0.92rem;outline:none;transition:border-color 0.2s;}
+    .field input:focus{border-color:var(--border-hover);}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:var(--radius-sm);font-family:var(--font-head);font-size:1rem;font-weight:700;cursor:pointer;border:none;transition:all 0.18s;}
+    .btn-primary{background:var(--accent);color:#0a0a0f;}
+    .btn-primary:hover{background:#d4f57a;transform:translateY(-1px);}
+    .result-area{margin-top:1.5rem;text-align:center;}
+    .dice-results{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:16px;}
+    .die-result{width:60px;height:60px;border-radius:10px;background:var(--surface2);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:1.4rem;font-weight:700;color:var(--accent);animation:pop 0.25s ease;}
+    @keyframes pop{0%{transform:scale(0.7);opacity:0;}100%{transform:scale(1);opacity:1;}}
+    .total-line{font-size:0.85rem;color:var(--muted);}
+    .total-line strong{color:var(--accent);font-size:1.4rem;font-family:var(--font-mono);}
+    .history{margin-top:1.5rem;max-height:200px;overflow-y:auto;}
+    .history-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:0.8rem;color:var(--muted);font-family:var(--font-mono);}
+    .history-item:last-child{border-bottom:none;}
+    .info-section{margin-top:40px;border-top:1px solid var(--border);padding-top:32px;}
+    .info-section h2{font-size:1.1rem;font-weight:700;margin-bottom:10px;}
+    .info-section p{color:var(--muted);font-size:0.88rem;line-height:1.8;margin-bottom:12px;}
+    footer{text-align:center;padding:2rem;border-top:1px solid var(--border);color:var(--muted);font-size:0.78rem;}
+    footer a{color:var(--accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Detsh<span>Tool</span></a>
+  <span class="sep">›</span><a href="/" class="bc">Tools</a>
+  <span class="sep">›</span><span class="cur">Dice Roller</span>
+</nav>
+<main>
+  <div class="badge">🎲 Game Tool</div>
+  <h1>Online Dice Roller</h1>
+  <p class="subtitle">Roll any type of dice for tabletop RPGs, board games, or decisions. Choose D4 to D100 or set a custom number of sides. Roll multiple dice at once.</p>
+  <div class="card">
+    <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Dice Type</div>
+    <div class="dice-grid">
+      <button class="die-btn" onclick="selectDie(4,this)">D4</button>
+      <button class="die-btn active" onclick="selectDie(6,this)">D6</button>
+      <button class="die-btn" onclick="selectDie(8,this)">D8</button>
+      <button class="die-btn" onclick="selectDie(10,this)">D10</button>
+      <button class="die-btn" onclick="selectDie(12,this)">D12</button>
+      <button class="die-btn" onclick="selectDie(20,this)">D20</button>
+      <button class="die-btn" onclick="selectDie(100,this)">D100</button>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Custom Sides</label>
+        <input type="number" id="customSides" min="2" max="1000" placeholder="e.g. 30" oninput="customDie()">
+      </div>
+      <div class="field">
+        <label>Number of Dice</label>
+        <input type="number" id="numDice" min="1" max="20" value="1">
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="rollDice()">🎲 Roll</button>
+    <div class="result-area" id="resultArea"></div>
+    <div class="history" id="history"></div>
+  </div>
+  <section class="info-section">
+    <h2>Common dice for RPGs</h2>
+    <p>D&amp;D and Pathfinder use D4 (damage), D6 (common damage/attributes), D8 (hit dice), D10 (percentile), D12 (large weapons), and D20 (attack rolls, saving throws).</p>
+    <h2>Press Space to roll</h2>
+    <p>You can press the spacebar to quickly re-roll the same dice combination without clicking the button.</p>
+  </section>
+</main>
+<footer>
+  <div style="margin-bottom:10px;"><a href="/about.html">About</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="/contact.html">Contact</a></div>
+  © 2025 <a href="/">DetshTool</a> — Free Online Tools
+</footer>
+<script>
+let sides=6;
+const history=[];
+function selectDie(n,el){
+  sides=n;
+  document.querySelectorAll('.die-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('customSides').value='';
+}
+function customDie(){
+  const v=+document.getElementById('customSides').value;
+  if(v>=2){
+    sides=v;
+    document.querySelectorAll('.die-btn').forEach(b=>b.classList.remove('active'));
+  }
+}
+function rollDice(){
+  const n=Math.min(20,Math.max(1,+document.getElementById('numDice').value||1));
+  const rolls=Array.from({length:n},()=>Math.floor(Math.random()*sides)+1);
+  const total=rolls.reduce((a,b)=>a+b,0);
+  const ra=document.getElementById('resultArea');
+  ra.innerHTML=`<div class="dice-results">${rolls.map(r=>`<div class="die-result">${r}</div>`).join('')}</div><div class="total-line">${n>1?`Total: <strong>${total}</strong> (${rolls.join(' + ')})`:''}</div>`;
+  const label=`${n}d${sides}`;
+  history.unshift({label,rolls,total});
+  if(history.length>10)history.pop();
+  document.getElementById('history').innerHTML=history.map(h=>`<div class="history-item"><span>${h.label}</span><span>[${h.rolls.join(', ')}]${h.rolls.length>1?' = '+h.total:''}</span></div>`).join('');
+}
+document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target===document.body){e.preventDefault();rollDice();}});
+</script>
+</body>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tip Calculator — DetshTool</title>
+  <meta name="description" content="Free online tip calculator. Split the bill easily, calculate tip percentage per person. Fast, simple, no signup needed." />
+  <link rel="canonical" href="https://detsh-tool.vercel.app/tip-calculator.html" />
+  <link rel="icon" href="favicon.ico" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #13131a;
+      --surface2: #1c1c26;
+      --border: #2a2a3a;
+      --accent: #7c6aff;
+      --accent2: #ff6ab0;
+      --text: #e8e8f0;
+      --muted: #6b6b80;
+      --success: #4ade80;
+      --radius: 14px;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 28px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .nav-logo {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-back {
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: color .2s;
+    }
+    .nav-back:hover { color: var(--text); }
+
+    /* MAIN */
+    main {
+      flex: 1;
+      max-width: 560px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 48px 20px 64px;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .page-icon {
+      font-size: 2.8rem;
+      display: block;
+      margin-bottom: 14px;
+      filter: drop-shadow(0 0 20px rgba(124,106,255,.4));
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--text) 40%, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+    .page-header p {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    /* CARD */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+
+    .field { margin-bottom: 18px; }
+    label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+    .input-wrap {
+      position: relative;
+    }
+    .input-prefix {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      pointer-events: none;
+    }
+    input[type="number"], input[type="text"] {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem;
+      padding: 13px 14px 13px 32px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      -moz-appearance: textfield;
+    }
+    input[type="number"]:focus, input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(124,106,255,.15);
+    }
+    input::-webkit-inner-spin-button,
+    input::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+    /* TIP BUTTONS */
+    .tip-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .tip-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 11px 6px;
+      cursor: pointer;
+      transition: all .2s;
+      text-align: center;
+    }
+    .tip-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .tip-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .custom-tip-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .custom-tip-wrap span {
+      color: var(--muted);
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+    #customTip {
+      width: 100px;
+      padding-left: 14px;
+    }
+
+    /* SPLIT */
+    .split-control {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .split-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 1.2rem;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .split-btn:hover { border-color: var(--accent); color: var(--accent); }
+    #splitCount {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 600;
+      min-width: 32px;
+      text-align: center;
+    }
+
+    /* RESULT */
+    .result-card {
+      background: linear-gradient(135deg, rgba(124,106,255,.12), rgba(255,106,176,.08));
+      border: 1px solid rgba(124,106,255,.3);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .result-item {
+      background: rgba(255,255,255,.04);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .result-item.big {
+      grid-column: span 2;
+      background: rgba(124,106,255,.1);
+    }
+    .result-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .result-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .result-item.big .result-value { font-size: 2rem; color: var(--accent); }
+
+    /* RESET */
+    .btn-reset {
+      width: 100%;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--muted);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.88rem;
+      padding: 11px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-reset:hover { border-color: var(--accent2); color: var(--accent2); }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">Detsh<span>Tool</span></a>
+  <a href="/" class="nav-back">← All Tools</a>
+</nav>
+
+<main>
+  <div class="page-header">
+    <span class="page-icon">💰</span>
+    <h1>Tip Calculator</h1>
+    <p>Calculate tip & split the bill instantly — no signup needed</p>
+  </div>
+
+  <div class="card">
+    <!-- Bill Amount -->
+    <div class="field">
+      <label>Bill Amount</label>
+      <div class="input-wrap">
+        <span class="input-prefix">$</span>
+        <input type="number" id="billAmount" placeholder="0.00" min="0" step="0.01" oninput="calculate()" />
+      </div>
+    </div>
+
+    <!-- Tip % -->
+    <div class="field">
+      <label>Tip Percentage</label>
+      <div class="tip-grid">
+        <button class="tip-btn" data-tip="10" onclick="selectTip(this)">10%</button>
+        <button class="tip-btn active" data-tip="15" onclick="selectTip(this)">15%</button>
+        <button class="tip-btn" data-tip="20" onclick="selectTip(this)">20%</button>
+        <button class="tip-btn" data-tip="25" onclick="selectTip(this)">25%</button>
+      </div>
+      <div class="custom-tip-wrap">
+        <span>Custom %</span>
+        <input type="number" id="customTip" placeholder="e.g. 18" min="0" max="100" oninput="selectCustomTip()" />
+      </div>
+    </div>
+
+    <!-- Split -->
+    <div class="field">
+      <label>Split Between</label>
+      <div class="split-control">
+        <button class="split-btn" onclick="changeSplit(-1)">−</button>
+        <span id="splitCount">1</span>
+        <button class="split-btn" onclick="changeSplit(1)">+</button>
+        <span style="color:var(--muted);font-size:.85rem;">person(s)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="result-card">
+    <div class="result-grid">
+      <div class="result-item">
+        <div class="result-label">Tip Amount</div>
+        <div class="result-value" id="tipAmount">$0.00</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">Total Bill</div>
+        <div class="result-value" id="totalBill">$0.00</div>
+      </div>
+      <div class="result-item big">
+        <div class="result-label">Per Person</div>
+        <div class="result-value" id="perPerson">$0.00</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-reset" onclick="reset()">↺ Reset</button>
+</main>
+
+<footer>
+  Part of <a href="/">DetshTool</a> — Free Utility Kit &nbsp;·&nbsp; 16 Tools &amp; counting
+</footer>
+
+<script>
+  let tipPercent = 15;
+  let splitPeople = 1;
+
+  function selectTip(btn) {
+    document.querySelectorAll('.tip-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    tipPercent = parseFloat(btn.dataset.tip);
+    document.getElementById('customTip').value = '';
+    calculate();
+  }
+
+  function selectCustomTip() {
+    const val = parseFloat(document.getElementById('customTip').value);
+    document.querySelectorAll('.tip-btn').forEach(b => b.classList.remove('active'));
+    if (!isNaN(val) && val >= 0) {
+      tipPercent = val;
+      calculate();
+    }
+  }
+
+  function changeSplit(delta) {
+    splitPeople = Math.max(1, splitPeople + delta);
+    document.getElementById('splitCount').textContent = splitPeople;
+    calculate();
+  }
+
+  function calculate() {
+    const bill = parseFloat(document.getElementById('billAmount').value) || 0;
+    const tip = bill * (tipPercent / 100);
+    const total = bill + tip;
+    const per = total / splitPeople;
+
+    document.getElementById('tipAmount').textContent = '$' + tip.toFixed(2);
+    document.getElementById('totalBill').textContent = '$' + total.toFixed(2);
+    document.getElementById('perPerson').textContent = '$' + per.toFixed(2);
+  }
+
+  function reset() {
+    document.getElementById('billAmount').value = '';
+    document.getElementById('customTip').value = '';
+    splitPeople = 1;
+    tipPercent = 15;
+    document.getElementById('splitCount').textContent = '1';
+    document.querySelectorAll('.tip-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('[data-tip="15"]').classList.add('active');
+    calculate();
+  }
+</script>
+</body>
+</html>

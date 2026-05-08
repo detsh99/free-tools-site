@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Word Counter Online — DetshTool</title>
+  <meta name="description" content="Count words, characters, sentences and paragraphs instantly. Estimate reading time and see most used words. Free online word counter tool." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://detsh-tool.vercel.app/word-counter.html" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Word Counter","description":"Free online word counter tool","url":"https://detsh-tool.vercel.app/word-counter.html","applicationCategory":"UtilityApplication","offers":{"@type":"Offer","price":"0"}}</script>
+  <style>
+    :root{--bg:#0a0a0f;--surface:#121218;--surface2:#1a1a24;--border:rgba(255,255,255,0.07);--border-hover:rgba(255,255,255,0.15);--text:#f0eee8;--muted:#7a7888;--accent:#c8f065;--accent3:#ff6b6b;--font-head:'Syne',sans-serif;--font-mono:'DM Mono',monospace;--radius:14px;--radius-sm:8px;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-height:100vh;}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:1rem 1.5rem;background:rgba(10,10,15,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+    .logo{font-size:1.2rem;font-weight:800;text-decoration:none;color:var(--text);}.logo span{color:var(--accent);}
+    nav a.bc{color:var(--muted);font-size:0.82rem;text-decoration:none;}nav a.bc:hover{color:var(--text);}
+    nav .sep{color:var(--border-hover);font-size:0.8rem;}nav .cur{color:var(--text);font-size:0.82rem;}
+    main{max-width:720px;margin:0 auto;padding:40px 20px 80px;}
+    .badge{display:inline-block;font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:16px;background:rgba(255,107,107,0.15);color:#ff9b9b;border:1px solid rgba(255,107,107,0.3);}
+    h1{font-size:clamp(24px,5vw,38px);font-weight:800;letter-spacing:-0.03em;line-height:1.15;margin-bottom:10px;}
+    .subtitle{color:var(--muted);font-size:0.95rem;line-height:1.7;margin-bottom:36px;}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:24px;}
+    .field{margin-bottom:1.2rem;}
+    .field label{display:block;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+    .field textarea{width:100%;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font-head);font-size:0.92rem;outline:none;resize:vertical;min-height:200px;transition:border-color 0.2s;}
+    .field textarea:focus{border-color:var(--border-hover);}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-top:1.5rem;}
+    .stat-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;text-align:center;}
+    .stat-val{font-size:1.8rem;font-weight:800;color:var(--accent);}
+    .stat-label{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:4px;}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:1rem;}
+    .chip{padding:6px 14px;border-radius:100px;background:var(--surface2);border:1px solid var(--border);font-family:var(--font-mono);font-size:0.82rem;color:var(--muted);}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:var(--radius-sm);font-family:var(--font-head);font-size:0.88rem;font-weight:700;cursor:pointer;border:none;transition:all 0.18s;}
+    .btn-ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+    .btn-ghost:hover{border-color:var(--border-hover);}
+    .clear-btn{margin-top:12px;}
+    .info-section{margin-top:40px;border-top:1px solid var(--border);padding-top:32px;}
+    .info-section h2{font-size:1.1rem;font-weight:700;margin-bottom:10px;}
+    .info-section p{color:var(--muted);font-size:0.88rem;line-height:1.8;margin-bottom:12px;}
+    footer{text-align:center;padding:2rem;border-top:1px solid var(--border);color:var(--muted);font-size:0.78rem;}
+    footer a{color:var(--accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Detsh<span>Tool</span></a>
+  <span class="sep">›</span><a href="/" class="bc">Tools</a>
+  <span class="sep">›</span><span class="cur">Word Counter</span>
+</nav>
+<main>
+  <div class="badge">📝 Text Tool</div>
+  <h1>Free Word Counter</h1>
+  <p class="subtitle">Paste or type your text to instantly count words, characters, sentences, paragraphs and estimate reading time. 100% free, works offline.</p>
+  <div class="card">
+    <div class="field">
+      <label>Your Text</label>
+      <textarea id="wcInput" placeholder="Paste or type your text here..." oninput="countWords()"></textarea>
+    </div>
+    <button class="btn btn-ghost clear-btn" onclick="document.getElementById('wcInput').value='';countWords()">✕ Clear</button>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-val" id="wcWords">0</div><div class="stat-label">Words</div></div>
+      <div class="stat-card"><div class="stat-val" id="wcChars">0</div><div class="stat-label">Characters</div></div>
+      <div class="stat-card"><div class="stat-val" id="wcCharsNoSpace">0</div><div class="stat-label">No Spaces</div></div>
+      <div class="stat-card"><div class="stat-val" id="wcSentences">0</div><div class="stat-label">Sentences</div></div>
+      <div class="stat-card"><div class="stat-val" id="wcParagraphs">0</div><div class="stat-label">Paragraphs</div></div>
+      <div class="stat-card"><div class="stat-val" id="wcReadTime">0</div><div class="stat-label">Read (min)</div></div>
+    </div>
+    <div style="margin-top:1.5rem;">
+      <p style="font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-bottom:8px;">Top Words</p>
+      <div class="chips" id="topWords"></div>
+    </div>
+  </div>
+  <section class="info-section">
+    <h2>What is a word counter?</h2>
+    <p>A word counter is a tool that counts the number of words, characters, and sentences in a piece of text. It's useful for essays, social media posts, SEO content, and more.</p>
+    <h2>Common word limits</h2>
+    <p>Twitter/X: 280 characters · Instagram caption: 2,200 characters · Instagram bio: 150 characters · LinkedIn post: 3,000 characters · SMS: 160 characters.</p>
+    <h2>Reading time estimate</h2>
+    <p>The average adult reads about 200-250 words per minute. Our reading time estimate is based on 200 words per minute.</p>
+  </section>
+</main>
+<footer>
+  <div style="margin-bottom:10px;"><a href="/about.html">About</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="/contact.html">Contact</a></div>
+  © 2025 <a href="/">DetshTool</a> — Free Online Tools
+</footer>
+<script>
+function countWords() {
+  const text = document.getElementById('wcInput').value;
+  const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+  const chars = text.length;
+  const charsNoSpace = text.replace(/\s/g,'').length;
+  const sentences = text.trim() === '' ? 0 : (text.match(/[^.!?]*[.!?]/g) || []).length;
+  const paragraphs = text.trim() === '' ? 0 : text.split(/\n\s*\n/).filter(p=>p.trim()).length || (text.trim() ? 1 : 0);
+  const readTime = Math.ceil(words / 200);
+  document.getElementById('wcWords').textContent = words.toLocaleString();
+  document.getElementById('wcChars').textContent = chars.toLocaleString();
+  document.getElementById('wcCharsNoSpace').textContent = charsNoSpace.toLocaleString();
+  document.getElementById('wcSentences').textContent = sentences;
+  document.getElementById('wcParagraphs').textContent = paragraphs;
+  document.getElementById('wcReadTime').textContent = readTime;
+  // Top words
+  const freq = {};
+  text.toLowerCase().match(/\b[a-z]{3,}\b/g)?.forEach(w => { freq[w] = (freq[w]||0)+1; });
+  const top = Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  document.getElementById('topWords').innerHTML = top.map(([w,c])=>`<span class="chip">${w} <span style="color:var(--accent)">${c}</span></span>`).join('');
+}
+</script>
+</body>
+</html>

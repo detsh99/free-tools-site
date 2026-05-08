@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Username Generator — DetshTool</title>
+  <meta name="description" content="Generate cool, unique usernames instantly for gaming, social media, and more. Customize style and get unlimited suggestions. Free, no signup." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://detsh-tool.vercel.app/username-generator.html" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Username Generator","description":"Free online username generator","url":"https://detsh-tool.vercel.app/username-generator.html","applicationCategory":"UtilityApplication","offers":{"@type":"Offer","price":"0"}}</script>
+  <style>
+    :root{--bg:#0a0a0f;--surface:#121218;--surface2:#1a1a24;--border:rgba(255,255,255,0.07);--border-hover:rgba(255,255,255,0.15);--text:#f0eee8;--muted:#7a7888;--accent:#c8f065;--font-head:'Syne',sans-serif;--font-mono:'DM Mono',monospace;--radius:14px;--radius-sm:8px;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-height:100vh;}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:1rem 1.5rem;background:rgba(10,10,15,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+    .logo{font-size:1.2rem;font-weight:800;text-decoration:none;color:var(--text);}.logo span{color:var(--accent);}
+    nav a.bc{color:var(--muted);font-size:0.82rem;text-decoration:none;}nav a.bc:hover{color:var(--text);}
+    nav .sep{color:var(--border-hover);font-size:0.8rem;}nav .cur{color:var(--text);font-size:0.82rem;}
+    main{max-width:720px;margin:0 auto;padding:40px 20px 80px;}
+    .badge{display:inline-block;font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:16px;background:rgba(108,99,255,0.15);color:#9b93ff;border:1px solid rgba(108,99,255,0.3);}
+    h1{font-size:clamp(24px,5vw,38px);font-weight:800;letter-spacing:-0.03em;line-height:1.15;margin-bottom:10px;}
+    .subtitle{color:var(--muted);font-size:0.95rem;line-height:1.7;margin-bottom:36px;}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:24px;}
+    .field{margin-bottom:1.2rem;}
+    .field label{display:block;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+    .field input,.field select{width:100%;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font-head);font-size:0.92rem;outline:none;transition:border-color 0.2s;}
+    .field input:focus,.field select:focus{border-color:var(--border-hover);}
+    .field select option{background:var(--surface2);}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    @media(max-width:600px){.row{grid-template-columns:1fr;}}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:var(--radius-sm);font-family:var(--font-head);font-size:0.88rem;font-weight:700;cursor:pointer;border:none;transition:all 0.18s;}
+    .btn-primary{background:var(--accent);color:#0a0a0f;}
+    .btn-primary:hover{background:#d4f57a;transform:translateY(-1px);}
+    .btn-ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+    .btn-ghost:hover{border-color:var(--border-hover);}
+    .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:1.2rem;}
+    .results{margin-top:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    @media(max-width:480px){.results{grid-template-columns:1fr;}}
+    .result-item{display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;transition:border-color 0.2s;}
+    .result-item:hover{border-color:var(--border-hover);}
+    .result-name{font-family:var(--font-mono);font-size:0.88rem;color:var(--accent);}
+    .copy-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:0.75rem;padding:4px 8px;border-radius:4px;transition:color 0.15s;}
+    .copy-btn:hover{color:var(--text);}
+    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--accent);color:#0a0a0f;font-weight:700;font-size:0.82rem;padding:8px 20px;border-radius:100px;opacity:0;pointer-events:none;transition:all 0.25s;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .info-section{margin-top:40px;border-top:1px solid var(--border);padding-top:32px;}
+    .info-section h2{font-size:1.1rem;font-weight:700;margin-bottom:10px;}
+    .info-section p{color:var(--muted);font-size:0.88rem;line-height:1.8;margin-bottom:12px;}
+    footer{text-align:center;padding:2rem;border-top:1px solid var(--border);color:var(--muted);font-size:0.78rem;}
+    footer a{color:var(--accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Detsh<span>Tool</span></a>
+  <span class="sep">›</span><a href="/" class="bc">Tools</a>
+  <span class="sep">›</span><span class="cur">Username Generator</span>
+</nav>
+<main>
+  <div class="badge">👤 Identity Tool</div>
+  <h1>Free Username Generator</h1>
+  <p class="subtitle">Generate cool, unique usernames for gaming, social media, or any platform. Add a keyword, pick a style, and get instant suggestions.</p>
+  <div class="card">
+    <div class="row">
+      <div class="field">
+        <label>Your Keyword (optional)</label>
+        <input type="text" id="ugKeyword" placeholder="e.g. shadow, nova, wolf">
+      </div>
+      <div class="field">
+        <label>Style</label>
+        <select id="ugStyle">
+          <option value="gaming">Gaming</option>
+          <option value="cool">Cool &amp; Aesthetic</option>
+          <option value="funny">Funny</option>
+          <option value="professional">Professional</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Add Numbers</label>
+        <select id="ugNums">
+          <option value="none">None</option>
+          <option value="end" selected>At End</option>
+          <option value="random">Random</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Separator</label>
+        <select id="ugSep">
+          <option value="">None</option>
+          <option value="_" selected>Underscore _</option>
+          <option value=".">Dot .</option>
+          <option value="-">Dash -</option>
+        </select>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="generateUsernames()">⚡ Generate</button>
+    </div>
+    <div class="results" id="ugResults"></div>
+  </div>
+  <section class="info-section">
+    <h2>Tips for a great username</h2>
+    <p>Keep it short (under 20 characters), easy to remember, and unique. Avoid personal info like your full name or birthday. A good username works across multiple platforms.</p>
+    <h2>Which platforms have username restrictions?</h2>
+    <p>Instagram & Twitter: 30 chars, letters/numbers/underscores/dots. TikTok: 24 chars. Steam: 32 chars. Roblox: no spaces. Always check availability on the platform you need.</p>
+  </section>
+</main>
+<footer>
+  <div style="margin-bottom:10px;"><a href="/about.html">About</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="/contact.html">Contact</a></div>
+  © 2025 <a href="/">DetshTool</a> — Free Online Tools
+</footer>
+<div class="toast" id="toast">✓ Copied!</div>
+<script>
+const gaming=['Shadow','Blaze','Nova','Viper','Ghost','Storm','Frost','Dark','Cyber','Neon','Iron','Steel','Void','Echo','Phantom','Rogue','Apex','Titan','Drift','Hyper'];
+const cool=['Aura','Luna','Sage','Mist','Zara','Lyric','River','Sky','Ember','Opal','Reef','Haze','Dusk','Iris','Flux','Glow','Wave','Zen','Pixel','Crypt'];
+const funny=['Potato','Noodle','Pickle','Waffle','Muffin','Taco','Biscuit','Donut','Penguin','Socks','Wizard','Goblin','Chaos','Derp','Yolo','Ninja','Pigeon','Llama','Cactus','Bobble'];
+const professional=['Alex','Jordan','Morgan','Taylor','Casey','Riley','Quinn','Avery','Blake','Drew','Hayden','Logan','Parker','Reese','Skyler','Jamie','Dylan','Peyton','Finley','Emery'];
+const suffixes=['Pro','XO','IRL','HQ','Dev','Lab','Hub','IO','Run','Go'];
+
+function rand(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function randNum(type){
+  if(type==='none')return '';
+  const n=Math.floor(Math.random()*9000)+100;
+  return type==='end'?String(n).slice(0,3):String(Math.floor(Math.random()*99)+1);
+}
+
+function generateUsernames(){
+  const kw=(document.getElementById('ugKeyword').value||'').trim();
+  const style=document.getElementById('ugStyle').value;
+  const nums=document.getElementById('ugNums').value;
+  const sep=document.getElementById('ugSep').value;
+  const pool={'gaming':gaming,'cool':cool,'funny':funny,'professional':professional}[style];
+  const results=[];
+  for(let i=0;i<12;i++){
+    let base=kw||(rand(pool));
+    let part2=rand(pool);
+    const r=Math.random();
+    let name='';
+    if(r<0.33) name=base+sep+part2;
+    else if(r<0.66) name=part2+sep+base;
+    else name=base+sep+rand(suffixes);
+    const n=randNum(nums);
+    if(n) name+=sep+n;
+    results.push(name);
+  }
+  document.getElementById('ugResults').innerHTML=results.map(n=>`<div class="result-item"><span class="result-name">${n}</span><button class="copy-btn" onclick="copyText('${n}')">Copy</button></div>`).join('');
+}
+
+function copyText(t){
+  navigator.clipboard.writeText(t).then(()=>{
+    const toast=document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'),1800);
+  });
+}
+generateUsernames();
+</script>
+</body>
+</html>

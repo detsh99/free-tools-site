@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free UUID Generator — DetshTool</title>
+  <meta name="description" content="Generate UUID v4 identifiers instantly. Bulk generate UUIDs, copy to clipboard, and export as a list. Free online UUID generator tool." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://detsh-tool.vercel.app/uuid-generator.html" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"UUID Generator","description":"Free online UUID v4 generator","url":"https://detsh-tool.vercel.app/uuid-generator.html","applicationCategory":"UtilityApplication","offers":{"@type":"Offer","price":"0"}}</script>
+  <style>
+    :root{--bg:#0a0a0f;--surface:#121218;--surface2:#1a1a24;--border:rgba(255,255,255,0.07);--border-hover:rgba(255,255,255,0.15);--text:#f0eee8;--muted:#7a7888;--accent:#c8f065;--font-head:'Syne',sans-serif;--font-mono:'DM Mono',monospace;--radius:14px;--radius-sm:8px;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-height:100vh;}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:1rem 1.5rem;background:rgba(10,10,15,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+    .logo{font-size:1.2rem;font-weight:800;text-decoration:none;color:var(--text);}.logo span{color:var(--accent);}
+    nav a.bc{color:var(--muted);font-size:0.82rem;text-decoration:none;}nav a.bc:hover{color:var(--text);}
+    nav .sep{color:var(--border-hover);font-size:0.8rem;}nav .cur{color:var(--text);font-size:0.82rem;}
+    main{max-width:720px;margin:0 auto;padding:40px 20px 80px;}
+    .badge{display:inline-block;font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:16px;background:rgba(6,214,160,0.12);color:#06d6a0;border:1px solid rgba(6,214,160,0.25);}
+    h1{font-size:clamp(24px,5vw,38px);font-weight:800;letter-spacing:-0.03em;line-height:1.15;margin-bottom:10px;}
+    .subtitle{color:var(--muted);font-size:0.95rem;line-height:1.7;margin-bottom:36px;}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:24px;}
+    .single-uuid{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px 18px;margin-bottom:20px;}
+    .uuid-text{flex:1;font-family:var(--font-mono);font-size:1rem;color:var(--accent);letter-spacing:0.04em;word-break:break-all;}
+    .icon-btn{background:none;border:none;cursor:pointer;color:var(--muted);padding:4px;border-radius:6px;transition:color 0.15s;}
+    .icon-btn:hover{color:var(--text);}
+    .field{margin-bottom:1.2rem;}
+    .field label{display:block;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+    .range-row{display:flex;align-items:center;gap:12px;}
+    input[type=range]{flex:1;-webkit-appearance:none;height:6px;border-radius:100px;background:var(--surface2);outline:none;cursor:pointer;}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--bg);}
+    .range-val{font-family:var(--font-mono);font-size:0.9rem;color:var(--accent);min-width:28px;text-align:right;}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:var(--radius-sm);font-family:var(--font-head);font-size:0.88rem;font-weight:700;cursor:pointer;border:none;transition:all 0.18s;}
+    .btn-primary{background:var(--accent);color:#0a0a0f;}
+    .btn-primary:hover{background:#d4f57a;transform:translateY(-1px);}
+    .btn-ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+    .btn-ghost:hover{border-color:var(--border-hover);}
+    .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:1.2rem;}
+    .bulk-output{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;margin-top:16px;max-height:260px;overflow-y:auto;display:none;}
+    .bulk-output p{font-family:var(--font-mono);font-size:0.82rem;color:var(--muted);line-height:2;border-bottom:1px solid var(--border);padding-bottom:2px;}
+    .bulk-output p:last-child{border-bottom:none;}
+    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--accent);color:#0a0a0f;font-weight:700;font-size:0.82rem;padding:8px 20px;border-radius:100px;opacity:0;pointer-events:none;transition:all 0.25s;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .format-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+    .ftab{padding:6px 14px;border-radius:100px;background:var(--surface2);border:1px solid var(--border);font-size:0.78rem;cursor:pointer;color:var(--muted);transition:all 0.15s;}
+    .ftab.active,.ftab:hover{border-color:var(--accent);color:var(--accent);}
+    .info-section{margin-top:40px;border-top:1px solid var(--border);padding-top:32px;}
+    .info-section h2{font-size:1.1rem;font-weight:700;margin-bottom:10px;}
+    .info-section p{color:var(--muted);font-size:0.88rem;line-height:1.8;margin-bottom:12px;}
+    footer{text-align:center;padding:2rem;border-top:1px solid var(--border);color:var(--muted);font-size:0.78rem;}
+    footer a{color:var(--accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Detsh<span>Tool</span></a>
+  <span class="sep">›</span><a href="/" class="bc">Tools</a>
+  <span class="sep">›</span><span class="cur">UUID Generator</span>
+</nav>
+<main>
+  <div class="badge">🔑 Dev Tool</div>
+  <h1>UUID Generator</h1>
+  <p class="subtitle">Generate RFC 4122 compliant UUID v4 identifiers instantly. Bulk generate up to 100 UUIDs at once, choose your format, and copy with one click.</p>
+  <div class="card">
+    <div class="single-uuid">
+      <span class="uuid-text" id="singleUuid">—</span>
+      <button class="icon-btn" onclick="copySingle()" title="Copy">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+      <button class="icon-btn" onclick="genSingle()" title="Refresh">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      </button>
+    </div>
+    <div class="format-tabs">
+      <div class="ftab active" onclick="setFmt(this,'default')">Default</div>
+      <div class="ftab" onclick="setFmt(this,'uppercase')">UPPERCASE</div>
+      <div class="ftab" onclick="setFmt(this,'no-hyphens')">No Hyphens</div>
+      <div class="ftab" onclick="setFmt(this,'braces')">&#123;Braces&#125;</div>
+    </div>
+    <div class="field">
+      <label>Bulk Count</label>
+      <div class="range-row">
+        <input type="range" id="bulkCount" min="1" max="100" value="10" oninput="document.getElementById('bulkVal').textContent=this.value">
+        <span class="range-val" id="bulkVal">10</span>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="genSingle()">Generate</button>
+      <button class="btn btn-ghost" onclick="genBulk()">Bulk Generate</button>
+      <button class="btn btn-ghost" onclick="copyBulk()">Copy All</button>
+    </div>
+    <div class="bulk-output" id="bulkOutput"></div>
+  </div>
+  <section class="info-section">
+    <h2>What is a UUID?</h2>
+    <p>A UUID (Universally Unique Identifier) is a 128-bit value used to uniquely identify information in software. UUID v4 is randomly generated, making collisions practically impossible.</p>
+    <h2>When should I use UUIDs?</h2>
+    <p>Use UUIDs as primary keys in databases, session tokens, file names, or any scenario where you need a unique identifier that doesn't require a central authority to generate.</p>
+  </section>
+</main>
+<footer>
+  <div style="margin-bottom:10px;"><a href="/about.html">About</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="/contact.html">Contact</a></div>
+  © 2025 <a href="/">DetshTool</a> — Free Online Tools
+</footer>
+<div class="toast" id="toast">✓ Copied!</div>
+<script>
+let fmt='default';
+function uuidv4(){
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,c=>(c^crypto.getRandomValues(new Uint8Array(1))[0]&15>>c/4).toString(16));
+}
+function formatUuid(u){
+  if(fmt==='uppercase')return u.toUpperCase();
+  if(fmt==='no-hyphens')return u.replace(/-/g,'');
+  if(fmt==='braces')return '{'+u+'}';
+  return u;
+}
+function setFmt(el,f){
+  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  fmt=f;
+  genSingle();
+}
+function genSingle(){
+  document.getElementById('singleUuid').textContent=formatUuid(uuidv4());
+}
+let bulkUuids=[];
+function genBulk(){
+  const n=+document.getElementById('bulkCount').value;
+  bulkUuids=Array.from({length:n},()=>formatUuid(uuidv4()));
+  const el=document.getElementById('bulkOutput');
+  el.innerHTML=bulkUuids.map(u=>`<p>${u}</p>`).join('');
+  el.style.display='block';
+}
+function copySingle(){
+  const t=document.getElementById('singleUuid').textContent;
+  navigator.clipboard.writeText(t).then(showToast);
+}
+function copyBulk(){
+  if(!bulkUuids.length){genBulk();}
+  navigator.clipboard.writeText(bulkUuids.join('\n')).then(showToast);
+}
+function showToast(){
+  const t=document.getElementById('toast');t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1800);
+}
+genSingle();
+</script>
+</body>
+</html>

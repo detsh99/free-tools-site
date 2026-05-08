@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Hashtag Generator — DetshTool</title>
+  <meta name="description" content="Generate trending hashtags for Instagram, TikTok, Twitter and YouTube. Enter your topic and get relevant hashtags instantly. Free online hashtag generator." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://detsh-tool.vercel.app/hashtag-generator.html" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Hashtag Generator","description":"Free online hashtag generator for social media","url":"https://detsh-tool.vercel.app/hashtag-generator.html","applicationCategory":"UtilityApplication","offers":{"@type":"Offer","price":"0"}}</script>
+  <style>
+    :root{--bg:#0a0a0f;--surface:#121218;--surface2:#1a1a24;--border:rgba(255,255,255,0.07);--border-hover:rgba(255,255,255,0.15);--text:#f0eee8;--muted:#7a7888;--accent:#c8f065;--font-head:'Syne',sans-serif;--font-mono:'DM Mono',monospace;--radius:14px;--radius-sm:8px;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-height:100vh;}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:1rem 1.5rem;background:rgba(10,10,15,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+    .logo{font-size:1.2rem;font-weight:800;text-decoration:none;color:var(--text);}.logo span{color:var(--accent);}
+    nav a.bc{color:var(--muted);font-size:0.82rem;text-decoration:none;}nav a.bc:hover{color:var(--text);}
+    nav .sep{color:var(--border-hover);font-size:0.8rem;}nav .cur{color:var(--text);font-size:0.82rem;}
+    main{max-width:720px;margin:0 auto;padding:40px 20px 80px;}
+    .badge{display:inline-block;font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:16px;background:rgba(108,99,255,0.15);color:#9b93ff;border:1px solid rgba(108,99,255,0.3);}
+    h1{font-size:clamp(24px,5vw,38px);font-weight:800;letter-spacing:-0.03em;line-height:1.15;margin-bottom:10px;}
+    .subtitle{color:var(--muted);font-size:0.95rem;line-height:1.7;margin-bottom:36px;}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:24px;}
+    .field{margin-bottom:1.2rem;}
+    .field label{display:block;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+    .field input,.field select{width:100%;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font-head);font-size:0.92rem;outline:none;transition:border-color 0.2s;}
+    .field input:focus{border-color:var(--border-hover);}
+    .field select option{background:var(--surface2);}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    @media(max-width:600px){.row{grid-template-columns:1fr;}}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:var(--radius-sm);font-family:var(--font-head);font-size:0.88rem;font-weight:700;cursor:pointer;border:none;transition:all 0.18s;}
+    .btn-primary{background:var(--accent);color:#0a0a0f;}
+    .btn-primary:hover{background:#d4f57a;transform:translateY(-1px);}
+    .btn-ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+    .btn-ghost:hover{border-color:var(--border-hover);}
+    .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:1.2rem;}
+    .tags-output{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;margin-top:16px;line-height:2.2;min-height:80px;word-break:break-word;}
+    .tag{display:inline-block;background:rgba(108,99,255,0.1);color:#9b93ff;border:1px solid rgba(108,99,255,0.2);border-radius:100px;padding:3px 12px;margin:3px;font-size:0.85rem;cursor:pointer;transition:all 0.15s;}
+    .tag:hover{background:rgba(108,99,255,0.2);border-color:rgba(108,99,255,0.4);}
+    .tag-count{font-size:0.72rem;color:var(--muted);margin-top:10px;}
+    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--accent);color:#0a0a0f;font-weight:700;font-size:0.82rem;padding:8px 20px;border-radius:100px;opacity:0;pointer-events:none;transition:all 0.25s;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .info-section{margin-top:40px;border-top:1px solid var(--border);padding-top:32px;}
+    .info-section h2{font-size:1.1rem;font-weight:700;margin-bottom:10px;}
+    .info-section p{color:var(--muted);font-size:0.88rem;line-height:1.8;margin-bottom:12px;}
+    footer{text-align:center;padding:2rem;border-top:1px solid var(--border);color:var(--muted);font-size:0.78rem;}
+    footer a{color:var(--accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Detsh<span>Tool</span></a>
+  <span class="sep">›</span><a href="/" class="bc">Tools</a>
+  <span class="sep">›</span><span class="cur">Hashtag Generator</span>
+</nav>
+<main>
+  <div class="badge"># Social Tool</div>
+  <h1>Free Hashtag Generator</h1>
+  <p class="subtitle">Generate relevant, high-reach hashtags for Instagram, TikTok, Twitter, and YouTube. Enter your topic and niche to get a curated list instantly.</p>
+  <div class="card">
+    <div class="row">
+      <div class="field">
+        <label>Topic / Keyword</label>
+        <input type="text" id="hgTopic" placeholder="e.g. travel, fitness, food">
+      </div>
+      <div class="field">
+        <label>Platform</label>
+        <select id="hgPlatform">
+          <option value="instagram">Instagram</option>
+          <option value="tiktok">TikTok</option>
+          <option value="twitter">Twitter / X</option>
+          <option value="youtube">YouTube</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Niche</label>
+        <select id="hgNiche">
+          <option value="general">General</option>
+          <option value="lifestyle">Lifestyle</option>
+          <option value="tech">Tech</option>
+          <option value="fitness">Fitness</option>
+          <option value="food">Food</option>
+          <option value="travel">Travel</option>
+          <option value="fashion">Fashion</option>
+          <option value="business">Business</option>
+          <option value="art">Art & Design</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Count</label>
+        <select id="hgCount">
+          <option value="10">10 hashtags</option>
+          <option value="20" selected>20 hashtags</option>
+          <option value="30">30 hashtags</option>
+        </select>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="generateHashtags()">Generate</button>
+      <button class="btn btn-ghost" onclick="copyAll()">Copy All</button>
+    </div>
+    <div id="hgOutput" class="tags-output"><span style="color:var(--muted)">Hashtags will appear here...</span></div>
+    <div class="tag-count" id="tagCount"></div>
+  </div>
+  <section class="info-section">
+    <h2>How many hashtags should I use?</h2>
+    <p>Instagram: 5–15 targeted hashtags work best (max 30). TikTok: 3–5 relevant tags. Twitter/X: 1–2 tags per tweet. YouTube: 3–5 tags in description.</p>
+    <h2>Mix big and niche hashtags</h2>
+    <p>Use a combination of large hashtags (1M+ posts) for reach and smaller niche ones (10K–100K) where you can rank. This balances visibility and competition.</p>
+  </section>
+</main>
+<footer>
+  <div style="margin-bottom:10px;"><a href="/about.html">About</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="/contact.html">Contact</a></div>
+  © 2025 <a href="/">DetshTool</a> — Free Online Tools
+</footer>
+<div class="toast" id="toast">✓ Copied!</div>
+<script>
+const baseByNiche={
+  general:['viral','trending','explore','instagood','daily','content','creator','foryou','fyp','reels','share','follow','like','community','online'],
+  lifestyle:['lifestyle','dailylife','wellbeing','selfcare','mindset','morningroutine','livingmybest','intentionalliving','slowliving','wellness','balance','gratitude','positivity','growth','habits'],
+  tech:['tech','technology','coding','developer','programming','software','innovation','startup','ai','machinelearning','cybersecurity','devlife','javascript','python','webdev'],
+  fitness:['fitness','workout','gym','fitlife','gains','training','healthylifestyle','cardio','weightlifting','motivation','bodybuilding','crossfit','running','nutrition','fatloss'],
+  food:['food','foodie','foodphotography','instafood','recipe','cooking','homemade','delicious','yummy','foodlover','chef','eats','mealprep','baking','foodblogger'],
+  travel:['travel','wanderlust','explore','adventure','travelgram','travelphotography','instatravel','vacation','trip','backpacking','travelblogger','worldtravel','tourism','bucketlist','roadtrip'],
+  fashion:['fashion','style','ootd','outfitoftheday','streetstyle','fashionblogger','outfit','trendy','clothing','model','aesthetic','fashionista','vintage','luxury','instafashion'],
+  business:['business','entrepreneur','success','hustle','startup','marketing','digitalmarketing','mindset','leadership','motivation','smallbusiness','growthhacking','branding','strategy','wealth'],
+  art:['art','artist','illustration','design','creative','digitalart','artwork','drawing','painting','sketch','artoftheday','visualart','graphicdesign','creativecommunity','artlover'],
+};
+
+let lastTags=[];
+function generateHashtags(){
+  const topic=(document.getElementById('hgTopic').value.trim()||'content').toLowerCase().replace(/\s+/g,'');
+  const niche=document.getElementById('hgNiche').value;
+  const count=+document.getElementById('hgCount').value;
+  const base=baseByNiche[niche]||baseByNiche.general;
+  const topicTags=[topic,topic+'life',topic+'gram',topic+'daily',topic+'content',topic+'tips',topic+'goals',topic+'love','best'+topic,topic+'community',topic+'world',topic+'vibes',topic+'inspo',topic+'style',topic+'time'];
+  const combined=[...new Set([...topicTags,...base])].slice(0,count);
+  lastTags=combined.map(t=>'#'+t);
+  document.getElementById('hgOutput').innerHTML=lastTags.map(t=>`<span class="tag" onclick="copySingle('${t}')">${t}</span>`).join(' ');
+  document.getElementById('tagCount').textContent=lastTags.length+' hashtags generated · Click a tag to copy it individually';
+}
+function copySingle(t){
+  navigator.clipboard.writeText(t).then(()=>{
+    const toast=document.getElementById('toast');
+    toast.textContent='✓ '+t+' copied!';
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'),1800);
+  });
+}
+function copyAll(){
+  if(!lastTags.length)return;
+  navigator.clipboard.writeText(lastTags.join(' ')).then(()=>{
+    const toast=document.getElementById('toast');
+    toast.textContent='✓ All hashtags copied!';
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'),1800);
+  });
+}
+</script>
+</body>
+</html>

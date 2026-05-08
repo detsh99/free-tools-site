@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Binary Converter — DetshTool</title>
+  <meta name="description" content="Convert between binary, decimal, hexadecimal and octal instantly. Also convert text to binary and binary to text. Free online binary converter tool." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://detsh-tool.vercel.app/binary-converter.html" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Binary Converter","description":"Free online binary converter","url":"https://detsh-tool.vercel.app/binary-converter.html","applicationCategory":"UtilityApplication","offers":{"@type":"Offer","price":"0"}}</script>
+  <style>
+    :root{--bg:#0a0a0f;--surface:#121218;--surface2:#1a1a24;--border:rgba(255,255,255,0.07);--border-hover:rgba(255,255,255,0.15);--text:#f0eee8;--muted:#7a7888;--accent:#c8f065;--font-head:'Syne',sans-serif;--font-mono:'DM Mono',monospace;--radius:14px;--radius-sm:8px;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-height:100vh;}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:1rem 1.5rem;background:rgba(10,10,15,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+    .logo{font-size:1.2rem;font-weight:800;text-decoration:none;color:var(--text);}.logo span{color:var(--accent);}
+    nav a.bc{color:var(--muted);font-size:0.82rem;text-decoration:none;}nav a.bc:hover{color:var(--text);}
+    nav .sep{color:var(--border-hover);font-size:0.8rem;}nav .cur{color:var(--text);font-size:0.82rem;}
+    main{max-width:720px;margin:0 auto;padding:40px 20px 80px;}
+    .badge{display:inline-block;font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:16px;background:rgba(255,107,107,0.12);color:#ff9b9b;border:1px solid rgba(255,107,107,0.25);}
+    h1{font-size:clamp(24px,5vw,38px);font-weight:800;letter-spacing:-0.03em;line-height:1.15;margin-bottom:10px;}
+    .subtitle{color:var(--muted);font-size:0.95rem;line-height:1.7;margin-bottom:36px;}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:24px;}
+    .tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+    .tab{padding:7px 16px;border-radius:100px;background:var(--surface2);border:1px solid var(--border);font-size:0.82rem;cursor:pointer;color:var(--muted);transition:all 0.15s;font-family:var(--font-head);font-weight:600;}
+    .tab.active{background:rgba(200,240,101,0.1);border-color:var(--accent);color:var(--accent);}
+    .pane{display:none;}.pane.active{display:block;}
+    .field{margin-bottom:1.2rem;}
+    .field label{display:block;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+    .field input,.field textarea{width:100%;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font-mono);font-size:0.92rem;outline:none;transition:border-color 0.2s;}
+    .field input:focus,.field textarea:focus{border-color:var(--border-hover);}
+    .field textarea{resize:vertical;min-height:80px;}
+    .result-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:1rem;}
+    @media(max-width:560px){.result-row{grid-template-columns:1fr;}}
+    .result-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;}
+    .result-box .rlabel{font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-weight:600;}
+    .result-box .rval{font-family:var(--font-mono);font-size:0.88rem;color:var(--accent);word-break:break-all;cursor:pointer;}
+    .result-box .rval:hover{opacity:0.8;}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:var(--radius-sm);font-family:var(--font-head);font-size:0.88rem;font-weight:700;cursor:pointer;border:none;transition:all 0.18s;}
+    .btn-primary{background:var(--accent);color:#0a0a0f;}
+    .btn-primary:hover{background:#d4f57a;transform:translateY(-1px);}
+    .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:1.2rem;}
+    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--accent);color:#0a0a0f;font-weight:700;font-size:0.82rem;padding:8px 20px;border-radius:100px;opacity:0;pointer-events:none;transition:all 0.25s;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .info-section{margin-top:40px;border-top:1px solid var(--border);padding-top:32px;}
+    .info-section h2{font-size:1.1rem;font-weight:700;margin-bottom:10px;}
+    .info-section p{color:var(--muted);font-size:0.88rem;line-height:1.8;margin-bottom:12px;}
+    footer{text-align:center;padding:2rem;border-top:1px solid var(--border);color:var(--muted);font-size:0.78rem;}
+    footer a{color:var(--accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Detsh<span>Tool</span></a>
+  <span class="sep">›</span><a href="/" class="bc">Tools</a>
+  <span class="sep">›</span><span class="cur">Binary Converter</span>
+</nav>
+<main>
+  <div class="badge">💻 Dev Tool</div>
+  <h1>Binary Converter</h1>
+  <p class="subtitle">Convert numbers between binary, decimal, hexadecimal, and octal. Also convert plain text to binary and back. Instant results, no signup needed.</p>
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('number',this)">Number Bases</button>
+      <button class="tab" onclick="switchTab('text',this)">Text ↔ Binary</button>
+    </div>
+
+    <!-- Number pane -->
+    <div class="pane active" id="paneNumber">
+      <div class="field">
+        <label>Enter a number</label>
+        <input type="text" id="numInput" placeholder="Enter decimal, binary (0b), hex (0x) or octal (0o)" oninput="convertNumber()">
+      </div>
+      <div class="result-row">
+        <div class="result-box"><div class="rlabel">Binary</div><div class="rval" id="resBin" onclick="copyVal(this)">—</div></div>
+        <div class="result-box"><div class="rlabel">Decimal</div><div class="rval" id="resDec" onclick="copyVal(this)">—</div></div>
+        <div class="result-box"><div class="rlabel">Hexadecimal</div><div class="rval" id="resHex" onclick="copyVal(this)">—</div></div>
+        <div class="result-box"><div class="rlabel">Octal</div><div class="rval" id="resOct" onclick="copyVal(this)">—</div></div>
+      </div>
+    </div>
+
+    <!-- Text pane -->
+    <div class="pane" id="paneText">
+      <div class="field">
+        <label>Text to Binary</label>
+        <textarea id="txtInput" placeholder="Type text here..." oninput="textToBin()"></textarea>
+      </div>
+      <div class="result-box" style="margin-bottom:16px;">
+        <div class="rlabel">Binary Output <small style="text-transform:none;letter-spacing:0;color:var(--muted)">(click to copy)</small></div>
+        <div class="rval" id="binOutput" onclick="copyVal(this)">—</div>
+      </div>
+      <div class="field">
+        <label>Binary to Text</label>
+        <textarea id="binInput" placeholder="Paste binary here (e.g. 01001000 01101001)..." oninput="binToText()"></textarea>
+      </div>
+      <div class="result-box">
+        <div class="rlabel">Text Output <small style="text-transform:none;letter-spacing:0;color:var(--muted)">(click to copy)</small></div>
+        <div class="rval" id="txtOutput" onclick="copyVal(this)">—</div>
+      </div>
+    </div>
+  </div>
+  <section class="info-section">
+    <h2>Number base quick reference</h2>
+    <p>Binary (base 2) uses 0 and 1. Decimal (base 10) is our everyday system. Hexadecimal (base 16) uses 0–9 and A–F, commonly used in programming. Octal (base 8) uses digits 0–7.</p>
+    <h2>How does text to binary work?</h2>
+    <p>Each character is converted to its ASCII/Unicode code point, then that number is expressed in 8-bit binary. For example, "A" = ASCII 65 = binary 01000001.</p>
+  </section>
+</main>
+<footer>
+  <div style="margin-bottom:10px;"><a href="/about.html">About</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="/contact.html">Contact</a></div>
+  © 2025 <a href="/">DetshTool</a> — Free Online Tools
+</footer>
+<div class="toast" id="toast">✓ Copied!</div>
+<script>
+function switchTab(id,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('pane'+id.charAt(0).toUpperCase()+id.slice(1)).classList.add('active');
+}
+function convertNumber(){
+  let val=document.getElementById('numInput').value.trim();
+  if(!val){['resBin','resDec','resHex','resOct'].forEach(id=>document.getElementById(id).textContent='—');return;}
+  let dec;
+  try{
+    if(val.startsWith('0b')||val.startsWith('0B'))dec=parseInt(val,2);
+    else if(val.startsWith('0x')||val.startsWith('0X'))dec=parseInt(val,16);
+    else if(val.startsWith('0o')||val.startsWith('0O'))dec=parseInt(val,8);
+    else dec=parseInt(val,10);
+    if(isNaN(dec))throw new Error();
+    document.getElementById('resBin').textContent=dec.toString(2);
+    document.getElementById('resDec').textContent=dec.toString(10);
+    document.getElementById('resHex').textContent=dec.toString(16).toUpperCase();
+    document.getElementById('resOct').textContent=dec.toString(8);
+  }catch(e){
+    ['resBin','resDec','resHex','resOct'].forEach(id=>document.getElementById(id).textContent='Invalid input');
+  }
+}
+function textToBin(){
+  const t=document.getElementById('txtInput').value;
+  if(!t){document.getElementById('binOutput').textContent='—';return;}
+  const bin=t.split('').map(c=>c.charCodeAt(0).toString(2).padStart(8,'0')).join(' ');
+  document.getElementById('binOutput').textContent=bin;
+}
+function binToText(){
+  const b=document.getElementById('binInput').value.trim();
+  if(!b){document.getElementById('txtOutput').textContent='—';return;}
+  try{
+    const txt=b.split(/\s+/).map(byte=>String.fromCharCode(parseInt(byte,2))).join('');
+    document.getElementById('txtOutput').textContent=txt;
+  }catch(e){document.getElementById('txtOutput').textContent='Invalid binary';}
+}
+function copyVal(el){
+  const t=el.textContent;
+  if(t==='—'||t.includes('Invalid'))return;
+  navigator.clipboard.writeText(t).then(()=>{
+    const toast=document.getElementById('toast');toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'),1800);
+  });
+}
+</script>
+</body>
+</html>

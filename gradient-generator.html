@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free CSS Gradient Generator — DetshTool</title>
+  <meta name="description" content="Generate beautiful CSS gradients visually. Pick colors, angle, and style. Copy the CSS code instantly. Free online gradient generator tool." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://detsh-tool.vercel.app/gradient-generator.html" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"CSS Gradient Generator","description":"Free online CSS gradient generator","url":"https://detsh-tool.vercel.app/gradient-generator.html","applicationCategory":"UtilityApplication","offers":{"@type":"Offer","price":"0"}}</script>
+  <style>
+    :root{--bg:#0a0a0f;--surface:#121218;--surface2:#1a1a24;--border:rgba(255,255,255,0.07);--border-hover:rgba(255,255,255,0.15);--text:#f0eee8;--muted:#7a7888;--accent:#c8f065;--font-head:'Syne',sans-serif;--font-mono:'DM Mono',monospace;--radius:14px;--radius-sm:8px;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-height:100vh;}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:1rem 1.5rem;background:rgba(10,10,15,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+    .logo{font-size:1.2rem;font-weight:800;text-decoration:none;color:var(--text);}.logo span{color:var(--accent);}
+    nav a.bc{color:var(--muted);font-size:0.82rem;text-decoration:none;}nav a.bc:hover{color:var(--text);}
+    nav .sep{color:var(--border-hover);font-size:0.8rem;}nav .cur{color:var(--text);font-size:0.82rem;}
+    main{max-width:720px;margin:0 auto;padding:40px 20px 80px;}
+    .badge{display:inline-block;font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:16px;background:rgba(200,240,101,0.1);color:#b8e055;border:1px solid rgba(200,240,101,0.25);}
+    h1{font-size:clamp(24px,5vw,38px);font-weight:800;letter-spacing:-0.03em;line-height:1.15;margin-bottom:10px;}
+    .subtitle{color:var(--muted);font-size:0.95rem;line-height:1.7;margin-bottom:36px;}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:24px;}
+    .preview{width:100%;height:200px;border-radius:var(--radius-sm);margin-bottom:20px;transition:all 0.2s;}
+    .field{margin-bottom:1.2rem;}
+    .field label{display:block;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+    .field select{width:100%;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font-head);font-size:0.92rem;outline:none;}
+    .field select option{background:var(--surface2);}
+    .colors-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;}
+    .color-field{display:flex;flex-direction:column;gap:6px;}
+    .color-field label{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;font-weight:600;}
+    .color-field input[type=color]{width:60px;height:44px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface2);padding:3px;cursor:pointer;}
+    .add-stop-btn{padding:10px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--muted);font-family:var(--font-head);font-size:0.82rem;cursor:pointer;transition:all 0.15s;align-self:flex-end;}
+    .add-stop-btn:hover{border-color:var(--border-hover);color:var(--text);}
+    .range-row{display:flex;align-items:center;gap:12px;}
+    input[type=range]{flex:1;-webkit-appearance:none;height:6px;border-radius:100px;background:var(--surface2);outline:none;cursor:pointer;}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--bg);}
+    .range-val{font-family:var(--font-mono);font-size:0.9rem;color:var(--accent);min-width:36px;text-align:right;}
+    .code-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;font-family:var(--font-mono);font-size:0.82rem;color:var(--accent);word-break:break-all;margin-top:14px;cursor:pointer;transition:border-color 0.2s;}
+    .code-box:hover{border-color:var(--border-hover);}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:var(--radius-sm);font-family:var(--font-head);font-size:0.88rem;font-weight:700;cursor:pointer;border:none;transition:all 0.18s;}
+    .btn-primary{background:var(--accent);color:#0a0a0f;}
+    .btn-primary:hover{background:#d4f57a;transform:translateY(-1px);}
+    .btn-ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+    .btn-ghost:hover{border-color:var(--border-hover);}
+    .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:1.2rem;}
+    .presets{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+    .preset{width:40px;height:40px;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:border-color 0.15s;}
+    .preset:hover{border-color:var(--border-hover);}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    @media(max-width:600px){.row{grid-template-columns:1fr;}}
+    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--accent);color:#0a0a0f;font-weight:700;font-size:0.82rem;padding:8px 20px;border-radius:100px;opacity:0;pointer-events:none;transition:all 0.25s;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .info-section{margin-top:40px;border-top:1px solid var(--border);padding-top:32px;}
+    .info-section h2{font-size:1.1rem;font-weight:700;margin-bottom:10px;}
+    .info-section p{color:var(--muted);font-size:0.88rem;line-height:1.8;margin-bottom:12px;}
+    footer{text-align:center;padding:2rem;border-top:1px solid var(--border);color:var(--muted);font-size:0.78rem;}
+    footer a{color:var(--accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Detsh<span>Tool</span></a>
+  <span class="sep">›</span><a href="/" class="bc">Tools</a>
+  <span class="sep">›</span><span class="cur">Gradient Generator</span>
+</nav>
+<main>
+  <div class="badge">🎨 Design Tool</div>
+  <h1>CSS Gradient Generator</h1>
+  <p class="subtitle">Build beautiful CSS gradients visually. Pick your colors, angle, and type — then copy the CSS code with one click. Completely free.</p>
+  <div class="card">
+    <div class="presets" id="presets"></div>
+    <div class="preview" id="preview"></div>
+    <div class="row">
+      <div class="field">
+        <label>Type</label>
+        <select id="ggType" onchange="updateGradient()">
+          <option value="linear">Linear</option>
+          <option value="radial">Radial</option>
+          <option value="conic">Conic</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Angle (Linear)</label>
+        <div class="range-row">
+          <input type="range" id="ggAngle" min="0" max="360" value="135" oninput="document.getElementById('angleVal').textContent=this.value+'°';updateGradient()">
+          <span class="range-val" id="angleVal">135°</span>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Colors</label>
+      <div class="colors-row" id="colorStops">
+        <div class="color-field"><label>Stop 1</label><input type="color" value="#c8f065" oninput="updateGradient()"></div>
+        <div class="color-field"><label>Stop 2</label><input type="color" value="#6c63ff" oninput="updateGradient()"></div>
+      </div>
+      <button class="add-stop-btn" style="margin-top:10px" onclick="addStop()">+ Add Color</button>
+    </div>
+    <div class="field">
+      <label>CSS Code <small style="color:var(--muted);text-transform:none;letter-spacing:0">(click to copy)</small></label>
+      <div class="code-box" id="cssCode" onclick="copyCss()"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="copyCss()">Copy CSS</button>
+      <button class="btn btn-ghost" onclick="randomGradient()">🎲 Random</button>
+    </div>
+  </div>
+  <section class="info-section">
+    <h2>CSS Gradient types</h2>
+    <p>Linear gradients go in a straight line at any angle. Radial gradients radiate from a center point. Conic gradients rotate around a center point like a color wheel.</p>
+    <h2>How to use this CSS</h2>
+    <p>Paste the generated code into your CSS file as a <code style="font-family:var(--font-mono);color:var(--accent);font-size:0.82em">background</code> or <code style="font-family:var(--font-mono);color:var(--accent);font-size:0.82em">background-image</code> property on any element.</p>
+  </section>
+</main>
+<footer>
+  <div style="margin-bottom:10px;"><a href="/about.html">About</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="/contact.html">Contact</a></div>
+  © 2025 <a href="/">DetshTool</a> — Free Online Tools
+</footer>
+<div class="toast" id="toast">✓ CSS Copied!</div>
+<script>
+const presetData=[
+  ['#c8f065','#6c63ff'],['#ff6b6b','#ffd166'],['#06d6a0','#118ab2'],
+  ['#f72585','#7209b7'],['#fb8500','#023047'],['#e9c46a','#264653'],
+];
+
+function buildGradient(){
+  const type=document.getElementById('ggType').value;
+  const angle=document.getElementById('ggAngle').value;
+  const inputs=document.querySelectorAll('#colorStops input[type=color]');
+  const colors=Array.from(inputs).map(i=>i.value);
+  if(type==='linear') return `linear-gradient(${angle}deg, ${colors.join(', ')})`;
+  if(type==='radial') return `radial-gradient(circle, ${colors.join(', ')})`;
+  return `conic-gradient(${colors.join(', ')})`;
+}
+
+function updateGradient(){
+  const g=buildGradient();
+  document.getElementById('preview').style.background=g;
+  document.getElementById('cssCode').textContent=`background: ${g};`;
+}
+
+function addStop(){
+  const wrap=document.getElementById('colorStops');
+  const n=wrap.querySelectorAll('input').length+1;
+  const div=document.createElement('div');
+  div.className='color-field';
+  div.innerHTML=`<label>Stop ${n}</label><input type="color" value="#${Math.floor(Math.random()*0xffffff).toString(16).padStart(6,'0')}" oninput="updateGradient()">`;
+  wrap.appendChild(div);
+  updateGradient();
+}
+
+function randomGradient(){
+  const inputs=document.querySelectorAll('#colorStops input[type=color]');
+  inputs.forEach(i=>i.value='#'+Math.floor(Math.random()*0xffffff).toString(16).padStart(6,'0'));
+  document.getElementById('ggAngle').value=Math.floor(Math.random()*360);
+  document.getElementById('angleVal').textContent=document.getElementById('ggAngle').value+'°';
+  updateGradient();
+}
+
+function copyCss(){
+  const txt=document.getElementById('cssCode').textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const t=document.getElementById('toast');t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),1800);
+  });
+}
+
+// Presets
+const pc=document.getElementById('presets');
+presetData.forEach(([c1,c2])=>{
+  const d=document.createElement('div');
+  d.className='preset';
+  d.style.background=`linear-gradient(135deg,${c1},${c2})`;
+  d.onclick=()=>{
+    const inputs=document.querySelectorAll('#colorStops input[type=color]');
+    if(inputs[0])inputs[0].value=c1;
+    if(inputs[1])inputs[1].value=c2;
+    updateGradient();
+  };
+  pc.appendChild(d);
+});
+
+updateGradient();
+</script>
+</body>
+</html>

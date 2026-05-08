@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free QR Code Generator — DetshTool</title>
+  <meta name="description" content="Generate QR codes instantly for any URL, text or email. Customize size, colors and error correction. Free, no signup required." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://detsh-tool.vercel.app/qr-generator.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"QR Code Generator","description":"Free online QR code generator","url":"https://detsh-tool.vercel.app/qr-generator.html","applicationCategory":"UtilityApplication","offers":{"@type":"Offer","price":"0"}}</script>
+  <style>
+    :root{--bg:#0a0a0f;--surface:#121218;--surface2:#1a1a24;--border:rgba(255,255,255,0.07);--border-hover:rgba(255,255,255,0.15);--text:#f0eee8;--muted:#7a7888;--accent:#c8f065;--accent2:#6c63ff;--font-head:'Syne',sans-serif;--font-mono:'DM Mono',monospace;--radius:14px;--radius-sm:8px;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-height:100vh;}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:1rem 1.5rem;background:rgba(10,10,15,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+    .logo{font-size:1.2rem;font-weight:800;letter-spacing:-0.03em;text-decoration:none;color:var(--text);}
+    .logo span{color:var(--accent);}
+    nav a.bc{color:var(--muted);font-size:0.82rem;text-decoration:none;}
+    nav a.bc:hover{color:var(--text);}
+    nav .sep{color:var(--border-hover);font-size:0.8rem;}
+    nav .cur{color:var(--text);font-size:0.82rem;}
+    main{max-width:720px;margin:0 auto;padding:40px 20px 80px;}
+    .badge{display:inline-block;font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:16px;background:rgba(108,99,255,0.15);color:#9b93ff;border:1px solid rgba(108,99,255,0.3);}
+    h1{font-size:clamp(24px,5vw,38px);font-weight:800;letter-spacing:-0.03em;line-height:1.15;margin-bottom:10px;}
+    .subtitle{color:var(--muted);font-size:0.95rem;line-height:1.7;margin-bottom:36px;}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:24px;}
+    .field{margin-bottom:1.2rem;}
+    .field label{display:block;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+    .field input,.field select{width:100%;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font-head);font-size:0.92rem;transition:border-color 0.2s;outline:none;}
+    .field input:focus,.field select:focus{border-color:var(--border-hover);}
+    .field select option{background:var(--surface2);}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    @media(max-width:600px){.row{grid-template-columns:1fr;}}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:var(--radius-sm);font-family:var(--font-head);font-size:0.88rem;font-weight:700;cursor:pointer;border:none;transition:all 0.18s;}
+    .btn-primary{background:var(--accent);color:#0a0a0f;}
+    .btn-primary:hover{background:#d4f57a;transform:translateY(-1px);}
+    .btn-ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+    .btn-ghost:hover{border-color:var(--border-hover);}
+    .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:1.2rem;}
+    #qr-output{margin-top:1.5rem;display:flex;justify-content:center;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;min-height:100px;}
+    #qrcode canvas,#qrcode img{border-radius:10px;}
+    .info-section{margin-top:40px;border-top:1px solid var(--border);padding-top:32px;}
+    .info-section h2{font-size:1.1rem;font-weight:700;margin-bottom:10px;}
+    .info-section p{color:var(--muted);font-size:0.88rem;line-height:1.8;margin-bottom:12px;}
+    footer{text-align:center;padding:2rem;border-top:1px solid var(--border);color:var(--muted);font-size:0.78rem;}
+    footer a{color:var(--accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Detsh<span>Tool</span></a>
+  <span class="sep">›</span>
+  <a href="/" class="bc">Tools</a>
+  <span class="sep">›</span>
+  <span class="cur">QR Generator</span>
+</nav>
+<main>
+  <div class="badge">📷 QR Code Tool</div>
+  <h1>Free QR Code Generator</h1>
+  <p class="subtitle">Create QR codes instantly for any URL, text, email or phone number. Customize colors and size. 100% free, runs in your browser.</p>
+  <div class="card">
+    <div class="field">
+      <label>Content</label>
+      <input type="text" id="qrInput" placeholder="https://example.com or any text" value="https://detsh-tool.vercel.app">
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Size</label>
+        <select id="qrSize">
+          <option value="128">128×128</option>
+          <option value="200" selected>200×200</option>
+          <option value="256">256×256</option>
+          <option value="320">320×320</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Error Correction</label>
+        <select id="qrCorrect">
+          <option value="L">Low (L)</option>
+          <option value="M" selected>Medium (M)</option>
+          <option value="Q">High (Q)</option>
+          <option value="H">Very High (H)</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Dark Color</label>
+        <input type="color" id="qrDark" value="#0a0a0f" style="height:44px;padding:4px;">
+      </div>
+      <div class="field">
+        <label>Light Color</label>
+        <input type="color" id="qrLight" value="#f0eee8" style="height:44px;padding:4px;">
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="generateQR()">Generate QR</button>
+      <button class="btn btn-ghost" onclick="downloadQR()">⬇ Download</button>
+    </div>
+    <div id="qr-output"><div id="qrcode"></div></div>
+  </div>
+  <section class="info-section">
+    <h2>What can I encode in a QR code?</h2>
+    <p>QR codes can store URLs, plain text, email addresses, phone numbers, Wi-Fi credentials, and more. They're readable by any smartphone camera.</p>
+    <h2>What is Error Correction?</h2>
+    <p>Higher error correction means the QR code can still be scanned even if part of it is damaged or obscured. Use "High" if you plan to print it on a surface that might get worn.</p>
+    <h2>Tips for best results</h2>
+    <p>Keep good contrast between dark and light colors. Avoid light dark colors or dark light colors. For printed QR codes, use at least 256×256 size.</p>
+  </section>
+</main>
+<footer>
+  <div style="margin-bottom:10px;"><a href="/about.html">About</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="/contact.html">Contact</a></div>
+  © 2025 <a href="/">DetshTool</a> — Free Online Tools
+</footer>
+<script>
+let qrInst = null;
+function generateQR() {
+  const text = document.getElementById('qrInput').value.trim();
+  if (!text) return;
+  const size = +document.getElementById('qrSize').value;
+  const correct = document.getElementById('qrCorrect').value;
+  const dark = document.getElementById('qrDark').value;
+  const light = document.getElementById('qrLight').value;
+  const el = document.getElementById('qrcode');
+  el.innerHTML = '';
+  qrInst = new QRCode(el, { text, width: size, height: size, colorDark: dark, colorLight: light, correctLevel: QRCode.CorrectLevel[correct] });
+}
+function downloadQR() {
+  const canvas = document.querySelector('#qrcode canvas');
+  if (!canvas) { generateQR(); setTimeout(downloadQR, 400); return; }
+  const a = document.createElement('a');
+  a.download = 'qrcode.png';
+  a.href = canvas.toDataURL();
+  a.click();
+}
+generateQR();
+</script>
+</body>
+</html>

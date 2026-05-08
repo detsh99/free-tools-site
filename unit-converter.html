@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unit Converter — DetshTool</title>
+  <meta name="description" content="Free online unit converter. Convert length, weight, temperature, area, speed, data and more. Fast, simple, no signup needed." />
+  <link rel="canonical" href="https://detsh-tool.vercel.app/unit-converter.html" />
+  <link rel="icon" href="favicon.ico" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #13131a;
+      --surface2: #1c1c26;
+      --border: #2a2a3a;
+      --accent: #7c6aff;
+      --accent2: #ff6ab0;
+      --text: #e8e8f0;
+      --muted: #6b6b80;
+      --radius: 14px;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 28px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .nav-logo {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-back {
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-back:hover { color: var(--text); }
+
+    main {
+      flex: 1;
+      max-width: 640px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 48px 20px 64px;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .page-icon { font-size: 2.8rem; display: block; margin-bottom: 14px; filter: drop-shadow(0 0 20px rgba(124,106,255,.4)); }
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--text) 40%, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+    .page-header p { color: var(--muted); font-size: 0.92rem; }
+
+    /* CATEGORY TABS */
+    .cat-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-bottom: 24px;
+      scrollbar-width: none;
+    }
+    .cat-scroll::-webkit-scrollbar { display: none; }
+    .cat-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      color: var(--muted);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+    .cat-btn:hover { border-color: var(--accent); color: var(--text); }
+    .cat-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* CONVERTER CARD */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+
+    .convert-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 8px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+
+    select, input[type="number"] {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      cursor: pointer;
+      -moz-appearance: textfield;
+    }
+    select:focus, input[type="number"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(124,106,255,.15);
+    }
+    input[type="number"] {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.05rem;
+      margin-top: 4px;
+    }
+    input::-webkit-inner-spin-button,
+    input::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+    .swap-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--accent);
+      font-size: 1.2rem;
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0;
+      align-self: end;
+      flex-shrink: 0;
+    }
+    .swap-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    /* RESULT */
+    .result-display {
+      background: linear-gradient(135deg, rgba(124,106,255,.1), rgba(255,106,176,.06));
+      border: 1px solid rgba(124,106,255,.25);
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .result-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--accent);
+      word-break: break-all;
+    }
+    .copy-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      padding: 8px 14px;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .copy-btn.copied { border-color: #4ade80; color: #4ade80; }
+
+    /* QUICK REFERENCE */
+    .ref-table {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      overflow: hidden;
+    }
+    .ref-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .ref-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+    .ref-row:last-child { border-bottom: none; }
+    .ref-from { color: var(--muted); }
+    .ref-val { font-family: 'JetBrains Mono', monospace; color: var(--text); font-size: 0.8rem; }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">Detsh<span>Tool</span></a>
+  <a href="/" class="nav-back">← All Tools</a>
+</nav>
+
+<main>
+  <div class="page-header">
+    <span class="page-icon">📐</span>
+    <h1>Unit Converter</h1>
+    <p>Convert length, weight, temperature, speed, data &amp; more</p>
+  </div>
+
+  <!-- Category Tabs -->
+  <div class="cat-scroll" id="catTabs"></div>
+
+  <!-- Converter -->
+  <div class="card">
+    <div class="convert-row">
+      <div class="field">
+        <label>From</label>
+        <select id="fromUnit" onchange="convert()"></select>
+        <input type="number" id="fromVal" placeholder="Enter value" oninput="convert()" />
+      </div>
+
+      <button class="swap-btn" onclick="swapUnits()" title="Swap">⇄</button>
+
+      <div class="field">
+        <label>To</label>
+        <select id="toUnit" onchange="convert()"></select>
+        <input type="number" id="toVal" placeholder="Result" readonly style="opacity:.7;cursor:default;" />
+      </div>
+    </div>
+
+    <div class="result-display" id="resultDisplay" style="display:none;">
+      <span class="result-text" id="resultText">—</span>
+      <button class="copy-btn" id="copyBtn" onclick="copyResult()">Copy</button>
+    </div>
+  </div>
+
+  <!-- Quick Reference -->
+  <div class="ref-table" id="refTable"></div>
+</main>
+
+<footer>
+  Part of <a href="/">DetshTool</a> — Free Utility Kit &nbsp;·&nbsp; 16 Tools &amp; counting
+</footer>
+
+<script>
+const categories = {
+  Length: {
+    units: ['Meter','Kilometer','Centimeter','Millimeter','Mile','Yard','Foot','Inch','Nautical Mile'],
+    base: 'Meter',
+    toBase: {Meter:1,Kilometer:1000,Centimeter:.01,Millimeter:.001,Mile:1609.344,Yard:.9144,Foot:.3048,Inch:.0254,'Nautical Mile':1852},
+    refs: [['1 Mile','1.609 km'],['1 Foot','30.48 cm'],['1 Inch','2.54 cm'],['1 Yard','0.914 m']]
+  },
+  Weight: {
+    units: ['Kilogram','Gram','Milligram','Pound','Ounce','Ton','Stone'],
+    base: 'Kilogram',
+    toBase: {Kilogram:1,Gram:.001,Milligram:.000001,Pound:.453592,Ounce:.0283495,Ton:1000,Stone:6.35029},
+    refs: [['1 Pound','0.4536 kg'],['1 Ounce','28.35 g'],['1 Stone','6.35 kg'],['1 Ton','1000 kg']]
+  },
+  Temperature: {
+    units: ['Celsius','Fahrenheit','Kelvin'],
+    base: null,
+    toBase: null,
+    refs: [['0°C','32°F / 273.15K'],['100°C','212°F / 373.15K'],['−40°C','−40°F'],['37°C','98.6°F (body)']]
+  },
+  Speed: {
+    units: ['m/s','km/h','mph','knot','ft/s'],
+    base: 'm/s',
+    toBase: {'m/s':1,'km/h':0.27778,'mph':0.44704,'knot':0.514444,'ft/s':0.3048},
+    refs: [['1 mph','1.609 km/h'],['1 knot','1.852 km/h'],['Sound','343 m/s'],['Light','3×10⁸ m/s']]
+  },
+  Area: {
+    units: ['m²','km²','cm²','mm²','Hectare','Acre','ft²','in²','mi²'],
+    base: 'm²',
+    toBase: {'m²':1,'km²':1e6,'cm²':1e-4,'mm²':1e-6,'Hectare':10000,'Acre':4046.856,'ft²':0.092903,'in²':0.000645136,'mi²':2589988.11},
+    refs: [['1 Acre','4047 m²'],['1 Hectare','10000 m²'],['1 ft²','0.0929 m²'],['1 mi²','2.59 km²']]
+  },
+  Volume: {
+    units: ['Liter','Milliliter','Gallon (US)','Quart','Pint','Cup','fl oz','m³','cm³'],
+    base: 'Liter',
+    toBase: {'Liter':1,'Milliliter':.001,'Gallon (US)':3.78541,'Quart':0.946353,'Pint':0.473176,'Cup':0.24,'fl oz':0.0295735,'m³':1000,'cm³':0.001},
+    refs: [['1 Gallon','3.785 L'],['1 Pint','473 mL'],['1 Cup','240 mL'],['1 fl oz','29.57 mL']]
+  },
+  Data: {
+    units: ['Byte','Kilobyte','Megabyte','Gigabyte','Terabyte','Bit','Kibibyte','Mebibyte','Gibibyte'],
+    base: 'Byte',
+    toBase: {'Byte':1,'Kilobyte':1000,'Megabyte':1e6,'Gigabyte':1e9,'Terabyte':1e12,'Bit':0.125,'Kibibyte':1024,'Mebibyte':1048576,'Gibibyte':1073741824},
+    refs: [['1 KB','1000 B'],['1 KiB','1024 B'],['1 MB','1000 KB'],['1 GB','1000 MB']]
+  },
+  Time: {
+    units: ['Second','Minute','Hour','Day','Week','Month','Year','Millisecond','Microsecond'],
+    base: 'Second',
+    toBase: {'Second':1,'Minute':60,'Hour':3600,'Day':86400,'Week':604800,'Month':2628000,'Year':31536000,'Millisecond':0.001,'Microsecond':0.000001},
+    refs: [['1 Minute','60 s'],['1 Hour','3600 s'],['1 Day','86400 s'],['1 Year','31,536,000 s']]
+  }
+};
+
+let currentCat = 'Length';
+
+function buildTabs() {
+  const tabs = document.getElementById('catTabs');
+  tabs.innerHTML = '';
+  Object.keys(categories).forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-btn' + (cat === currentCat ? ' active' : '');
+    btn.textContent = cat;
+    btn.onclick = () => { currentCat = cat; buildTabs(); buildUnits(); buildRef(); convert(); };
+    tabs.appendChild(btn);
+  });
+}
+
+function buildUnits() {
+  const cat = categories[currentCat];
+  ['fromUnit','toUnit'].forEach((id, i) => {
+    const sel = document.getElementById(id);
+    sel.innerHTML = cat.units.map(u => `<option value="${u}">${u}</option>`).join('');
+    sel.selectedIndex = i === 1 ? 1 : 0;
+  });
+  document.getElementById('fromVal').value = '';
+  document.getElementById('toVal').value = '';
+  document.getElementById('resultDisplay').style.display = 'none';
+}
+
+function tempConvert(val, from, to) {
+  let c;
+  if (from === 'Celsius') c = val;
+  else if (from === 'Fahrenheit') c = (val - 32) * 5/9;
+  else c = val - 273.15;
+  if (to === 'Celsius') return c;
+  if (to === 'Fahrenheit') return c * 9/5 + 32;
+  return c + 273.15;
+}
+
+function convert() {
+  const cat = categories[currentCat];
+  const from = document.getElementById('fromUnit').value;
+  const to = document.getElementById('toUnit').value;
+  const val = parseFloat(document.getElementById('fromVal').value);
+  if (isNaN(val)) {
+    document.getElementById('toVal').value = '';
+    document.getElementById('resultDisplay').style.display = 'none';
+    return;
+  }
+  let result;
+  if (currentCat === 'Temperature') {
+    result = tempConvert(val, from, to);
+  } else {
+    result = val * cat.toBase[from] / cat.toBase[to];
+  }
+  const formatted = Math.abs(result) < 0.0001 || Math.abs(result) > 1e9
+    ? result.toExponential(4)
+    : parseFloat(result.toFixed(6)).toString();
+  document.getElementById('toVal').value = formatted;
+  document.getElementById('resultText').textContent = `${val} ${from} = ${formatted} ${to}`;
+  document.getElementById('resultDisplay').style.display = 'flex';
+}
+
+function swapUnits() {
+  const f = document.getElementById('fromUnit');
+  const t = document.getElementById('toUnit');
+  const fv = document.getElementById('fromVal');
+  const tv = document.getElementById('toVal');
+  [f.value, t.value] = [t.value, f.value];
+  fv.value = tv.value;
+  convert();
+}
+
+function copyResult() {
+  const text = document.getElementById('resultText').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+
+function buildRef() {
+  const cat = categories[currentCat];
+  const table = document.getElementById('refTable');
+  if (!cat.refs || cat.refs.length === 0) { table.style.display = 'none'; return; }
+  table.style.display = 'block';
+  table.innerHTML = `<div class="ref-title">Quick Reference</div>` +
+    cat.refs.map(([a,b]) => `<div class="ref-row"><span class="ref-from">${a}</span><span class="ref-val">${b}</span></div>`).join('');
+}
+
+// Init
+buildTabs();
+buildUnits();
+buildRef();
+</script>
+</body>
+</html>
